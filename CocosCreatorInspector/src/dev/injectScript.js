@@ -118,8 +118,7 @@ export default function () {
     };
     window.inspectorGameMemoryStorage[node.uuid] = node;
     let nodeChildren = node.getChildren();
-    for (let i = 0; i < nodeChildren.length; i++) {
-      let childItem = nodeChildren[i];
+    for (let childItem of nodeChildren) {
       // console.log("childName: " + childItem.name);
       getNodeChildren(childItem, nodeData.children);
     }
@@ -138,11 +137,13 @@ export default function () {
     window.sendMsgToDevTools(msgType.notSupport, "不支持调试游戏!");
   }
 
+  // 存在cc空间，游戏存在
   if (isCocosCreatorGame) {
+    // console.log("enter?");
     let scene = cc.director.getScene();
     if (scene) {
       postData.scene = {
-        type: 1,// 标识类型
+        type: msgType.nodeListInfo, // 标识类型
         uuid: scene.uuid,
         name: scene.name,
         children: [],
@@ -150,8 +151,7 @@ export default function () {
       window.inspectorGameMemoryStorage[scene.uuid] = scene;
 
       let sceneChildren = scene.getChildren();
-      for (let i = 0; i < sceneChildren.length; i++) {
-        let node = sceneChildren[i];
+      for (let node of sceneChildren) {
         getNodeChildren(node, postData.scene.children);
       }
       // console.log(postData);

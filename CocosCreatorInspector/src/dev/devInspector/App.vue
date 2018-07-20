@@ -133,17 +133,19 @@
         if (sceneData) {
           // scene info
           let dataRoot = {
-            type: sceneData.type, uuid: sceneData.uuid,
-            label: sceneData.name, children: []
+            type: sceneData.type,
+            uuid: sceneData.uuid,
+            label: sceneData.name,
+            children: []
           };
           this.treeData.push(dataRoot);
           this.handleNodeClick(dataRoot);
           // scene children info
-          for (let k in sceneData.children) {
-            let itemSceneData = sceneData.children[k];
+          for (let itemSceneData of sceneData.children) {
             // let sceneItem = {uuid: itemSceneData.uuid, label: itemSceneData.name, children: []};
             let sceneItem = {};
             dealChildrenNode(itemSceneData, sceneItem);
+            // ???? bug ????
             this.treeData[0].children.push(sceneItem);
           }
         }
@@ -160,8 +162,7 @@
           obj['type'] = rootData.type;
           obj['children'] = [];
           let rootChildren = rootData.children;
-          for (let k in rootChildren) {
-            let itemData = rootChildren[k];
+          for (let itemData of rootChildren) {
             let item = {};
             dealChildrenNode(itemData, item);
             obj.children.push(item);
@@ -171,6 +172,7 @@
       _getInjectScriptString() {
         let code = injectScript.toString();
         let array = code.split('\n');
+        // ??? 没必要吧 ???
         array.splice(0, 1);// 删除开头
         array.splice(-1, 1);// 删除结尾
         let evalCode = "";
