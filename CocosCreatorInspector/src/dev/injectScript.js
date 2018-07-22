@@ -29,6 +29,22 @@ export default function () {
     return ret;
   }
 
+  // func's type: void func(node)
+  window.pluginSetNode = function (uuid, func) {
+    let node = window.inspectorGameMemoryStorage[uuid];
+    if (node) {
+      func(node);
+    }
+  }
+
+  window.pluginSetNodeValue = function (uuid, key, value) {
+    let node = window.inspectorGameMemoryStorage[uuid];
+    if (node) {
+      node[key] = value;
+    }
+  }
+
+
   window.pluginSetNodeColor = function (uuid, colorHex) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {

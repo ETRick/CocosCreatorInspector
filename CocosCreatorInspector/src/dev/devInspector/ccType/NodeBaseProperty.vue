@@ -34,11 +34,6 @@
       <!--rotationX, rotationY暂时舍弃显示-->
       <ui-prop name="Rotation">
         <span> {{itemData.rotation}}</span>
-        <!--<input class="myInput"-->
-        <!--@change="changeRotation"-->
-        <!--placeholder="itemData.rotation"-->
-        <!--v-model="itemData.rotation"-->
-        <!--style="width: 98%">-->
       </ui-prop>
       <!--缩放-->
       <ui-prop name="Scale">
@@ -84,7 +79,6 @@
                    v-model="itemData.height">
           </ui-prop>
         </div>
-      </ui-prop>
       </ui-prop>
       <!--透明度-->
       <ui-prop name="Opacity">
