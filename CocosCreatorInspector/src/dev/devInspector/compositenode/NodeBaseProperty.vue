@@ -1,140 +1,63 @@
 <template>
   <div id="app">
-    <div>
-      <MovebleNode name="uuid">
-        <span> {{itemData.uuid}}</span>
-      </MovebleNode>
-      <MovebleNode name="name">
-        <span> {{itemData.name}}</span>
-      </MovebleNode>
-      <!--坐标-->
-      <MovebleNode name="Position">
-        <div style="float: left;width: 100%;">
-          <MovebleNode name="X" style="width: 50%;float: left; cursor: ew-resize;"
-                   @movestep="changePositionActionX"
-                   step="10">
-            <!--<span>{{itemData.x}}</span>-->
-            <input class="myInput"
-                   @change="changePosition"
-                   placeholder="itemData.x"
-                   v-model="itemData.x">
-          </MovebleNode>
-          <MovebleNode name="Y" style="width: 50%;float:left;cursor: ew-resize;"
-                   @movestep="changePositionActionY"
-                   step="10">
-            <!--<span>{{itemData.y}}</span>-->
-            <input class="myInput"
-                   @change="changePosition"
-                   placeholder="itemData.y"
-                   v-model="itemData.y">
-          </MovebleNode>
-        </div>
-      </MovebleNode>
-      <!--旋转-->
-      <!--rotationX, rotationY暂时舍弃显示-->
-      <MovebleNode name="Rotation">
-        <span> {{itemData.rotation}}</span>
-      </MovebleNode>
-      <!--缩放-->
-      <MovebleNode name="Scale">
-        <div style="float: left;width: 100%;">
-          <MovebleNode name="X" style="width: 50%;float: left;">
-            <span>{{itemData.scaleX}}</span>
-          </MovebleNode>
-          <MovebleNode name="Y" style="width: 50%;float:left;">
-            <span>{{itemData.scaleY}}</span>
-          </MovebleNode>
-        </div>
-      </MovebleNode>
-      <!--锚点-->
-      <MovebleNode name="Anchor">
-        <div style="float: left;width: 100%;">
-          <MovebleNode name="X" style="width: 50%;float: left;">
-            <span>{{itemData.anchorX}}</span>
-          </MovebleNode>
-          <MovebleNode name="Y" style="width: 50%;float:left;">
-            <span>{{itemData.anchorY}}</span>
-          </MovebleNode>
-        </div>
-      </MovebleNode>
-      <!--尺寸-->
-      <MovebleNode name="Size">
-        <div style="float: left;width: 100%;">
-          <MovebleNode name="W" style="width: 50%;float: left;cursor: ew-resize;"
-                   @movestep="changeSizeActionWidth"
-                   step="10">
-            <!--<span>{{itemData.width}}</span>-->
-            <input class="myInput"
-                   @change="changeSize"
-                   placeholder="itemData.width"
-                   v-model="itemData.width">
-          </MovebleNode>
-          <MovebleNode name="H" style="width: 50%;float:left;cursor: ew-resize;"
-                   @movestep="changeSizeActionHeight"
-                   step="10">
-            <!--<span>{{itemData.height}}</span>-->
-            <input class="myInput"
-                   @change="changeSize"
-                   placeholder="itemData.height"
-                   v-model="itemData.height">
-          </MovebleNode>
-        </div>
-      </MovebleNode>
-      <!--透明度-->
-      <MovebleNode name="Opacity">
-        <span>{{itemData.opacity}}</span>
-      </MovebleNode>
-      <!--斜切-->
-      <MovebleNode name="Skew">
-        <div style="float: left;width: 100%;">
-          <MovebleNode name="X" style="width: 50%;float: left;">
-            <span>{{itemData.skewX}}</span>
-          </MovebleNode>
-          <MovebleNode name="Y" style="width: 50%;float:left;">
-            <span>{{itemData.skewY}}</span>
-          </MovebleNode>
-        </div>
-      </MovebleNode>
-    </div>
-    <MovebleNode name="zIndex">
+    <!-- uuid -->
+    <FloatNode :itemData="itemData" mykey="uuid"></FloatNode>
+    <!-- 姓名 -->
+    <FloatNode :itemData="itemData" mykey="name"></FloatNode>
+    <!-- 坐标 -->
+    <MultiFloatNode :itemData="itemData" titlename="position" :mykeys="['x', 'y']" hasInput="true"></MultiFloatNode>
+    <!-- 旋转 -->
+    <FloatNode :itemData="itemData" mykey="rotation" hasInput="true"></FloatNode>
+    <!-- 缩放 -->
+    <MultiFloatNode :itemData="itemData" titlename="scale" :mykeys="['scaleX', 'scaleY']" hasInput="true" step="0.01"></MultiFloatNode>
+    <!-- 锚点 -->
+    <MultiFloatNode :itemData="itemData" titlename="anchor" :mykeys="['anchorX', 'anchorY']" hasInput="true" step="0.01"></MultiFloatNode>
+    <!-- 尺寸 -->
+    <MultiFloatNode :itemData="itemData" titlename="size" :mykeys="['width', 'height']" hasInput="true"></MultiFloatNode>
+    <!-- 透明度 -->
+    <FloatNode :itemData="itemData" mykey="opacity" hasInput="true"></FloatNode>
+    <!-- 斜切 -->
+    <MultiFloatNode :itemData="itemData" titlename="skew" :mykeys="['skewX', 'skewY']" hasInput="true" step="1"></MultiFloatNode>
+
+    <!-- <SlideNode name="zIndex">
       <span>{{itemData.zIndex}}</span>
-    </MovebleNode>
-    <MovebleNode name="childrenCount">
+    </SlideNode>
+    <SlideNode name="childrenCount">
       <span>{{itemData.childrenCount}}</span>
-    </MovebleNode>
-    <!--节点状态-->
-    <MovebleNode name="active">
+    </SlideNode> -->
+
+    <!-- 节点状态 -->
+    <SlideNode name="active" v-if="typeof itemData['active'] != 'undefined'">
       <p v-if="itemData.active" style="margin: 0;display: flex;align-items: center;flex-wrap: wrap;">
         <input type="checkbox"
-               style="width: 20px;height: 20px;"
-               :checked="itemData.active"
-               @click="onBtnClickNodeHide">
+              style="width: 20px;height: 20px;"
+              :checked="itemData.active"
+              @click="onBtnClickNodeHide">
         隐藏节点
       </p>
 
       <p v-if="!itemData.active" style="margin: 0;display: flex;align-items: center;flex-wrap: wrap;">
         <input type="checkbox"
-               style="width: 20px;height: 20px;"
-               :checked="itemData.active"
-               @click="onBtnClickNodeShow"
+              style="width: 20px;height: 20px;"
+              :checked="itemData.active"
+              @click="onBtnClickNodeShow"
         >
         显示节点
       </p>
-    </MovebleNode>
-    <!--颜色-->
-    <MovebleNode name="color">
+    </SlideNode>
+    <!-- 颜色 -->
+    <SlideNode name="color" v-if="typeof itemData['color'] != 'undefined'">
       <div style="float: left;width: 100%;height: 100%;">
         <div style="float: left;width: 50%; height: 100%;">
           <el-color-picker v-model="itemData.color" size="mini"
-                           style="margin: 0;display: flex;align-items: center;flex-wrap: wrap;"
-                           @change="changeColor"></el-color-picker>
+                          style="margin: 0;display: flex;align-items: center;flex-wrap: wrap;"
+                          @change="changeColor"></el-color-picker>
         </div>
         <div style="float: left;width: 50%;">
           <span>{{itemData.color}}</span>
         </div>
       </div>
-
-    </MovebleNode>
+    </SlideNode>
   </div>
 </template>
 

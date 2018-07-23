@@ -6,9 +6,9 @@
         <hr style="margin-bottom: 2px;margin-top: 2px;"/>
       </div>
       <div v-show="isShowComp">
-        <MovebleNode :name="index" track-by="$index" v-for="(comp,index) in components" :key="index">
+        <SlideNode :name="index" track-by="$index" v-for="(comp,index) in components" :key="index">
           <span>{{comp.type}}</span>
-        </MovebleNode>
+        </SlideNode>
       </div>
     </div>
   </div>

@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <div>
-      <MovebleNode :name="titlename">
-        <div style="float: left;width: 100%;">
-          <MovebleNode v-for="mykey in mykeys" :key="mykey" :name="mykey" class="ui" :style="{width: 100 / mykeys.length + '%'}"
-                   @movestep="changeFloatValueAction" step="10">
-            <input v-if="hasInput" class="myInput"
-                   @change="changeValue(mykey)"
-                   :placeholder="itemData[mykey]"
-                   v-model="itemData[mykey]">
-            <span v-else> {{itemData[mykey]}} </span>
-          </MovebleNode>
-        </div>
-      </MovebleNode>
+    <SlideNode :name="titlename.firstUpperCase()" :mykey="titlename">
+      <div style="float: left;width: 100%;">
+        <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey] != 'undefined'"
+                  :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
+                  class="ui" :style="{width: 100 / mykeys.length + '%'}"
+                  @movestep="changeFloatValueAction" :step="step">
+          <input v-if="hasInput" class="myInput"
+                  @change="changeValue(mykey)"
+                  :placeholder="itemData[mykey]"
+                  v-model="itemData[mykey]">
+          <span v-else> {{itemData[mykey]}} </span>
+        </SlideNode>
+      </div>
+    </SlideNode>
   </div>
 </template>
 
@@ -59,11 +60,9 @@ export default {
     'itemData',
     "titlename",
     'mykeys',
-    "hasInput"
+    'step',
+    "hasInput",
   ],
-  textFunc() {
-    alert("enter?");
-  },
 }
 </script>
 

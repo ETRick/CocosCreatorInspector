@@ -15,12 +15,9 @@
         </el-col>
         <el-col :span="16">
           <div class="grid-content bg-purple-light treeInfo">
-            <BaseNode :itemData="treeItemData" mykey="uuid"></BaseNode>
-            <BaseNode :itemData="treeItemData" mykey="name"></BaseNode>
-            <MultiNode :itemData="treeItemData" titlename="Position" :mykeys="['x', 'y']" hasInput="true"></MultiNode>
-            <!--NodeBaseProperty v-bind:itemData="treeItemData"></NodeBaseProperty-->
-            <SceneProperty v-show=" treeItemData.type === 'cc_Scene'"></SceneProperty>
-            <ComponentsProperty v-bind:components="treeItemData.components"></ComponentsProperty>
+            <NodeBaseProperty :itemData="treeItemData"></NodeBaseProperty>
+            <SceneProperty v-if="treeItemData.type === 'cc_Scene'"></SceneProperty>
+            <ComponentsProperty :components="treeItemData.components"></ComponentsProperty>
           </div>
         </el-col>
       </el-row>
@@ -33,6 +30,7 @@
 
 <script>
   import injectScript from '../injectScript.js'
+  import util from '../util.js'
 
   export default {
     name: "app",
@@ -45,6 +43,8 @@
       }
     },
     created() {
+      util();
+
       if (chrome && chrome.extension) {
 
       } else {
@@ -71,6 +71,7 @@
             this.isShowDebug = false;
           } else if (message.type === msgType.nodeInfo) {
             this.isShowDebug = true;
+            // console.log(message.msg);
             this.treeItemData = message.msg;
           }
         }

@@ -36,7 +36,7 @@
       },
       _onMouseMove(event) {
         let x = event.clientX;
-        let calcStep = parseFloat(this.step) || 1;// 默认值为1
+        let calcStep = parseFloat(this.step) || 10;// 默认值为10
         // console.log("curentX: " + x);
         // console.log("clientX: " + this.clientX);
         if (x > this.clientX) {
@@ -44,8 +44,8 @@
         } else {
           calcStep = -Math.abs(calcStep);
         }
-        // console.log(calcStep);
-        this.$emit("movestep", calcStep, this.name);
+        console.log(calcStep, this.mykey);
+        this.$emit("movestep", calcStep, this.mykey);
         this.clientX = x;
       },
       _onMouseUp(event) {
@@ -56,6 +56,7 @@
     },
     props: [
       'name',
+      'mykey',
       'step',
     ]
   }

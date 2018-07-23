@@ -1,13 +1,12 @@
 <template>
   <div id="app">
-    <div>
-      <MovebleNode :name="mykey">
-        <input v-if='hasInput' class="myInput"
-          @change="changeValue"
-          placeholder="itemData[mykey]"
-          v-model="itemData[mykey]">
-        <span v-else> {{itemData[mykey]}}</span>
-      </MovebleNode>
+    <SlideNode :name="mykey.firstUpperCase()" :mykey="mykey" v-if="typeof itemData[mykey] != 'undefined'">
+      <input v-if='hasInput' class="myInput"
+        @change="changeValue"
+        :placeholder="itemData[mykey]"
+        v-model="itemData[mykey]">
+      <span v-else> {{itemData[mykey]}}</span>
+    </SlideNode>
   </div>
 </template>
 
