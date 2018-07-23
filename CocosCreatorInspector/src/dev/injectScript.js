@@ -40,6 +40,7 @@ export default function () {
   window.pluginSetNodeValue = function (uuid, key, value) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {
+      this.console.log(key, node[key]);
       node[key] = value;
     }
   }

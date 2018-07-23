@@ -15,7 +15,10 @@
         </el-col>
         <el-col :span="16">
           <div class="grid-content bg-purple-light treeInfo">
-            <NodeBaseProperty v-bind:itemData="treeItemData"></NodeBaseProperty>
+            <BaseNode :itemData="treeItemData" mykey="uuid"></BaseNode>
+            <BaseNode :itemData="treeItemData" mykey="name"></BaseNode>
+            <MultiNode :itemData="treeItemData" titlename="Position" :mykeys="['x', 'y']" hasInput="true"></MultiNode>
+            <!--NodeBaseProperty v-bind:itemData="treeItemData"></NodeBaseProperty-->
             <SceneProperty v-show=" treeItemData.type === 'cc_Scene'"></SceneProperty>
             <ComponentsProperty v-bind:components="treeItemData.components"></ComponentsProperty>
           </div>

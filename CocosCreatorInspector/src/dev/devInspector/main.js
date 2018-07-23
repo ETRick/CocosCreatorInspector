@@ -3,18 +3,23 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App.vue';
 
-import ui_prop from './ui/ui-prop.vue'
-import NodeBaseProperty from './ccType/NodeBaseProperty.vue'
-import SceneProperty from './ccType/SceneProperty.vue'
-import ComponentsProperty from './ccType/ComponentsProperty'
-import ColorPicker from './ui/colorPicker'
+import MovebleNode from './basenode/MovebleNode.vue'
+import ColorPicker from './basenode/ColorPicker.vue'
+import BaseNode from './basenode/BaseNode.vue'
+import MultiNode from './basenode/MultiNode.vue'
+import NodeBaseProperty from './compositenode/NodeBaseProperty.vue'
+import SceneProperty from './compositenode/SceneProperty.vue'
+import ComponentsProperty from './compositenode/ComponentsProperty.vue'
 
 
-Vue.component('ui-prop', ui_prop);
+
+Vue.component('MovebleNode', MovebleNode);
+Vue.component('ColorPicker', ColorPicker);
+Vue.component('BaseNode', BaseNode);
+Vue.component('MultiNode', MultiNode);
 Vue.component('NodeBaseProperty', NodeBaseProperty);
 Vue.component('SceneProperty', SceneProperty);
 Vue.component('ComponentsProperty', ComponentsProperty);
-Vue.component('ColorPicker', ColorPicker);
 
 Vue.use(ElementUI);
 new Vue({
