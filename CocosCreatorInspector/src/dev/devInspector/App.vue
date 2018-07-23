@@ -9,7 +9,7 @@
           <div class="grid-content treeList">
             <el-tree :data="treeData"
                      :props="defaultProps"
-                     :expand-on-click-node="false"
+                     :expand-on-click-node="true"
                      @node-click="handleNodeClick"></el-tree>
           </div>
         </el-col>
