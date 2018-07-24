@@ -1,0 +1,43 @@
+[
+    {
+        "type": "single",
+        "key":  "name",
+        "read-only": true
+    },
+    {
+        "type": "multi",
+        "title": "position",
+        "keys": ["x", "y"]
+    },
+    {
+        "type": "single",
+        "key":  "rotation"
+    },
+    {
+        "type": "multi",
+        "title": "scale",
+        "keys": ["scaleX", "scaleY"],
+        "step": 0.01
+    },
+    {
+        "type": "multi",
+        "title": "anchor",
+        "keys": ["anchorX", "anchorY"],
+        "step": 0.01
+    },
+    {
+        "type": "multi",
+        "title": "size",
+        "keys": ["width", "height"]
+    },
+    {
+        "type": "single",
+        "key":  "opacity"
+    },
+    {
+        "type": "multi",
+        "title": "skew",
+        "keys": ["skewX", "skewY"],
+        "step": 1
+    }
+]

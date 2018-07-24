@@ -3,6 +3,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App.vue';
 
+import MyNode from './basenode/Node.vue'
 import SlideNode from './basenode/SlideNode.vue'
 import ColorPicker from './basenode/ColorPicker.vue'
 import FloatNode from './basenode/FloatNode.vue'
@@ -11,6 +12,7 @@ import NodeBaseProperty from './compositenode/NodeBaseProperty.vue'
 import SceneProperty from './compositenode/SceneProperty.vue'
 import ComponentsProperty from './compositenode/ComponentsProperty.vue'
 
+Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);
 Vue.component('ColorPicker', ColorPicker);
 Vue.component('FloatNode', FloatNode);

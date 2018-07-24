@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <SlideNode :name="titlename.firstUpperCase()" :mykey="titlename">
+    <Node :name="titlename.firstUpperCase()">
       <div style="float: left;width: 100%;">
         <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey] != 'undefined'"
                   :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
@@ -13,7 +13,7 @@
           <span v-else> {{itemData[mykey]}} </span>
         </SlideNode>
       </div>
-    </SlideNode>
+    </Node>
   </div>
 </template>
 

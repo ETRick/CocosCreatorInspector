@@ -2,7 +2,9 @@
   <div id="app">
     <!-- uuid -->
     <FloatNode :itemData="itemData" mykey="uuid"></FloatNode>
-    <!-- 姓名 -->
+    
+    <!-- 配置文件中属性 -->
+    <FloatNode :itemData="itemData" mykey="name"></FloatNode>
     <FloatNode :itemData="itemData" mykey="name"></FloatNode>
     <!-- 坐标 -->
     <MultiFloatNode :itemData="itemData" titlename="position" :mykeys="['x', 'y']" hasInput="true"></MultiFloatNode>
@@ -62,64 +64,19 @@
 </template>
 
 <script>
-
+  import configjs from '../config/nodebase.json'
 
   export default {
+    mounted() {
+      console.log(this.configs);
+    },
     name: "app",
     data() {
-      return {}
+      return {
+        configs: JSON.parse(configjs),
+      }
     },
     methods: {
-      changeSizeActionWidth(step) {
-        let w = parseFloat(this.itemData.width);
-        this.itemData.width = w + step;
-        this.changeSize();
-      },
-      changeSizeActionHeight(step) {
-        let h = parseFloat(this.itemData.height);
-        this.itemData.height = h + step;
-        this.changeSize();
-      },
-      changePositionActionX(step) {
-        let x = parseFloat(this.itemData.x);
-        this.itemData.x = x + step;
-        this.changePosition();
-      },
-      changePositionActionY(step) {
-        let y = parseFloat(this.itemData.y);
-        this.itemData.y = y + step;
-        this.changePosition();
-      },
-      changePosition() {
-        // console.log("change changePositionX:" + this.itemData.x);
-        // console.log("change changePositionY:" + this.itemData.y);
-        this._evalCode(
-          "window.pluginSetNodePosition(" +
-          "'" + this.itemData.uuid + "'," +
-          "'" + this.itemData.x + "'," +
-          "'" + this.itemData.y + "'" +
-          ")");
-        this._freshNode();
-      },
-      changeSize() {
-        // console.log("change width:" + this.itemData.width);
-        // console.log("change height:" + this.itemData.height);
-        this._evalCode(
-          "window.pluginSetNodeSize(" +
-          "'" + this.itemData.uuid + "'," +
-          "'" + this.itemData.width + "'," +
-          "'" + this.itemData.height + "'" +
-          ")");
-        this._freshNode();
-      },
-      changeRotation() {
-        console.log("change rotation:" + this.itemData.rotation);
-        this._evalCode(
-          "window.pluginSetNodeRotation('" +
-          this.itemData.uuid + "','" +
-          this.itemData.rotation + "')");
-        this._freshNode();
-      },
       changeColor() {
         let color = this.itemData.color;
         console.log("color:" + color);
