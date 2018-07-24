@@ -6,9 +6,15 @@
         <hr style="margin-bottom: 2px;margin-top: 2px;"/>
       </div>
       <div v-show="isShowComp">
-        <SlideNode :name="index" track-by="$index" v-for="(comp,index) in components" :key="index">
+        <Node :name="index" v-for="(comp,index) in components" :key="index">
           <span>{{comp.type}}</span>
-        </SlideNode>
+          <Node v-for="(property, key) in comp" 
+                :key="key" 
+                v-if="typeof comp[property] != 'function' && key[0] != '_'"
+                :name="key">
+          </Node>
+        </Node>
+
       </div>
     </div>
   </div>
@@ -17,7 +23,6 @@
 <script>
 
   export default {
-    name: "",
     data() {
       return {
         isShowComp: true,
@@ -25,6 +30,7 @@
     },
     methods: {
       onClickComp() {
+        console.log("mouted:", this.components);
         this.isShowComp = !this.isShowComp;
       }
     },

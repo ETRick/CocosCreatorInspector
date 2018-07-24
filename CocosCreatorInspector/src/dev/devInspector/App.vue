@@ -78,8 +78,8 @@
       }.bind(this));
 
       window.addEventListener('message', function (event) {
-        console.log("on vue:" + JSON.stringify(event.data));
-        console.log("on vue:" + JSON.stringify(event));
+        // console.log("on vue:" + JSON.stringify(event.data));
+        // console.log("on vue:" + JSON.stringify(event));
       }, false);
     },
     methods: {
