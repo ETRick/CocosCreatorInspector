@@ -2,7 +2,7 @@
     {
         "type": "single",
         "key":  "name",
-        "read-only": true
+        "readonly": true
     },
     {
         "type": "multi",
@@ -39,5 +39,9 @@
         "title": "skew",
         "keys": ["skewX", "skewY"],
         "step": 1
+    },
+    {
+        "type": "singlebool",
+        "key":  "active"
     }
 ]

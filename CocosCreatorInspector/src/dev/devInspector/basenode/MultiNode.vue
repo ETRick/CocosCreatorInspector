@@ -6,7 +6,7 @@
                   :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
                   class="ui" :style="{width: 100 / mykeys.length + '%'}"
                   @movestep="changeFloatValueAction" :step="step">
-          <input v-if="hasInput" class="myInput"
+          <input v-if="!readonly" class="myInput"
                   @change="changeValue(mykey)"
                   :placeholder="itemData[mykey]"
                   v-model="itemData[mykey]">
@@ -61,7 +61,7 @@ export default {
     "titlename",
     'mykeys',
     'step',
-    "hasInput",
+    "readonly",
   ],
 }
 </script>

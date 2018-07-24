@@ -29,7 +29,7 @@ export default function () {
     return ret;
   }
 
-  // func's type: void func(node)
+  // 设置节点状态（通过函数） func's type: void func(node)
   window.pluginSetNode = function (uuid, func) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {
@@ -37,6 +37,7 @@ export default function () {
     }
   }
 
+  // 设置节点状态（通过key-value）
   window.pluginSetNodeValue = function (uuid, key, value) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {
@@ -45,40 +46,21 @@ export default function () {
     }
   }
 
-
+  // 设置节点颜色
   window.pluginSetNodeColor = function (uuid, colorHex) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {
-      node.color = cc.hexToColor(colorHex);
+      node.color = node.color.fromHEX(colorHex);
     }
   };
-  window.pluginSetNodeRotation = function (uuid, rotation) {
-    let node = window.inspectorGameMemoryStorage[uuid];
-    if (node) {
-      node.rotation = rotation;
-    }
-  };
-  window.pluginSetNodePosition = function (uuid, x, y) {
-    let node = window.inspectorGameMemoryStorage[uuid];
-    if (node) {
-      node.x = x;
-      node.y = y;
-    }
-  };
-  window.pluginSetNodeSize = function (uuid, width, height) {
-    let node = window.inspectorGameMemoryStorage[uuid];
-    if (node) {
-      node.width = width;
-      node.height = height;
-    }
-  };
+
   // 设置节点是否可视
   window.pluginSetNodeActive = function (uuid, isActive) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {
-      if (isActive === 1) {
+      if (isActive === true) {
         node.active = true;
-      } else if (isActive === 0) {
+      } else if (isActive === false) {
         node.active = false;
       }
     }

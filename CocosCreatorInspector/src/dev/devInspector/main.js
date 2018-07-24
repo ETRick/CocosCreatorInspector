@@ -5,18 +5,20 @@ import App from './App.vue';
 
 import MyNode from './basenode/Node.vue'
 import SlideNode from './basenode/SlideNode.vue'
-import ColorPicker from './basenode/ColorPicker.vue'
-import FloatNode from './basenode/FloatNode.vue'
-import MultiFloatNode from './basenode/MultiFloatNode.vue'
+// import ColorPicker from './basenode/ColorPicker.vue'
+import CheckBox from './basenode/CheckBox.vue'
+import SingleNode from './basenode/SingleNode.vue'
+import MultiNode from './basenode/MultiNode.vue'
 import NodeBaseProperty from './compositenode/NodeBaseProperty.vue'
 import SceneProperty from './compositenode/SceneProperty.vue'
 import ComponentsProperty from './compositenode/ComponentsProperty.vue'
 
 Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);
-Vue.component('ColorPicker', ColorPicker);
-Vue.component('FloatNode', FloatNode);
-Vue.component('MultiFloatNode', MultiFloatNode);
+// Vue.component('ColorPicker', ColorPicker);
+Vue.component('CheckBox', CheckBox);
+Vue.component('SingleNode', SingleNode);
+Vue.component('MultiNode', MultiNode);
 Vue.component('NodeBaseProperty', NodeBaseProperty);
 Vue.component('SceneProperty', SceneProperty);
 Vue.component('ComponentsProperty', ComponentsProperty);

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <SlideNode :name="mykey.firstUpperCase()" :mykey="mykey" v-if="typeof itemData[mykey] != 'undefined'">
-      <input v-if='hasInput' class="myInput"
+      <input v-if='!readonly' class="myInput"
         @change="changeValue"
         :placeholder="itemData[mykey]"
         v-model="itemData[mykey]">
@@ -44,7 +44,7 @@
     props: [
       'itemData',
       'mykey',
-      'hasInput'
+      'readonly'
     ]
   }
 </script>
