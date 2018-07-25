@@ -1,9 +1,8 @@
 <template>
   <div id="app">
-    <div>
-        <Node :name="index" v-for="key in comp" :key="key">
-          <span>{{key}}</span>
-        </Node>
+    <div >
+        <SingleNode v-for="mykey in comp" :key="mykey" :itemData="component" :mykey="mykey">
+        </SingleNode>
     </div>
   </div>
 </template>
@@ -11,12 +10,19 @@
 <script>
 
   export default {
+    mounted() {
+      console.log(this.comp);
+    },
     data() {
       return {
-        comp: component.getPublicKey(),
+        // 得到主键
+        comp: Object.keys(this.component).filter(function (key) {
+          return key[0] != "_" && key != "comptype";
+        }),
       }
     },
     methods: {
+      
     },
     props: [
       'component'

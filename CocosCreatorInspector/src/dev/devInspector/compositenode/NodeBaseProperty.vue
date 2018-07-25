@@ -44,9 +44,6 @@
   import configjs from '../config/nodebase.json'
 
   export default {
-    mounted() {
-      console.log(this.configs);
-    },
     name: "app",
     data() {
       return {

@@ -5,12 +5,12 @@
         <h4 @click="onClickComp" style="margin-top: 5px;margin-bottom: 1px;font-weight: bold;cursor: pointer">挂载组件:</h4>
         <hr style="margin-bottom: 2px;margin-top: 2px;"/>
       </div>
-      <div v-show="isShowComp">
-        <Node :name="index" v-for="(comp,index) in components" :key="index">
+      <div v-show="isShowComp" v-for="(comp,index) in components" :key="index">
+        <Node :name="'Num:' + index">
           <span>{{comp.comptype}}</span>
-          <!-- <ComponentProperty :component="comp">
-          </ComponentProperty> -->
         </Node>
+        <ComponentProperty :component="comp">
+        </ComponentProperty>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@
     },
     methods: {
       onClickComp() {
-        console.log("mouted:", this.components);
+        // console.log("mouted:", this.components);
         this.isShowComp = !this.isShowComp;
       }
     },

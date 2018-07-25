@@ -57,7 +57,7 @@
       });
       
       backgroundPageConnection.onMessage.addListener(function (message) {
-        console.log("getInfo:", message);
+        // console.log("getInfo:", message);
         if (message !== null) {
           let msgType = {
             nodeInfo: 2,//节点信息
@@ -73,7 +73,7 @@
             this.isShowDebug = false;
           } else if (message.type === msgType.nodeInfo) {
             this.isShowDebug = true;
-            console.log("msg:", message.msg);
+            // console.log("msg:", message.msg);
             this.treeItemData = message.msg;
           }
         }

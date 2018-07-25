@@ -22,11 +22,14 @@ export default function () {
       return that.slice(0, index);
     }
   };
-
-  // 得到主键
-  window.getPublicKeys = function (obj) {
-    return Object.keys(obj).filter(function (key) {
-      return key[0] != "_";
-    });
-  };
+  // removeByValue 删除数组中某个元素
+  // Array.prototype.removeByValue = function (value) {
+  //   let that = this;
+  //   for (var i = 0; i < that.length; i++) {
+  //     if (that[i] == value) {
+  //       that.splice(i, 1);
+  //       break;
+  //     }
+  //   }
+  // };
 }

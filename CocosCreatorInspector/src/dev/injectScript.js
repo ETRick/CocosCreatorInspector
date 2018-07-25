@@ -29,7 +29,7 @@ export default function () {
           comptype: com.constructor.name,
           enable: com.enable,
         };
-        console.log(filterCom, "\n\n\n");
+        // console.log(filterCom, "\n\n\n");
         for (let key in com) {
           let value = com[key];
           if (key[0] != "_" && typeof value != "function") {
@@ -43,7 +43,7 @@ export default function () {
             } else {
               filterCom[key] = value;
             }
-            console.log(key, filterCom[key]);
+            // console.log(key, filterCom[key]);
           }
           // 到姓名结束
           if (key == "name") {
@@ -138,7 +138,7 @@ export default function () {
     if (node) {
       let nodeComps = getNodeComponentsInfo(node);
       let nodeData = window.connectConstructor.Node(node);
-      console.log("components:", nodeComps);
+      // console.log("components:", nodeComps);
       nodeData.components = nodeComps;
       if (!node instanceof cc.Scene) {
         nodeData.active = node.active;
