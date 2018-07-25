@@ -7,14 +7,10 @@
       </div>
       <div v-show="isShowComp">
         <Node :name="index" v-for="(comp,index) in components" :key="index">
-          <span>{{comp.type}}</span>
-          <Node v-for="(property, key) in comp" 
-                :key="key" 
-                v-if="typeof comp[property] != 'function' && key[0] != '_'"
-                :name="key">
-          </Node>
+          <span>{{comp.comptype}}</span>
+          <!-- <ComponentProperty :component="comp">
+          </ComponentProperty> -->
         </Node>
-
       </div>
     </div>
   </div>
@@ -26,6 +22,7 @@
     data() {
       return {
         isShowComp: true,
+
       }
     },
     methods: {

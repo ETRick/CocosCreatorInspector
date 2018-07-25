@@ -11,6 +11,7 @@ import SingleNode from './basenode/SingleNode.vue'
 import MultiNode from './basenode/MultiNode.vue'
 import NodeBaseProperty from './compositenode/NodeBaseProperty.vue'
 import SceneProperty from './compositenode/SceneProperty.vue'
+import ComponentProperty from './compositenode/ComponentProperty.vue'
 import ComponentsProperty from './compositenode/ComponentsProperty.vue'
 
 Vue.component('Node', MyNode);
@@ -21,6 +22,7 @@ Vue.component('SingleNode', SingleNode);
 Vue.component('MultiNode', MultiNode);
 Vue.component('NodeBaseProperty', NodeBaseProperty);
 Vue.component('SceneProperty', SceneProperty);
+Vue.component('ComponentProperty', ComponentProperty);
 Vue.component('ComponentsProperty', ComponentsProperty);
 
 Vue.use(ElementUI);

@@ -55,7 +55,9 @@
       let backgroundPageConnection = chrome.extension.connect({
         name: btoa("for" + String(chrome.devtools.inspectedWindow.tabId))
       });
+      
       backgroundPageConnection.onMessage.addListener(function (message) {
+        console.log("getInfo:", message);
         if (message !== null) {
           let msgType = {
             nodeInfo: 2,//节点信息
@@ -71,7 +73,7 @@
             this.isShowDebug = false;
           } else if (message.type === msgType.nodeInfo) {
             this.isShowDebug = true;
-            // console.log(message.msg);
+            console.log("msg:", message.msg);
             this.treeItemData = message.msg;
           }
         }
@@ -123,10 +125,11 @@
       },
       handleNodeClick(data) {
         // todo 去获取节点信息
-        // console.log(data);
+        // console.log("click:", data);
         let uuid = data.uuid;
         if (uuid !== undefined) {
           let code = "window.getNodeInfo('" + uuid + "')";
+          // console.log(code);
           chrome.devtools.inspectedWindow.eval(code);
         }
       },
@@ -176,7 +179,7 @@
       _getInjectScriptString() {
         let code = injectScript.toString();
         let array = code.split('\n');
-        // ??? 没必要吧 ???
+        // PS: 必须不能带头尾
         array.splice(0, 1);// 删除开头
         array.splice(-1, 1);// 删除结尾
         let evalCode = "";
