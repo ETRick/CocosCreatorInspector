@@ -9,7 +9,7 @@
         <Node :name="'Num:' + index">
           <span>{{comp.comptype}}</span>
         </Node>
-        <ComponentProperty :component="comp">
+        <ComponentProperty v-if="comp.comptype.slice(0, 3) != 'cc_'" :component="comp">
         </ComponentProperty>
       </div>
     </div>
@@ -22,7 +22,6 @@
     data() {
       return {
         isShowComp: true,
-
       }
     },
     methods: {

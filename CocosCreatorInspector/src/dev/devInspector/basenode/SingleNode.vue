@@ -19,7 +19,7 @@
     methods: {
       // 修改任意key-value属性值
       changeValue() {
-        // console.log(this.mykey, this.itemData[this.mykey]);
+        console.log(this.mykey, this.itemData[this.mykey]);
         this._evalCode(
           "window.pluginSetNodeValue(" +
           "'" + this.itemData.uuid + "'," +

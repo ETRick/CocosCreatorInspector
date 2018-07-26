@@ -27,11 +27,10 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     // webpack 执行之前删除dist下的文件
     new CleanWebpackPlugin(
-      ['dist/*'],
-      {
-        root: __dirname,//根目录
-        verbose: true,//开启在控制台输出信息
-        dry: false,//启用删除文件
+      ['dist/*'], {
+        root: __dirname, //根目录
+        verbose: true, //开启在控制台输出信息
+        dry: false, //启用删除文件
       }),
     //index.html
     new HtmlWebpackPlugin({
@@ -64,8 +63,7 @@ module.exports = {
     }),
 
     // 拷贝静态资源(manifest.json)
-    new CopyWebpackPlugin([
-      {
+    new CopyWebpackPlugin([{
         from: path.resolve(__dirname, 'src/assets/'),
         to: 'static',
         force: true,
@@ -74,7 +72,8 @@ module.exports = {
       {
         from: path.resolve(__dirname, 'src/manifest.json'),
         to: path.resolve(__dirname, 'dist/')
-      }]),
+      }
+    ]),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
@@ -91,8 +90,7 @@ module.exports = {
     })
   ],
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.(less|css)$/,
         use: [
           'vue-style-loader',
@@ -131,10 +129,10 @@ module.exports = {
     extensions: ['*', '.js', '.vue', '.json']
   },
   devServer: {
-    contentBase: "./dist",//本地服务器所加载的页面所在的目录
-    historyApiFallback: true,//不跳转
+    contentBase: "./dist", //本地服务器所加载的页面所在的目录
+    historyApiFallback: true, //不跳转
     noInfo: true,
-    inline: true,//实时刷新
+    inline: true, //实时刷新
     overlay: true
   },
 
@@ -143,5 +141,3 @@ module.exports = {
   },
   devtool: '#source-map'
 };
-
-

@@ -27,12 +27,14 @@ export default function () {
       if (com instanceof cc.Component) {
         let filterCom = {
           comptype: com.constructor.name,
+          uuid: com.uuid,
           enable: com.enable,
         };
         // console.log(filterCom, "\n\n\n");
         for (let key in com) {
           let value = com[key];
-          if (key[0] != "_" && typeof value != "function") {
+          // 到姓名结束
+          if (key[0] != "_" && key != "name" && typeof value != "function") {
             // console.log(key, value);
             // object节点无法通过post进行复制，因此在此处修改
             if (value instanceof cc.Object || value instanceof cc.Action) {
@@ -44,10 +46,6 @@ export default function () {
               filterCom[key] = value;
             }
             // console.log(key, filterCom[key]);
-          }
-          // 到姓名结束
-          if (key == "name") {
-            break;
           }
         }
         // console.log(filterCom);
@@ -79,22 +77,11 @@ export default function () {
           scaleY: node.scaleY,
           skewX: node.skewX,
           skewY: node.skewY,
+          active: node.active,
         };
       }
     }
   };
-
-  // 收集组件信息
-  function getNodeComponentsInfo(node) {
-    let ret = [];
-    let nodeComp = node._components;
-    for (let i in nodeComp) {
-      let com = nodeComp[i];
-      window.inspectorGameMemoryStorage[com.uuid] = com;
-      ret.push(window.connectConstructor.Component(com));
-    }
-    return ret;
-  }
 
   // 设置节点状态（通过函数） func's type: void func(node)
   window.pluginSetNode = function (uuid, func) {
@@ -107,8 +94,8 @@ export default function () {
   // 设置节点状态（通过key-value）
   window.pluginSetNodeValue = function (uuid, key, value) {
     let node = window.inspectorGameMemoryStorage[uuid];
+    console.log("SetNodeValue:", uuid, node, key, value);
     if (node) {
-      // this.console.log(key, node[key]);
       node[key] = value;
     }
   }
@@ -132,13 +119,26 @@ export default function () {
       }
     }
   };
+
+  // 收集组件信息
+  function getNodeComponentsInfo(node) {
+    let ret = [];
+    let nodeComp = node._components;
+    for (let i in nodeComp) {
+      let com = nodeComp[i];
+      window.inspectorGameMemoryStorage[com.uuid] = com;
+      ret.push(window.connectConstructor.Component(com));
+    }
+    return ret;
+  }
+
   // 获取节点信息
   window.getNodeInfo = function (uuid) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {
       let nodeComps = getNodeComponentsInfo(node);
       let nodeData = window.connectConstructor.Node(node);
-      // console.log("components:", nodeComps);
+      console.log("components:", nodeComps);
       nodeData.components = nodeComps;
       if (!node instanceof cc.Scene) {
         nodeData.active = node.active;
@@ -171,7 +171,7 @@ export default function () {
   window.sendMsgToDevTools = function (type, msg) {
     // this.console.log("type:", type);
     // this.console.log("meg:", msg);
-    top.postMessage({
+    window.postMessage({
       type: type,
       msg: msg
     }, "*");
@@ -203,7 +203,7 @@ export default function () {
       for (let node of sceneChildren) {
         getNodeChildren(node, postData.scene.children);
       }
-      console.log(postData);
+      // console.log(postData);
       window.sendMsgToDevTools(msgType.nodeListInfo, postData);
     } else {
       postData.scene = null;

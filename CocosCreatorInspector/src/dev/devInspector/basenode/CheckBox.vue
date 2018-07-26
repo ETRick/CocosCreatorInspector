@@ -11,6 +11,9 @@
 <script>
   export default {
     name: "app",
+    mounted() {
+      console.log(this.itemData[this.mykey]);
+    },
     data() {
       return {
       };

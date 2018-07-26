@@ -2,7 +2,7 @@
   <div id="app" style="height: 30px;overflow: hidden;width: 100%;">
     <div style="width: 20%;float: left;background-color: #4a4a4a;text-align: left;"
          class="noselect">
-      <span onselectstart="return false;" class="noselect font"
+      <span onselectstart="return false;" class="noselect font spancolor"
             style="line-height: 30px;color: #bdbdbd;font-size: 12px;margin: 3px;">
         {{name}}
       </span>
