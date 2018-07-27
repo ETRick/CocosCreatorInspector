@@ -7,9 +7,11 @@
                   class="ui" :style="{width: 100 / mykeys.length + '%'}"
                   @movestep="changeFloatValueAction" :step="step">
           <input v-if="!readonly" class="myInput"
+                  @focus="pauseGame"
+                  @blur="resumeGame"
                   @change="changeValue(mykey)"
                   :placeholder="itemData[mykey]"
-                  v-model="itemData[mykey]">
+                  v-model.lazy="itemData[mykey]">
           <span v-else> {{itemData[mykey]}} </span>
         </SlideNode>
       </div>
@@ -23,37 +25,37 @@ export default {
   data() {
     return {}
   },
-  keysFunc() {
-    return this.mykeys;
-  },
   methods: {
     changeValue(key) {
-      // console.log("changeValue", key);
-      this._evalCode(
-        "window.pluginSetNodeValue(" +
+      console.log("changeValue", key);
+      // 添加uuid，key值
+      let code = "window.pluginSetNodeValue(" +
         "'" + this.itemData.uuid + "'," +
-        "'" + key + "'," +
-        "'" + this.itemData[key] + "'" +
-        ")");
+        "'" + key + "',";
+      // value值需要判断一下
+      if (typeof this.itemData[key] == "number") {
+        code += this.itemData[key] + ")";
+      } else {
+        code += "'" + this.itemData[key] + "'" + ")";
+      }
+      this._evalCode(code);
       this._freshNode();
     },
     changeFloatValueAction(step, key) {
       // console.log("changeFloatValueAction", key);
-      let value = parseFloat(this.itemData[key]);
-      this.itemData[key] = value + step;
-      this.changeValue(key);
-    },
-    _freshNode() {
-      let uuid = this.itemData.uuid;
-      let code2 = "window.getNodeInfo('" + uuid + "')";
-      this._evalCode(code2);
-    },
-    _evalCode(code) {
-      if (chrome && chrome.devtools) {
-        chrome.devtools.inspectedWindow.eval(code);
-      } else {
-        console.log(code);
+      if (typeof this.itemData[key] == "number") {
+        let value = parseFloat(this.itemData[key]);
+        this.itemData[key] = value + step;
+        this.changeValue(key);
       }
+    },
+    pauseGame() {
+      this._evalCode("window.pluginPauseGame()");
+      this._freshNode();
+    },
+    resumeGame() {
+      this._evalCode("window.pluginResumeGame()");
+      this._freshNode();
     },
   },
   props: [

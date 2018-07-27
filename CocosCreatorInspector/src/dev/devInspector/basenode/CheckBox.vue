@@ -11,9 +11,9 @@
 <script>
   export default {
     name: "app",
-    mounted() {
-      console.log(this.itemData[this.mykey]);
-    },
+    // mounted() {
+    //   console.log(this.itemData[this.mykey]);
+    // },
     data() {
       return {
       };
@@ -24,20 +24,8 @@
             this._evalCode("window.pluginSetNodeValue('" 
                         + this.itemData.uuid + "','"
                         + this.mykey + "',"
-                        + (this.itemData[this.mykey] ? "1" : "0") + ");");
+                        + this.itemData[this.mykey] + ");");
             this._freshNode();
-        },
-        _freshNode() {
-            let uuid = this.itemData.uuid;
-            let code2 = "window.getNodeInfo('" + uuid + "')";
-            this._evalCode(code2);
-        },
-        _evalCode(code) {
-            if (chrome && chrome.devtools) {
-            chrome.devtools.inspectedWindow.eval(code);
-            } else {
-            console.log(code);
-            }
         },
     },
     props: [

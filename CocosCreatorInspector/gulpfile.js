@@ -2,15 +2,8 @@ let gulp = require('gulp');
 let path = require('path');
 let fse = require('fs-extra');
 let fs = require('fs');
-let shell = require('gulp-shell');
-let sourcemaps = require('gulp-sourcemaps');
 
 gulp.task("packageCrx", function () {
-  sourcemaps.init({
-        loadMaps: true,  //是否加载以前的 .map 
-        largeFile: true,   //是否以流的方式处理大文件
-  })
-
   let pem = path.join(__dirname, "bin/dist.pem");
   if (!fs.existsSync(pem)) {
     console.log("签名文件不存在:" + pem);
@@ -53,7 +46,6 @@ gulp.task("packageCrx", function () {
       console.log("发布失败!");
     }
   });
-  sourcemaps.write("maps");
 });
 gulp.task("default", function () {
   console.log("hello gulp!");

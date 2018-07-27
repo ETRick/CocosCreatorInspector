@@ -8,7 +8,8 @@
       <SingleNode v-if="config.type === 'single'" 
                  :itemData="itemData"
                  :mykey="config.key"
-                 :readonly="config.readonly">
+                 :readonly="config.readonly"
+                 :step="config.step || 10">
       </SingleNode>
       <CheckBox v-else-if="config.type === 'singlebool'"
                 :itemData="itemData"

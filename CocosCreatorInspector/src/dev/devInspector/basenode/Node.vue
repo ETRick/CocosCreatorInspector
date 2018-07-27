@@ -19,8 +19,7 @@
   export default {
     name: "app",
     data() {
-      return {
-      };
+      return {};
     },
     props: [
       'name'

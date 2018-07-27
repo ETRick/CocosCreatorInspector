@@ -29,8 +29,9 @@
 </template>
 
 <script>
-  import injectScript from '../injectScript.js'
-  import util from '../util.js'
+  import injectPlugin from '../injectedScripts/pluginInit.js'
+  import injectConnect from '../injectedScripts/connectInit.js'
+  import injectScript from '../injectedScripts/injectScript.js'
 
   export default {
     name: "app",
@@ -39,12 +40,12 @@
         isShowDebug: false,
         treeItemData: {},
         treeData: [],
+        oldTreeData: [],
         treeDataMap: {},
+        expendTreeKey: ""
       }
     },
     created() {
-      util();
-
       if (chrome && chrome.extension) {
 
       } else {
@@ -60,21 +61,24 @@
         // console.log("getInfo:", message);
         if (message !== null) {
           let msgType = {
-            nodeInfo: 2,//节点信息
-            nodeListInfo: 1,// 节点列表信息
-            notSupport: 0,// 不支持的游戏
+            refleshInfo: 3, // 节点刷新信息
+            nodeInfo: 2, // 节点信息
+            nodeListInfo: 1, // 节点列表信息
+            notSupport: 0, // 不支持的游戏
           };
-          if (message.type === msgType.nodeListInfo) {// 游戏节点
+          if (message.type === msgType.nodeListInfo) { // 游戏树节点
             this.isShowDebug = true;
             // let str = JSON.stringify(message.msg);
             // console.log("onMessage: " + str);
             this._updateView(message.msg);
-          } else if (message.type === msgType.notSupport) {// 不支持调试
+          } else if (message.type === msgType.notSupport) { // 不支持调试
             this.isShowDebug = false;
-          } else if (message.type === msgType.nodeInfo) {
+          } else if (message.type === msgType.nodeInfo) { // 获取节点属性信息
             this.isShowDebug = true;
             // console.log("msg:", message.msg);
             this.treeItemData = message.msg;
+          } else if (message.type === msgType.refleshInfo) { // 刷新节点
+            this._freshNode(this.treeItemData.uuid);
           }
         }
       }.bind(this));
@@ -126,18 +130,30 @@
       handleNodeClick(data) {
         // todo 去获取节点信息
         // console.log("click:", data);
-        let uuid = data.uuid;
-        if (uuid !== undefined) {
-          let code = "window.getNodeInfo('" + uuid + "')";
-          // console.log(code);
-          chrome.devtools.inspectedWindow.eval(code);
-        }
+        this._freshNode(data.uuid);
       },
-      _updateView(data) {
-        // 构建树形数据
-        this.treeData = [];
+      // 更新树，如果出现更新，返回true
+      _updateTree(oldtree, newtree) {
+        let update = false;
+        for (let i = 0; i < newtree.length; i++) {
+          if (typeof oldtree[i] == 'undefined') {
+            update = true;
+            oldtree.push(newtree[i]);
+          } else if (oldtree[i].uuid != newtree[i].uuid) {
+            update = true;
+            oldtree[i].uuid = newtree[i].uuid;
+            oldtree[i].name = newtree[i].name;
+          }
+          update = update || this._updateTree(oldtree[i].children, newtree[i].children);
+        }
+        oldtree.splice(newtree.length, newtree.length - oldtree.length);
+        return update || newtree.length != oldtree.length;
+      },
+      _generateTreeData(data) {
+        let treeData = [];
         let sceneData = data.scene;
         if (sceneData) {
+          // console.log(sceneData);
           // scene info
           let dataRoot = {
             type: sceneData.type,
@@ -145,21 +161,15 @@
             label: sceneData.name,
             children: []
           };
-          this.treeData.push(dataRoot);
-          this.handleNodeClick(dataRoot);
+          treeData.push(dataRoot);
+          // this.handleNodeClick(dataRoot);
           // scene children info
           for (let itemSceneData of sceneData.children) {
             // let sceneItem = {uuid: itemSceneData.uuid, label: itemSceneData.name, children: []};
             let sceneItem = {};
             dealChildrenNode(itemSceneData, sceneItem);
-            // ???? bug ????
-            this.treeData[0].children.push(sceneItem);
+            treeData[0].children.push(sceneItem);
           }
-        }
-        // TODO 节点树折叠的问题
-        if (JSON.stringify(this.treeData) === "[]") {// 第一次赋值
-
-        } else {// 更新值
         }
 
         function dealChildrenNode(rootData, obj) {
@@ -175,14 +185,34 @@
             obj.children.push(item);
           }
         }
+
+        return treeData;
       },
-      _getInjectScriptString() {
-        let code = injectScript.toString();
+      _updateView(data) {
+        // TODO 节点树折叠的问题
+        if (JSON.stringify(this.treeData) !== "[]") { // 更新值
+          let newtree = this._generateTreeData(data);
+          if (this._updateTree(this.oldTreeData, newtree)) {
+            console.log("enter?");
+            this._updateTree(this.treeData, this.oldTreeData);
+          }
+        } else { // 第一次赋值
+          // 构建树形数据
+          this.treeData = this._generateTreeData(data);
+          this._updateTree(this.oldTreeData, this.treeData);
+          this.handleNodeClick({uuid: this.treeData[0].uuid});
+        }
+      },
+      _getInjectScriptString(script) {
+        // PS:脚本代码行数过多会读不进来，目前测试为230行
+        let code = script.toString();
         let array = code.split('\n');
-        // PS: 必须不能带头尾
-        array.splice(0, 1);// 删除开头
-        array.splice(-1, 1);// 删除结尾
+        // 删除开头function() {
+        array.splice(0, 1);
+        // 删除结尾} 使函数直接注入
+        array.splice(-1, 1);
         let evalCode = "";
+        // 防止注释使代码失效
         for (let i = 0; i < array.length; i++) {
           evalCode += array[i] + '\n';
         }
@@ -191,7 +221,11 @@
       },
 
       onBtnClickUpdatePage() {
-        let code = this._getInjectScriptString();
+        let code = this._getInjectScriptString(injectPlugin);
+        chrome.devtools.inspectedWindow.eval(code);
+        code = this._getInjectScriptString(injectConnect);
+        chrome.devtools.inspectedWindow.eval(code);
+        code = this._getInjectScriptString(injectScript);
         chrome.devtools.inspectedWindow.eval(code, function () {
           console.log("刷新成功!");
         });

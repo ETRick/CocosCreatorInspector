@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default function () {
   // String 字符串扩展函数
   // firstUpperCase 将字符串首字母大写
@@ -32,4 +34,22 @@ export default function () {
   //     }
   //   }
   // };
+
+  // 刷新节点
+  Vue.prototype._freshNode = function (uuid) {
+    if (typeof uuid == "undefined") {
+      uuid = this.itemData.uuid;
+    }
+    let code2 = "window.getNodeInfo('" + uuid + "')";
+    this._evalCode(code2);
+  };
+
+  // 执行代码
+  Vue.prototype._evalCode = function (code) {
+    if (chrome && chrome.devtools) {
+      chrome.devtools.inspectedWindow.eval(code);
+    } else {
+      console.log(code);
+    }
+  };
 }

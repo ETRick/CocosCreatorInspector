@@ -14,6 +14,10 @@ import SceneProperty from './compositenode/SceneProperty.vue'
 import ComponentProperty from './compositenode/ComponentProperty.vue'
 import ComponentsProperty from './compositenode/ComponentsProperty.vue'
 
+import util from '../util.js'
+
+util();
+
 Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);
 // Vue.component('ColorPicker', ColorPicker);

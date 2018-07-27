@@ -8,8 +8,8 @@
         </CheckBox>
         <SingleNode v-else-if="typeof component[mykey] != 'object'" :itemData="component" :mykey="mykey">
         </SingleNode>
-        <Node v-else :name="mykey.firstUpperCase()">
-          <span> {{component[mykey] && component[mykey].name ? component[mykey].name : "null"}} </span>
+        <Node v-else-if="component[mykey] && component[mykey].name" :name="mykey.firstUpperCase()">
+          <span> {{component[mykey].name}} </span>
         </Node>
     </div>
   </div>
@@ -18,15 +18,15 @@
 <script>
 
   export default {
-    mounted() {
-      console.log(this.component);
-    },
+    // mounted() {
+    //   console.log(this.component);
+    // },
     data() {
       return {
-        // 得到主键
+        // 得到主键，除去comptype和uuid
         comp: Object.keys(this.component).filter(function(key) {
           return key[0] != "_";
-        }).slice(2, -1)
+        }).slice(2)
       }
     },
     methods: {
