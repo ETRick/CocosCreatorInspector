@@ -22,14 +22,6 @@
       return {}
     },
     methods: {
-      changeFloatValueAction(step, key) {
-        // console.log("changeFloatValueAction", key);
-        if (typeof this.itemData[this.mykey] == "number") {
-          let value = parseFloat(this.itemData[key]);
-          this.itemData[key] = value + step;
-          this.changeValue(key);
-        }
-      },
       // 修改任意key-value属性值
       changeValue() {
         // 添加uuid，key值
@@ -44,6 +36,14 @@
         }
         this._evalCode(code);
         this._freshNode();
+      },
+      changeFloatValueAction(step, key) {
+        // console.log("changeFloatValueAction", key);
+        if (typeof this.itemData[this.mykey] == "number") {
+          let value = parseFloat(this.itemData[key]);
+          this.itemData[key] = value + step;
+          this.changeValue(key);
+        }
       },
       pauseGame() {
         this._evalCode("window.pluginPauseGame()");

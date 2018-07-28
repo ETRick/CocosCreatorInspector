@@ -14,8 +14,8 @@ import SceneProperty from './compositenode/SceneProperty.vue'
 import ComponentProperty from './compositenode/ComponentProperty.vue'
 import ComponentsProperty from './compositenode/ComponentsProperty.vue'
 
+// 自定义util函数加载
 import util from './util.js'
-
 util();
 
 Vue.component('Node', MyNode);

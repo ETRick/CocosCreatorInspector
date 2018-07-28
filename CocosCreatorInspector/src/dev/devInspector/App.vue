@@ -16,7 +16,6 @@
         <el-col :span="16">
           <div class="grid-content bg-purple-light treeInfo">
             <NodeBaseProperty :itemData="treeItemData"></NodeBaseProperty>
-            <SceneProperty v-if="treeItemData.type === 'cc_Scene'"></SceneProperty>
             <ComponentsProperty :components="treeItemData.components"></ComponentsProperty>
           </div>
         </el-col>
@@ -29,8 +28,8 @@
 </template>
 
 <script>
-  import injectPlugin from '../injectedScripts/pluginInit.js'
-  import injectConnect from '../injectedScripts/connectInit.js'
+  import injectPluginInit from '../injectedScripts/pluginInit.js'
+  import injectConnectInit from '../injectedScripts/connectInit.js'
   import injectScript from '../injectedScripts/injectScript.js'
 
   export default {
@@ -221,9 +220,9 @@
       },
 
       onBtnClickUpdatePage() {
-        let code = this._getInjectScriptString(injectPlugin);
+        let code = this._getInjectScriptString(injectPluginInit);
         chrome.devtools.inspectedWindow.eval(code);
-        code = this._getInjectScriptString(injectConnect);
+        code = this._getInjectScriptString(injectConnectInit);
         chrome.devtools.inspectedWindow.eval(code);
         code = this._getInjectScriptString(injectScript);
         chrome.devtools.inspectedWindow.eval(code, function () {
