@@ -1,13 +1,13 @@
 .DS_Store
-/node_modules
+node_modules
 npm-debug.log
 yarn-error.log
 
 # Editor directories and files
 .idea
 *.suo
-/dist
+dist
 *.ntvs*
 *.njsproj
 *.sln
-/bin/cc-inspector.crx
+bin/cc-inspector.crx
