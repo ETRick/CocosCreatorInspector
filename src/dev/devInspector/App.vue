@@ -192,7 +192,6 @@
         if (JSON.stringify(this.treeData) !== "[]") { // 更新值
           let newtree = this._generateTreeData(data);
           if (this._updateTree(this.oldTreeData, newtree)) {
-            console.log("enter?");
             this._updateTree(this.treeData, this.oldTreeData);
           }
         } else { // 第一次赋值

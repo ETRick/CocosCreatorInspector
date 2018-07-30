@@ -54,24 +54,11 @@
     methods: {
       changeColor() {
         let color = this.itemData.color;
-        console.log("color:" + color);
         this._evalCode(
           "window.pluginSetNodeColor('" +
           this.itemData.uuid + "','" +
           color + "');");
         this._freshNode();
-      },
-      _freshNode() {
-        let uuid = this.itemData.uuid;
-        let code2 = "window.getNodeInfo('" + uuid + "')";
-        this._evalCode(code2);
-      },
-      _evalCode(code) {
-        if (chrome && chrome.devtools) {
-          chrome.devtools.inspectedWindow.eval(code);
-        } else {
-          console.log(code);
-        }
       },
     },
     props: [
