@@ -105,9 +105,6 @@ export default function () {
       let nodeData = window.Connect.Node(node);
       // console.log("components:", nodeComps);
       nodeData.components = nodeComps;
-      if (node instanceof cc.Scene) {
-        delete nodeData.active;
-      }
       // console.log("send:", nodeData);
       window.sendMsgToDevTools(window.Connect.msgType.nodeInfo, nodeData);
     } else {

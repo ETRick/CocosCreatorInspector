@@ -44,7 +44,7 @@ export default function () {
     // 节点构造：构造自定义节点
     Node(node) {
       if (node instanceof cc.Node) {
-        return {
+        let rtnNode = {
           type: node.constructor.name,
           uuid: node.uuid,
           name: node.name,
@@ -66,8 +66,12 @@ export default function () {
           scaleY: node.scaleY,
           skewX: node.skewX,
           skewY: node.skewY,
-          active: node.active,
         };
+        // scene没有active
+        if (!node instanceof cc.Scene) {
+          rtnNode.active = node.active;
+        }
+        return rtnNode;
       }
     }
   };
