@@ -5,7 +5,7 @@
         <h4 @click="onClickComp" style="margin-top: 5px;margin-bottom: 1px;font-weight: bold;cursor: pointer">挂载组件:</h4>
         <hr style="margin-bottom: 2px;margin-top: 2px;"/>
       </div>
-      <div v-show="isShowComp" v-for="(comp,index) in components" :key="index">
+      <div v-show="isShowComp" v-for="(comp,index) in components" :key="comp.uuid">
         <Node :name="'Num:' + index">
           <span>{{comp.comptype}}</span>
         </Node>

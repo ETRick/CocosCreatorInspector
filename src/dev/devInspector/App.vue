@@ -12,7 +12,6 @@
                      show-checkbox
                      check-strictly
                      expand-on-click-node
-                     check-on-click-node
                      node-key="uuid"
                      :default-expanded-keys="Object.keys(expendTreeKeys)"
                      :render-content="renderTreeContent"
@@ -79,7 +78,8 @@
             this.isShowDebug = false;
           } else if (message.type === msgType.nodeInfo) { // 获取节点属性信息
             this.isShowDebug = true;
-            // console.log("msg:", message.msg);
+            let node = message.msg;
+            console.log("component:", node.components);
             this.treeItemData = message.msg;
           } else if (message.type === msgType.refleshInfo) { // 刷新节点
             this._freshNode(this.treeItemData.uuid);
@@ -135,7 +135,6 @@
         }
         // 设置唯一选择框
         this.$refs.tree.setCheckedKeys([data.uuid]);
-        console.log(this.expendTreeKeys);
         this._freshNode(data.uuid);
       },
       // 渲染树节点

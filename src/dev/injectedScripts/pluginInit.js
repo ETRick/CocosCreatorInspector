@@ -80,6 +80,23 @@ export default function () {
     }
   };
 
+  // 收集节点信息
+  function getNodeChildren(node, data) {
+    // console.log("nodeName: " + node.name);
+    let nodeData = {
+      uuid: node.uuid,
+      name: node.name,
+      children: [],
+    };
+    window.inspectorGameMemoryStorage[node.uuid] = node;
+    let nodeChildren = node.getChildren();
+    for (let childItem of nodeChildren) {
+      // console.log("childName: " + childItem.name);
+      getNodeChildren(childItem, nodeData.children);
+    }
+    data.push(nodeData);
+  }
+
   // 获取节点信息
   window.getNodeInfo = function (uuid) {
     let node = window.inspectorGameMemoryStorage[uuid];
@@ -98,23 +115,6 @@ export default function () {
       console.log("未获取到节点数据");
     }
   };
-
-  // 收集节点信息
-  function getNodeChildren(node, data) {
-    // console.log("nodeName: " + node.name);
-    let nodeData = {
-      uuid: node.uuid,
-      name: node.name,
-      children: [],
-    };
-    window.inspectorGameMemoryStorage[node.uuid] = node;
-    let nodeChildren = node.getChildren();
-    for (let childItem of nodeChildren) {
-      // console.log("childName: " + childItem.name);
-      getNodeChildren(childItem, nodeData.children);
-    }
-    data.push(nodeData);
-  }
 
   // 收集组件信息
   function getNodeComponentsInfo(node) {
