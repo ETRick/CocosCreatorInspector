@@ -8,12 +8,15 @@ export default function () {
 
   // 暂停游戏
   window.pluginPauseGame = function () {
-    cc.director.pause();
+    window.initialIsPaused = cc.game.isPaused();
+    cc.game.pause();
   };
 
   // 恢复游戏
   window.pluginResumeGame = function () {
-    cc.director.resume();
+    if (!window.initialIsPaused) {
+      cc.game.resume();
+    }
   };
 
   // 设置节点状态（通过key-value）
@@ -41,12 +44,8 @@ export default function () {
   // 设置节点是否可视
   window.pluginSetNodeActive = function (uuid, isActive) {
     let node = window.inspectorGameMemoryStorage[uuid];
-    if (node) {
-      if (isActive === true) {
-        node.active = true;
-      } else if (isActive === false) {
-        node.active = false;
-      }
+    if (node && typeof isActive == 'boolean') {
+      node.active = isActive;
     }
   };
 

@@ -14,21 +14,22 @@ export default function () {
   // 存在cc空间，游戏存在
   if (isCocosCreatorGame) {
     // 添加节点刷新帧
-    cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
-      let interval = 0.5;
-      let timer = 0.0;
-      return function (event) {
-        if (!cc.director._paused) {
+    if (!hasListen) {
+      var hasListen = cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
+        let interval = 0.5;
+        let timer = 0.0;
+        return function (event) {
           timer += cc.director._deltaTime;
-          if (timer > interval) {
+          // 暂停时可能会调用step，此时进入
+          if (cc.game.isPaused() || timer > interval) {
             // console.log(timer);
             window.sendMsgToDevTools(window.Connect.msgType.refleshInfo, {});
             window.sendNodeTreeInfo();
             timer = 0.0;
           }
-        }
-      };
-    }(), cc.director);
+        };
+      }(), cc.director);
+    }
 
     window.sendNodeTreeInfo();
     // console.log("enter?");

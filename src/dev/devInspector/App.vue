@@ -10,6 +10,9 @@
             <el-tree :data="treeData"
                      :props="defaultProps"
                      :expand-on-click-node="true"
+                     node-key="uuid"
+                     highlight-current
+                     :render-content="renderTreeContent"
                      @node-click="handleNodeClick"></el-tree>
           </div>
         </el-col>
@@ -41,7 +44,6 @@
         treeData: [],
         oldTreeData: [],
         treeDataMap: {},
-        expendTreeKey: ""
       }
     },
     created() {
@@ -81,11 +83,6 @@
           }
         }
       }.bind(this));
-
-      window.addEventListener('message', function (event) {
-        // console.log("on vue:" + JSON.stringify(event.data));
-        // console.log("on vue:" + JSON.stringify(event));
-      }, false);
     },
     methods: {
       onTestData() {
@@ -130,6 +127,18 @@
         // todo 去获取节点信息
         // console.log("click:", data);
         this._freshNode(data.uuid);
+      },
+      // 增加树节点
+      addTreeNode() {
+
+      },
+      // 删除树节点
+      deleteTreeNode() {
+
+      },
+      // 渲染树节点
+      renderTreeContent() {
+
       },
       // 更新树，如果出现更新，返回true
       _updateTree(oldtree, newtree) {
