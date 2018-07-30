@@ -8,12 +8,15 @@ export default function () {
 
   // 暂停游戏
   window.pluginPauseGame = function () {
-    cc.director.pause();
+    window.initialIsPaused = cc.game.isPaused();
+    cc.game.pause();
   };
 
   // 恢复游戏
   window.pluginResumeGame = function () {
-    cc.director.resume();
+    if (!window.initialIsPaused) {
+      cc.game.resume();
+    }
   };
 
   // 设置节点状态（通过key-value）
@@ -41,12 +44,8 @@ export default function () {
   // 设置节点是否可视
   window.pluginSetNodeActive = function (uuid, isActive) {
     let node = window.inspectorGameMemoryStorage[uuid];
-    if (node) {
-      if (isActive === true) {
-        node.active = true;
-      } else if (isActive === false) {
-        node.active = false;
-      }
+    if (node && typeof isActive == 'boolean') {
+      node.active = isActive;
     }
   };
 
@@ -81,25 +80,6 @@ export default function () {
     }
   };
 
-  // 获取节点信息
-  window.getNodeInfo = function (uuid) {
-    let node = window.inspectorGameMemoryStorage[uuid];
-    if (node) {
-      let nodeComps = getNodeComponentsInfo(node);
-      let nodeData = window.Connect.Node(node);
-      // console.log("components:", nodeComps);
-      nodeData.components = nodeComps;
-      if (!node instanceof cc.Scene) {
-        nodeData.active = node.active;
-      }
-      // console.log("send:", nodeData);
-      window.sendMsgToDevTools(window.Connect.msgType.nodeInfo, nodeData);
-    } else {
-      // 未获取到节点数据
-      console.log("未获取到节点数据");
-    }
-  };
-
   // 收集节点信息
   function getNodeChildren(node, data) {
     // console.log("nodeName: " + node.name);
@@ -116,6 +96,25 @@ export default function () {
     }
     data.push(nodeData);
   }
+
+  // 获取节点信息
+  window.getNodeInfo = function (uuid) {
+    let node = window.inspectorGameMemoryStorage[uuid];
+    if (node) {
+      let nodeComps = getNodeComponentsInfo(node);
+      let nodeData = window.Connect.Node(node);
+      // console.log("components:", nodeComps);
+      nodeData.components = nodeComps;
+      if (node instanceof cc.Scene) {
+        delete nodeData.active;
+      }
+      // console.log("send:", nodeData);
+      window.sendMsgToDevTools(window.Connect.msgType.nodeInfo, nodeData);
+    } else {
+      // 未获取到节点数据
+      console.log("未获取到节点数据");
+    }
+  };
 
   // 收集组件信息
   function getNodeComponentsInfo(node) {

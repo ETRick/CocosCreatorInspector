@@ -18,9 +18,9 @@
 <script>
 
   export default {
-    // mounted() {
-    //   console.log(this.component);
-    // },
+    mounted() {
+      // console.log(this.comp);
+    },
     data() {
       return {
         // 得到主键，除去comptype和uuid

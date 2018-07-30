@@ -14,7 +14,7 @@ chrome.extension.onConnect.addListener(function (port) {
       }
 
     } else {
-      console.log(message);
+      // console.log(message);
       port.postMessage(message);
     }
     sendResponse(message);

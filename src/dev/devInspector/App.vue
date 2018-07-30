@@ -7,9 +7,14 @@
       <el-row>
         <el-col :span="8">
           <div class="grid-content treeList">
-            <el-tree :data="treeData"
+            <el-tree :data="treeData" ref="tree"
                      :props="defaultProps"
-                     :expand-on-click-node="true"
+                     show-checkbox
+                     check-strictly
+                     expand-on-click-node
+                     node-key="uuid"
+                     :default-expanded-keys="Object.keys(expendTreeKeys)"
+                     :render-content="renderTreeContent"
                      @node-click="handleNodeClick"></el-tree>
           </div>
         </el-col>
@@ -40,8 +45,7 @@
         treeItemData: {},
         treeData: [],
         oldTreeData: [],
-        treeDataMap: {},
-        expendTreeKey: ""
+        expendTreeKeys: {},
       }
     },
     created() {
@@ -74,18 +78,14 @@
             this.isShowDebug = false;
           } else if (message.type === msgType.nodeInfo) { // 获取节点属性信息
             this.isShowDebug = true;
-            // console.log("msg:", message.msg);
+            let node = message.msg;
+            console.log("component:", node.components);
             this.treeItemData = message.msg;
           } else if (message.type === msgType.refleshInfo) { // 刷新节点
             this._freshNode(this.treeItemData.uuid);
           }
         }
       }.bind(this));
-
-      window.addEventListener('message', function (event) {
-        // console.log("on vue:" + JSON.stringify(event.data));
-        // console.log("on vue:" + JSON.stringify(event));
-      }, false);
     },
     methods: {
       onTestData() {
@@ -126,27 +126,32 @@
         };
         this.treeItemData = testData;
       },
-      handleNodeClick(data) {
-        // todo 去获取节点信息
-        // console.log("click:", data);
+      handleNodeClick(data, node) {
+        // 设置下次刷新的节点框
+        if (!this.expendTreeKeys[data.uuid]) {
+          this.expendTreeKeys[data.uuid] = true;
+        } else {
+          this._removeExpendKey(data);
+        }
+        // 设置唯一选择框
+        this.$refs.tree.setCheckedKeys([data.uuid]);
         this._freshNode(data.uuid);
       },
-      // 更新树，如果出现更新，返回true
-      _updateTree(oldtree, newtree) {
-        let update = false;
-        for (let i = 0; i < newtree.length; i++) {
-          if (typeof oldtree[i] == 'undefined') {
-            update = true;
-            oldtree.push(newtree[i]);
-          } else if (oldtree[i].uuid != newtree[i].uuid) {
-            update = true;
-            oldtree[i].uuid = newtree[i].uuid;
-            oldtree[i].name = newtree[i].name;
-          }
-          update = update || this._updateTree(oldtree[i].children, newtree[i].children);
+      // 渲染树节点
+      renderTreeContent(h, {node, data, store}) {
+        return (
+          <span class="custom-tree-node">
+            <span>{data.label}</span>
+          </span>);
+      },
+      // 删除树和树子节点的key
+      _removeExpendKey(node) {
+        if (this.expendTreeKeys[node.uuid]) {
+          delete this.expendTreeKeys[node.uuid];
         }
-        oldtree.splice(newtree.length, newtree.length - oldtree.length);
-        return update || newtree.length != oldtree.length;
+        for (let child of node.children) {
+          this._removeExpendKey(child);
+        }
       },
       _generateTreeData(data) {
         let treeData = [];
@@ -164,7 +169,6 @@
           // this.handleNodeClick(dataRoot);
           // scene children info
           for (let itemSceneData of sceneData.children) {
-            // let sceneItem = {uuid: itemSceneData.uuid, label: itemSceneData.name, children: []};
             let sceneItem = {};
             dealChildrenNode(itemSceneData, sceneItem);
             treeData[0].children.push(sceneItem);
@@ -188,18 +192,12 @@
         return treeData;
       },
       _updateView(data) {
-        // TODO 节点树折叠的问题
-        if (JSON.stringify(this.treeData) !== "[]") { // 更新值
-          let newtree = this._generateTreeData(data);
-          if (this._updateTree(this.oldTreeData, newtree)) {
-            console.log("enter?");
-            this._updateTree(this.treeData, this.oldTreeData);
-          }
-        } else { // 第一次赋值
-          // 构建树形数据
-          this.treeData = this._generateTreeData(data);
-          this._updateTree(this.oldTreeData, this.treeData);
-          this.handleNodeClick({uuid: this.treeData[0].uuid});
+        let isFirst = JSON.stringify(this.treeData) === "[]";
+        // 获得数据
+        this.treeData = this._generateTreeData(data);
+        // 第一次赋值，渲染右边界面
+        if (isFirst) {
+          this._freshNode(this.treeData[0].uuid);
         }
       },
       _getInjectScriptString(script) {
@@ -257,5 +255,14 @@
 
   body span h1 h2 h3 {
     font-family: BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, 'SourceHanSansCN-Normal', Arial, sans-serif
+  }
+
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
   }
 </style>
