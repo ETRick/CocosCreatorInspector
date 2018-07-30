@@ -129,16 +129,20 @@
         this._freshNode(data.uuid);
       },
       // 增加树节点
-      addTreeNode() {
+      addTreeNode(uuid, node) {
 
       },
       // 删除树节点
-      deleteTreeNode() {
+      deleteTreeNode(uuid, node) {
 
       },
       // 渲染树节点
-      renderTreeContent() {
-
+      renderTreeContent(h, {node, data, store}) {
+        return (
+          <span class="">
+            <span>{node.name}</span>
+          </span>
+        );
       },
       // 更新树，如果出现更新，返回true
       _updateTree(oldtree, newtree) {
