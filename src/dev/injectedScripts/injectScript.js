@@ -32,7 +32,6 @@ export default function () {
     }
 
     window.sendNodeTreeInfo();
-    // console.log("enter?");
   } else {
     console.log("未发现cocos creator game");
   }

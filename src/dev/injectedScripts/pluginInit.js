@@ -96,7 +96,12 @@ export default function () {
     }
   };
 
-  // 收集节点信息
+  // 判断是不是相同的树
+  function isSameNodeTree(oldtree, newtree) {
+    return false;
+  }
+
+  // 收集节点的儿子信息
   function getNodeChildren(node, data) {
     // console.log("nodeName: " + node.name);
     let nodeData = {

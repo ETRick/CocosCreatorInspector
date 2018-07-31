@@ -5,10 +5,11 @@ import App from './App.vue';
 
 import MyNode from './basenode/Node.vue'
 import SlideNode from './basenode/SlideNode.vue'
-// import ColorPicker from './basenode/ColorPicker.vue'
 import CheckBox from './basenode/CheckBox.vue'
 import SingleNode from './basenode/SingleNode.vue'
 import MultiNode from './basenode/MultiNode.vue'
+
+import NodeTreeProperty from './compositenode/NodeTreeProperty.vue'
 import NodeBaseProperty from './compositenode/NodeBaseProperty.vue'
 import SceneProperty from './compositenode/SceneProperty.vue'
 import ComponentProperty from './compositenode/ComponentProperty.vue'
@@ -20,10 +21,11 @@ util();
 
 Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);
-// Vue.component('ColorPicker', ColorPicker);
 Vue.component('CheckBox', CheckBox);
 Vue.component('SingleNode', SingleNode);
 Vue.component('MultiNode', MultiNode);
+
+Vue.component('NodeTreeProperty', NodeTreeProperty);
 Vue.component('NodeBaseProperty', NodeBaseProperty);
 Vue.component('SceneProperty', SceneProperty);
 Vue.component('ComponentProperty', ComponentProperty);

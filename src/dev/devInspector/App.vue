@@ -1,22 +1,14 @@
 <template>
   <div id="app">
-    <el-button type="success" class="el-icon-refresh" size="mini" @click="onBtnClickUpdatePage">刷新</el-button>
+    <el-button type="success" class="el-icon-refresh reflesh-button" size="mini" @click="onBtnClickUpdatePage">刷新</el-button>
     <!--<el-button type="success" size="mini" @click="onTestData">测试</el-button>-->
     <!--<el-button type="success" size="mini" @click="onBtnClickTest">test</el-button>-->
     <div v-show="isShowDebug">
       <el-row>
         <el-col :span="10">
-          <div class="grid-content treeList">
-            <el-tree :data="treeData" ref="tree"
-                     :props="defaultProps"
-                     show-checkbox
-                     check-strictly
-                     expand-on-click-node
-                     node-key="uuid"
-                     :default-expanded-keys="Object.keys(expendTreeKeys)"
-                     :render-content="renderTreeContent"
-                     @node-click="handleNodeClick"></el-tree>
-          </div>
+          <NodeTreeProperty :treeData="treeData"
+                            nodeKey="uuid">
+          </NodeTreeProperty>
         </el-col>
         <el-col :span="14">
           <div class="grid-content bg-purple-light treeInfo">
@@ -45,7 +37,8 @@ export default {
       treeItemData: {},
       treeData: [],
       oldTreeData: [],
-      expendTreeKeys: {}
+      filterText: "",
+      textNum: 1,
     };
   },
   created() {
@@ -132,34 +125,6 @@ export default {
       };
       this.treeItemData = testData;
     },
-    handleNodeClick(data, node) {
-      // 设置下次刷新的节点框
-      if (!this.expendTreeKeys[data.uuid]) {
-        this.expendTreeKeys[data.uuid] = true;
-      } else {
-        this._removeExpendKey(data);
-      }
-      // 设置唯一选择框
-      this.$refs.tree.setCheckedKeys([data.uuid]);
-      this._freshNode(data.uuid);
-    },
-    // 渲染树节点
-    renderTreeContent(h, { node, data, store }) {
-      return (
-        <span class="custom-tree-node">
-          <span>{data.label}</span>
-        </span>
-      );
-    },
-    // 删除树和树子节点的key
-    _removeExpendKey(node) {
-      if (this.expendTreeKeys[node.uuid]) {
-        delete this.expendTreeKeys[node.uuid];
-      }
-      for (let child of node.children) {
-        this._removeExpendKey(child);
-      }
-    },
     _generateTreeData(data) {
       let treeData = [];
       let sceneData = data.scene;
@@ -198,13 +163,40 @@ export default {
 
       return treeData;
     },
+    // 更新树
+    _updateTree(oldtree, newtree) {
+      let oldchildren = oldtree.children;
+      let newchildren = newtree.children;
+      for (let i = 0; i < newchildren.length; i++) {
+        if (typeof oldchildren[i] == 'undefined') {
+          // add
+          oldchildren.push(newchildren[i]);
+        } else if (oldchildren[i].uuid != newchildren[i].uuid) {
+          // replace
+          oldchildren.splice(i, 1, newchildren[i]);
+        } else {
+          // update name
+          if (oldchildren[i].label != newchildren[i].label) {
+            oldchildren[i].label = newchildren[i].label
+          }
+          this._updateTree(oldchildren[i], newchildren[i]);
+        }
+      }
+      // remove
+      if (oldchildren.length > newchildren.length) {
+        oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
+      }
+    },
+    // 渲染界面
     _updateView(data) {
-      let isFirst = JSON.stringify(this.treeData) === "[]";
-      // 获得数据
-      this.treeData = this._generateTreeData(data);
       // 第一次赋值，渲染右边界面
-      if (isFirst) {
+      if (JSON.stringify(this.treeData) === "[]") {
+        // 获得数据
+        this.treeData = this._generateTreeData(data);
         this._freshNode(this.treeData[0].uuid);
+      } else {
+        let newTree = this._generateTreeData(data);
+        this._updateTree(this.treeData[0], newTree[0]);
       }
     },
     _getInjectScriptString(script) {
@@ -239,23 +231,12 @@ export default {
 </script>
 
 <style scoped>
-.treeList {
-  overflow-x: auto;
-  height: 100%;
-  width: 100%;
-}
-
 .treeInfo {
   height: 100%;
 }
 
 .bg-purple {
   background: #d3dce6;
-}
-
-.grid-content {
-  border-radius: 4px;
-  min-height: 20px;
 }
 
 .bg-purple-light {
@@ -267,12 +248,8 @@ body span h1 h2 h3 {
     "Segoe UI", Ubuntu, Cantarell, "SourceHanSansCN-Normal", Arial, sans-serif;
 }
 
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
+
+.reflesh-button {
+  margin-bottom: 10px;
 }
 </style>
