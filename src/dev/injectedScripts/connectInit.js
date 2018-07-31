@@ -50,7 +50,7 @@ export default function () {
           name: node.name,
           x: node.x,
           y: node.y,
-          zIndex: node.zIndex,
+          // zIndex: node.zIndex,
           childrenCount: node.childrenCount,
           children: [],
           width: node.width,

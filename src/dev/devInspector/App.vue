@@ -5,7 +5,7 @@
     <!--<el-button type="success" size="mini" @click="onBtnClickTest">test</el-button>-->
     <div v-show="isShowDebug">
       <el-row>
-        <el-col :span="8">
+        <el-col :span="10">
           <div class="grid-content treeList">
             <el-tree :data="treeData" ref="tree"
                      :props="defaultProps"
@@ -18,7 +18,7 @@
                      @node-click="handleNodeClick"></el-tree>
           </div>
         </el-col>
-        <el-col :span="16">
+        <el-col :span="14">
           <div class="grid-content bg-purple-light treeInfo">
             <NodeBaseProperty :itemData="treeItemData"></NodeBaseProperty>
             <ComponentsProperty :components="treeItemData.components"></ComponentsProperty>
@@ -233,11 +233,13 @@
 
 <style scoped>
   .treeList {
-    height: 100%
+    overflow-x: auto;
+    height: 100%;
+    width: 100%;
   }
 
   .treeInfo {
-    height: 100%
+    height: 100%;
   }
 
   .bg-purple {
