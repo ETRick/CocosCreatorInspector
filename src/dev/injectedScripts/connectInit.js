@@ -44,13 +44,13 @@ export default function () {
     // 节点构造：构造自定义节点
     Node(node) {
       if (node instanceof cc.Node) {
-        return {
+        let rtnNode = {
           type: node.constructor.name,
           uuid: node.uuid,
           name: node.name,
           x: node.x,
           y: node.y,
-          zIndex: node.zIndex,
+          // zIndex: node.zIndex,
           childrenCount: node.childrenCount,
           children: [],
           width: node.width,
@@ -66,8 +66,12 @@ export default function () {
           scaleY: node.scaleY,
           skewX: node.skewX,
           skewY: node.skewY,
-          active: node.active,
         };
+        // scene没有active
+        if (!node instanceof cc.Scene) {
+          rtnNode.active = node.active;
+        }
+        return rtnNode;
       }
     }
   };

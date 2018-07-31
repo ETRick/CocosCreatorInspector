@@ -1,8 +1,7 @@
 [
     {
         "type": "single",
-        "key":  "name",
-        "readonly": true
+        "key":  "name"
     },
     {
         "type": "multi",
@@ -34,6 +33,10 @@
     {
         "type": "single",
         "key":  "opacity"
+    },
+    {
+        "type": "single",
+        "key":  "zIndex"
     },
     {
         "type": "multi",

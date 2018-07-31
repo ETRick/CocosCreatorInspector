@@ -16,7 +16,7 @@ export default function () {
     // 添加节点刷新帧
     if (!hasListen) {
       var hasListen = cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
-        let interval = 0.5;
+        let interval = 0.2;
         let timer = 0.0;
         return function (event) {
           timer += cc.director._deltaTime;
