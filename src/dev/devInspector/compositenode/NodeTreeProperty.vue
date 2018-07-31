@@ -42,7 +42,8 @@ export default {
             if (!filtervalue) {
                 return true;
             }
-            return data.label.indexOf(filtervalue) !== -1 || data.uuid.indexOf(filtervalue) !== -1;
+            return data.label.toLowerCase().indexOf(filtervalue.toLowerCase()) !== -1 
+                || data.uuid.toLowerCase().indexOf(filtervalue.toLowerCase()) !== -1;
         },
         // 渲染树节点
         renderTreeContent(h, { node, data, store }) {

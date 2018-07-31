@@ -7,7 +7,7 @@
       </div>
       <div v-show="isShowComp" v-for="(comp,index) in components" :key="comp.uuid">
         <Node :name="'Num:' + index">
-          <span>{{comp.comptype}}</span>
+          <span>{{comp.comptype == "" ? "Undefined Type": comp.comptype}}</span>
         </Node>
         <ComponentProperty v-if="comp.comptype.slice(0, 3) != 'cc_'" :component="comp">
         </ComponentProperty>

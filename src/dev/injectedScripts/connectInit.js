@@ -68,7 +68,7 @@ export default function () {
           skewY: node.skewY,
         };
         // scene没有active
-        if (!node instanceof cc.Scene) {
+        if (!(node instanceof cc.Scene)) {
           rtnNode.active = node.active;
         }
         return rtnNode;

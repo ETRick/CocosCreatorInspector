@@ -74,8 +74,7 @@ export default {
           } else if (message.type === msgType.nodeInfo) {
             // 获取节点属性信息
             this.isShowDebug = true;
-            // let node = message.msg;
-            // console.log("component:", node.components);
+            // console.log("node:", message.msg);
             this.treeItemData = message.msg;
           } else if (message.type === msgType.refleshInfo) {
             // 刷新节点

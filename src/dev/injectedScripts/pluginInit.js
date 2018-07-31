@@ -59,13 +59,13 @@ export default function () {
         {
           scene = cc.director.getScene().children[0];
           break;
-        };
+        }
         // 1.9 2.0版本中有scene的uuid
       default:
         {
           scene = cc.director.getScene();
           break;
-        };
+        }
     }
 
     if (scene) {
@@ -96,11 +96,6 @@ export default function () {
     }
   };
 
-  // 判断是不是相同的树
-  function isSameNodeTree(oldtree, newtree) {
-    return false;
-  }
-
   // 收集节点的儿子信息
   function getNodeChildren(node, data) {
     // console.log("nodeName: " + node.name);
@@ -124,7 +119,7 @@ export default function () {
     if (node) {
       let nodeComps = getNodeComponentsInfo(node);
       let nodeData = window.Connect.Node(node);
-      // console.log("components:", nodeComps);
+      console.log("node:", nodeData);
       nodeData.components = nodeComps;
       // console.log("send:", nodeData);
       window.sendMsgToDevTools(window.Connect.msgType.nodeInfo, nodeData);
@@ -138,7 +133,7 @@ export default function () {
   function getNodeComponentsInfo(node) {
     let ret = [];
     let nodeComp = node._components;
-    for (let i in nodeComp) {
+    for (let i = 0; i < nodeComp.length; i++) {
       let com = nodeComp[i];
       window.inspectorGameMemoryStorage[com.uuid] = com;
       ret.push(window.Connect.Component(com));
