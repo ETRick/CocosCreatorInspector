@@ -119,9 +119,7 @@ export default function () {
     if (node) {
       let nodeComps = getNodeComponentsInfo(node);
       let nodeData = window.Connect.Node(node);
-      console.log("node:", nodeData);
       nodeData.components = nodeComps;
-      // console.log("send:", nodeData);
       window.sendMsgToDevTools(window.Connect.msgType.nodeInfo, nodeData);
     } else {
       // 未获取到节点数据

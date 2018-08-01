@@ -5,13 +5,12 @@
         <div class="grid-content treeList">
             <el-tree :data="treeData" ref="tree" 
                     :props="treeProps" 
-                    show-checkbox 
                     check-strictly 
                     highlight-current 
                     :node-key="nodeKey"
                     :expand-on-click-node="false" 
                     :render-content="renderTreeContent" 
-                    :filter-node-method="filterNode" 
+                    :filter-node-method="filterNode"
                     @node-click="handleNodeClick">
             </el-tree>
         </div>
@@ -47,9 +46,17 @@ export default {
         },
         // 渲染树节点
         renderTreeContent(h, { node, data, store }) {
+            let clickFunc = function(event) {
+                let newelement = event.srcElement;
+                if (this.oldelement) {
+                    this.oldelement.className = "custom-tree-node";
+                }
+                this.oldelement = newelement;
+                newelement.className = "custom-tree-node checked-tree-node";
+            }.bind(this);
             return (
-                <span class="custom-tree-node">
-                <span>{data.label}</span>
+                <span class="custom-tree-node" on-click={clickFunc}>
+                    <span>{data.label}</span>
                 </span>
             );
         },
@@ -74,6 +81,10 @@ export default {
   min-height: 20px;
 }
 
+.is-current {
+    background-color: blue !important; 
+}
+
 .custom-tree-node {
   flex: 1;
   display: flex;
@@ -82,4 +93,5 @@ export default {
   font-size: 14px;
   padding-right: 8px;
 }
+
 </style>

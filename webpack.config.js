@@ -19,6 +19,7 @@ module.exports = {
     injectPlugin: path.resolve(__dirname, './src/dev/injectedScripts/pluginInit.js'),
     injectConnect: path.resolve(__dirname, './src/dev/injectedScripts/connectInit.js'),
     injectScript: path.resolve(__dirname, './src/dev/injectedScripts/injectScript.js'),
+    injectDebugDOM: path.resolve(__dirname, './src/dev/injectedScripts/debugDOM.js')
   },
   output: {
     path: path.resolve(__dirname, './dist'),

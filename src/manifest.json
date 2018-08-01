@@ -42,6 +42,7 @@
     "nativeMessaging"
   ],
   "web_accessible_resources": [
+    "*/*/*",
     "*/*",
     "*"
   ],

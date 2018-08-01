@@ -28,6 +28,7 @@
 import injectPluginInit from "../injectedScripts/pluginInit.js";
 import injectConnectInit from "../injectedScripts/connectInit.js";
 import injectScript from "../injectedScripts/injectScript.js";
+import injectDebugDOM from "../injectedScripts/debugDOM.js";
 
 export default {
   name: "app",
@@ -204,6 +205,9 @@ export default {
       let array = code.split("\n");
       // 删除开头function() {
       array.splice(0, 1);
+      while (array[0].indexOf("//") != -1) {
+        array.splice(0, 1);
+      }
       // 删除结尾} 使函数直接注入
       array.splice(-1, 1);
       let evalCode = "";
@@ -220,6 +224,9 @@ export default {
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectConnectInit);
       chrome.devtools.inspectedWindow.eval(code);
+      code = this._getInjectScriptString(injectDebugDOM);
+      chrome.devtools.inspectedWindow.eval(code);
+      console.log(code);
       code = this._getInjectScriptString(injectScript);
       chrome.devtools.inspectedWindow.eval(code, function() {
         console.log("刷新成功!");
