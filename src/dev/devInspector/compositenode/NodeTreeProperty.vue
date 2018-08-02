@@ -5,7 +5,6 @@
         <div class="grid-content treeList">
             <el-tree :data="treeData" ref="tree" 
                     :props="treeProps" 
-                    check-strictly 
                     highlight-current 
                     :node-key="nodeKey"
                     :expand-on-click-node="false" 
@@ -33,8 +32,9 @@ export default {
     methods: {
         // 点击节点的触发函数
         handleNodeClick(data, node) {
-            // 设置唯一选择框
-            this.$refs.tree.setCheckedKeys([data.uuid]);
+            // 选中DOM节点
+            this._evalCode("window.changeDOMBorder("
+                + "'" + data.uuid + "')");
             this._freshNode(data.uuid);
         },
         filterNode(filtervalue, data) {

@@ -6,6 +6,7 @@ export default function () {
   window.Connect = {
     // 通讯类型定义
     msgType: {
+      clickedNodeInfo: 4, // 出现节点被点击
       refleshInfo: 3, // 节点刷新信息
       nodeInfo: 2, // 节点信息
       nodeListInfo: 1, // 节点列表信息

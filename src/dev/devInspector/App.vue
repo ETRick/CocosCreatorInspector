@@ -7,7 +7,8 @@
       <el-row>
         <el-col :span="10">
           <NodeTreeProperty :treeData="treeData"
-                            nodeKey="uuid">
+                            nodeKey="uuid"
+                            ref="tree">
           </NodeTreeProperty>
         </el-col>
         <el-col :span="14">
@@ -54,34 +55,59 @@ export default {
     });
 
     backgroundPageConnection.onMessage.addListener(
-      function(message) {
-        // console.log("getInfo:", message);
-        if (message !== null) {
-          let msgType = {
-            refleshInfo: 3, // 节点刷新信息
-            nodeInfo: 2, // 节点信息
-            nodeListInfo: 1, // 节点列表信息
-            notSupport: 0 // 不支持的游戏
-          };
-          if (message.type === msgType.nodeListInfo) {
-            // 游戏树节点
-            this.isShowDebug = true;
-            // let str = JSON.stringify(message.msg);
-            // console.log("onMessage: " + str);
-            this._updateView(message.msg);
-          } else if (message.type === msgType.notSupport) {
-            // 不支持调试
-            this.isShowDebug = false;
-          } else if (message.type === msgType.nodeInfo) {
-            // 获取节点属性信息
-            this.isShowDebug = true;
-            // console.log("node:", message.msg);
-            this.treeItemData = message.msg;
-          } else if (message.type === msgType.refleshInfo) {
-            // 刷新节点
-            this._freshNode(this.treeItemData.uuid);
+        function(message) {
+          // console.log("getInfo:", message);
+          if (message !== null) {
+            const msgType = {
+              clickedNodeInfo: 4, // 出现节点被点击
+              refleshInfo: 3, // 节点刷新信息
+              nodeInfo: 2, // 节点信息
+              nodeListInfo: 1, // 节点列表信息
+              notSupport: 0 // 不支持的游戏
+            };
+            switch (message.type) {
+              case msgType.nodeListInfo: {
+                // 游戏树节点
+                this.isShowDebug = true;
+                this._updateView(message.msg);
+                break;
+              } 
+              case msgType.notSupport: {
+                // 不支持调试
+                this.isShowDebug = false;
+                break;
+              }
+              case msgType.nodeInfo: {
+                // 获取节点属性信息
+                this.isShowDebug = true;
+                // console.log("node:", message.msg);
+                this.treeItemData = message.msg;
+                break;
+              }
+              case msgType.refleshInfo: {
+                // 刷新节点
+                this._freshNode(this.treeItemData.uuid);
+                break;
+              }
+              case msgType.clickedNodeInfo: {
+                // 直接点击树节点
+                let treeproto = this.$refs.tree.$refs.tree;
+                let uuid = message.msg;
+                // 节点属性页面更新
+                this.$refs.tree.handleNodeClick({uuid: uuid});
+                // 节点树更新
+                let node = treeproto.getNode(uuid);
+                // 节点展开
+                while (node.parent) {
+                  node.parent.expanded = true;
+                  node = node.parent;
+                }
+                treeproto.setCurrentKey(uuid);
+                break;
+              }
+              default:
+            }
           }
-        }
       }.bind(this)
     );
   },
@@ -218,7 +244,6 @@ export default {
       // console.log(evalCode);
       return evalCode;
     },
-
     onBtnClickUpdatePage() {
       let code = this._getInjectScriptString(injectPluginInit);
       chrome.devtools.inspectedWindow.eval(code);
@@ -226,7 +251,6 @@ export default {
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectDebugDOM);
       chrome.devtools.inspectedWindow.eval(code);
-      console.log(code);
       code = this._getInjectScriptString(injectScript);
       chrome.devtools.inspectedWindow.eval(code, function() {
         console.log("刷新成功!");

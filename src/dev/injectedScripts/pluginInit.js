@@ -139,6 +139,23 @@ export default function () {
     return ret;
   }
 
+  // 显示DOM边框，并去除之前的DOM边框
+  window.changeDOMBorder = (function () {
+    let olddom;
+    return function (uuidordom) {
+      let newdom = typeof uuidordom == 'string' ? window.getDOMElement(uuidordom) : uuidordom;
+      // 防止循环递归
+      if (olddom && olddom != newdom) {
+        olddom.css('border-color', '#00000000');
+      }
+      // 防止节点被删除
+      if (newdom.length != 0) {
+        newdom.css('border-color', 'red');
+        olddom = newdom;
+      }
+    };
+  })();
+
   // 向devtools发送信息
   window.sendMsgToDevTools = function (type, msg) {
     // this.console.log("type:", type);

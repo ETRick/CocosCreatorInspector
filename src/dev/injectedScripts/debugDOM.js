@@ -12,7 +12,7 @@ export default function () {
     // 由于存在'/'等不明字符，因此转换成ascii码
     let formatUuid = function (uuid) {
       const isNumber = function (ch) {
-        return ch >= '0' && ch <= '0';
+        return ch >= '0' && ch <= '9';
       };
       const isLetter = function (ch) {
         return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
@@ -42,24 +42,19 @@ export default function () {
           'height': height ? height : 0 + 'px',
         })
         .css({
-          'position': 'absolute',
+            'border-style': 'solid',
+            // 初始设置为透明
+            'border-color': '#00000000',
+            'border-width': lineWidth + 'px',
+            'position': 'absolute',
         });
-      // 当width，height不为0，添加border
+      // 当width，height不为0，添加click
       if (width && height) {
-        dom.css({
-          'border-style': 'solid',
-          // 初始设置为透明
-          'border-color': '#00000000',
-          'border-width': lineWidth + 'px',
-        });
-        dom.hover(
+        dom.click(
           function (e) {
-            $(this).css('border-color', 'red');
-            window.getNodeInfo($(this).attr("uuid"));
-            e.stopPropagation();
-          },
-          function (e) {
-            $(this).css('border-color', '#00000000');
+            window.changeDOMBorder($(this));
+            // 这里会循环调用
+            window.sendMsgToDevTools(window.Connect.msgType.clickedNodeInfo, $(this).attr("uuid"));
             e.stopPropagation();
           });
       }
@@ -167,21 +162,21 @@ export default function () {
     //     }
     // })(ccCanvas);
 
-    let generateDOMTree = (node => {
+    window.updateDOMTree = (node => {
       let domnode = getDOMElement(node.uuid);
       for (let i = 0; i < node.children.length; i++) {
         let child = node.children[i];
-        console.log(child);
+        // console.log(child);
         if (getDOMElement(child.uuid).length == 0) {
           let tl = convertRelativeCC2DOM(child.getRelativeLeftTopPosition());
           let size = child.getDOMSize();
           let domElement = createDOMElement(
             child.uuid, tl.top, tl.left, size.width, size.height);
-          domnode.append(domElement)
+          domnode.append(domElement);
         };
-        generateDOMTree(child);
+        window.updateDOMTree(child);
       }
     });
-    generateDOMTree(ccCanvas);
+    window.updateDOMTree(ccCanvas);
   }
 }
