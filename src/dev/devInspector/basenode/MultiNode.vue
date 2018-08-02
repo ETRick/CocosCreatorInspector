@@ -11,7 +11,7 @@
                   @blur="resumeGame"
                   @change="changeValue(mykey)"
                   :placeholder="itemData[mykey]"
-                  v-model.lazy="itemData[mykey]">
+                  v-model="itemData[mykey]">
           <span v-else> {{itemData[mykey]}} </span>
         </SlideNode>
       </div>

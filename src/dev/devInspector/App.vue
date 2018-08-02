@@ -1,7 +1,14 @@
 <template>
   <div id="app">
-    <el-button type="success" class="el-icon-refresh reflesh-button" size="mini" @click="onBtnClickUpdatePage">刷新</el-button>
-    <!--<el-button type="success" size="mini" @click="onTestData">测试</el-button>-->
+    <el-button type="success" class="el-icon-refresh reflesh-button" size="small" @click="onBtnClickUpdatePage">刷新</el-button>
+    <div style="float: right">
+      <el-button type="danger" class="el-icon-view debug-button" size="small" :disabled="!isShowDebug" @click="onBtnClickDebug">
+        {{(isEnterDebugMode ? "退出" : "进入") + "Debug模式"}}
+      </el-button>
+      <!-- <span>显示所有节点</span> -->
+      <!-- <input type="checkbox" style="width: 20px;height: 20px;" > -->
+    </div>
+    
     <!--<el-button type="success" size="mini" @click="onBtnClickTest">test</el-button>-->
     <div v-show="isShowDebug">
       <el-row>
@@ -26,9 +33,9 @@
 </template>
 
 <script>
-import injectPluginInit from "../injectedScripts/pluginInit.js";
-import injectConnectInit from "../injectedScripts/connectInit.js";
-import injectScript from "../injectedScripts/injectScript.js";
+import injectPlugin from "../injectedScripts/plugin.js";
+import injectConnect from "../injectedScripts/connect.js";
+import injectMain from "../injectedScripts/main.js";
 import injectDebugDOM from "../injectedScripts/debugDOM.js";
 
 export default {
@@ -36,11 +43,12 @@ export default {
   data() {
     return {
       isShowDebug: false,
+      isEnterDebugMode: false,
+      debugModeUuid: null,
       treeItemData: {},
       treeData: [],
       oldTreeData: [],
       filterText: "",
-      textNum: 1,
     };
   },
   created() {
@@ -80,7 +88,7 @@ export default {
               case msgType.nodeInfo: {
                 // 获取节点属性信息
                 this.isShowDebug = true;
-                // console.log("node:", message.msg);
+                console.log("node:", Object.keys(message.msg));
                 this.treeItemData = message.msg;
                 break;
               }
@@ -112,6 +120,9 @@ export default {
     );
   },
   methods: {
+    mounted() {
+      console.log("?");
+    },
     onTestData() {
       let testData = {
         type: "cc_Node",
@@ -245,16 +256,34 @@ export default {
       return evalCode;
     },
     onBtnClickUpdatePage() {
-      let code = this._getInjectScriptString(injectPluginInit);
+      let code = this._getInjectScriptString(injectPlugin);
       chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectConnectInit);
+      code = this._getInjectScriptString(injectConnect);
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectDebugDOM);
       chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectScript);
+      code = this._getInjectScriptString(injectMain);
       chrome.devtools.inspectedWindow.eval(code, function() {
         console.log("刷新成功!");
       });
+    },
+    onBtnClickDebug() {
+      this.isEnterDebugMode = !this.isEnterDebugMode;
+      if (this.isEnterDebugMode) {
+        this._evalCode("window.showDOM()");
+        // let uuid = this.$refs.tree.$refs.tree.getCurrentKey();
+        // this._evalCode("window.showDOM("
+        //   + (uuid ? "'" + uuid + "'" : "")
+        //   + ")");
+        // this.debugModeUuid = uuid;
+      } else {
+        this._evalCode("window.hiddenDOM()");
+        // let uuid = this.debugModeUuid;
+        // this._evalCode("window.hiddenDOM("
+        //   + (uuid ? "'" + uuid + "'" : "")
+        //   + ")");
+        // this.debugModeUuid = null;
+      }
     }
   }
 };
@@ -278,8 +307,11 @@ body span h1 h2 h3 {
     "Segoe UI", Ubuntu, Cantarell, "SourceHanSansCN-Normal", Arial, sans-serif;
 }
 
-
 .reflesh-button {
+  margin-bottom: 10px;
+}
+
+.debug-button {
   margin-bottom: 10px;
 }
 </style>

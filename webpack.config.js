@@ -16,9 +16,9 @@ module.exports = {
     backgroundScripts: path.resolve(__dirname, './src/dev/backgroundScripts.js'),
     contentScripts: path.resolve(__dirname, './src/dev/contentScripts.js'),
     util: path.resolve(__dirname, './src/dev/devInspector/util.js'),
-    injectPlugin: path.resolve(__dirname, './src/dev/injectedScripts/pluginInit.js'),
-    injectConnect: path.resolve(__dirname, './src/dev/injectedScripts/connectInit.js'),
-    injectScript: path.resolve(__dirname, './src/dev/injectedScripts/injectScript.js'),
+    injectPlugin: path.resolve(__dirname, './src/dev/injectedScripts/plugin.js'),
+    injectConnect: path.resolve(__dirname, './src/dev/injectedScripts/connect.js'),
+    injectMain: path.resolve(__dirname, './src/dev/injectedScripts/main.js'),
     injectDebugDOM: path.resolve(__dirname, './src/dev/injectedScripts/debugDOM.js')
   },
   output: {

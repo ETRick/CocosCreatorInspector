@@ -8,15 +8,12 @@ export default function () {
 
   // 暂停游戏
   window.pluginPauseGame = function () {
-    window.initialIsPaused = cc.game.isPaused();
-    cc.game.pause();
+    cc.director.pause();
   };
 
   // 恢复游戏
   window.pluginResumeGame = function () {
-    if (!window.initialIsPaused) {
-      cc.game.resume();
-    }
+    cc.director.resume();
   };
 
   // 设置节点状态（通过key-value）
@@ -143,18 +140,45 @@ export default function () {
   window.changeDOMBorder = (function () {
     let olddom;
     return function (uuidordom) {
-      let newdom = typeof uuidordom == 'string' ? window.getDOMElement(uuidordom) : uuidordom;
+      let config = window.Config.DEBUG_MODE;
+      let newdom = typeof uuidordom == 'string' ? $.getDOMElement(uuidordom) : uuidordom;
       // 防止循环递归
       if (olddom && olddom != newdom) {
-        olddom.css('border-color', '#00000000');
+        olddom.css('border-color', config.showCustomBorder ? config.customBorderColor : '#00000000');
       }
       // 防止节点被删除
       if (newdom.length != 0) {
-        newdom.css('border-color', 'red');
+        newdom.css('border-color', config.clickedBroderColor);
         olddom = newdom;
       }
     };
   })();
+
+  // 隐藏DOM树，只隐藏指定节点的DOM树
+  window.hiddenDOM = function (uuid) {
+    // 去除DOM边框
+    window.changeDOMBorder("");
+    if (!uuid) {
+      uuid = cc.Canvas.instance.node.uuid;
+    }
+    // 防止设置inactive节点
+    let node = $.getDOMElement(uuid);
+    if (node.css("display") == 'block') {
+      node.css("display", "none");
+    }
+  };
+
+  // 显示DOM树，只显示指定节点的DOM树
+  window.showDOM = function (uuid) {
+    if (!uuid) {
+      uuid = cc.Canvas.instance.node.uuid;
+    }
+    // 防止设置inactive节点
+    let node = $.getDOMElement(uuid);
+    if (node.css("display") == 'none') {
+      node.css("display", "block");
+    }
+  };
 
   // 向devtools发送信息
   window.sendMsgToDevTools = function (type, msg) {
