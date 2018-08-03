@@ -103,7 +103,7 @@ export default function () {
       name: node.name,
       children: [],
     };
-    
+
     let nodeChildren = node.getChildren();
     for (let i = 0; i < nodeChildren.length; i++) {
       let childItem = nodeChildren[i];
@@ -157,29 +157,22 @@ export default function () {
     };
   })();
 
-  // 隐藏DOM树，只隐藏指定节点的DOM树
-  window.hiddenDOM = function (uuid) {
-    // 去除DOM边框
-    window.changeDOMBorder("");
-    if (!uuid) {
-      uuid = cc.Canvas.instance.node.uuid;
-    }
-    // 防止设置inactive节点
-    let node = $.getDOMElement(uuid);
-    if (node.css("display") == 'block') {
-      node.css("display", "none");
+  // 显示DOM树，只显示指定节点的DOM树
+  window.showDOM = function (uuid) {
+    if (uuid) {
+      let node = $.getDOMElement(uuid);
+      node.css("visibility", "visible");
     }
   };
 
-  // 显示DOM树，只显示指定节点的DOM树
-  window.showDOM = function (uuid) {
-    if (!uuid) {
-      uuid = cc.Canvas.instance.node.uuid;
-    }
-    // 防止设置inactive节点
-    let node = $.getDOMElement(uuid);
-    if (node.css("display") == 'none') {
-      node.css("display", "block");
+  // 隐藏DOM树，只隐藏指定节点的DOM树
+  window.hiddenDOM = function (uuid) {
+    // 去除DOM边框
+    if (uuid) {
+      let node = $.getDOMElement(uuid);
+      // 父节点不能设置inherit
+      let attr = uuid == cc.Canvas.instance.node.uuid ? "hidden" : "inherit";
+      node.css("visibility", attr);
     }
   };
 

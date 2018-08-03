@@ -1,13 +1,6 @@
 <template>
   <div id="app">
     <el-button type="success" class="el-icon-refresh reflesh-button" size="small" @click="onBtnClickUpdatePage">刷新</el-button>
-    <div style="float: right">
-      <el-button type="danger" class="el-icon-view debug-button" size="small" :disabled="!isShowDebug" @click="onBtnClickDebug">
-        {{(isEnterDebugMode ? "退出" : "进入") + "Debug模式"}}
-      </el-button>
-      <!-- <span>显示所有节点</span> -->
-      <!-- <input type="checkbox" style="width: 20px;height: 20px;" > -->
-    </div>
     
     <!--<el-button type="success" size="mini" @click="onBtnClickTest">test</el-button>-->
     <div v-show="isShowDebug">
@@ -45,7 +38,6 @@ export default {
     return {
       isShowDebug: false,
       isEnterDebugMode: false,
-      debugModeUuid: null,
       treeItemData: {},
       treeData: [],
       oldTreeData: [],
@@ -270,24 +262,6 @@ export default {
         console.log("刷新成功!");
       });
     },
-    onBtnClickDebug() {
-      this.isEnterDebugMode = !this.isEnterDebugMode;
-      if (this.isEnterDebugMode) {
-        this._evalCode("window.showDOM()");
-        // let uuid = this.$refs.tree.$refs.tree.getCurrentKey();
-        // this._evalCode("window.showDOM("
-        //   + (uuid ? "'" + uuid + "'" : "")
-        //   + ")");
-        // this.debugModeUuid = uuid;
-      } else {
-        this._evalCode("window.hiddenDOM()");
-        // let uuid = this.debugModeUuid;
-        // this._evalCode("window.hiddenDOM("
-        //   + (uuid ? "'" + uuid + "'" : "")
-        //   + ")");
-        // this.debugModeUuid = null;
-      }
-    }
   }
 };
 </script>

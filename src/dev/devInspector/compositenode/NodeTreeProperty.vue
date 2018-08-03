@@ -40,10 +40,29 @@ export default {
             this._freshNode(data.uuid);
         },
         // 右键点击节点触发的函数
-        handleNodeRightClick(event, data, node, com) {
-            console.log(event, data, node, com);
-            console.log(com.$el.classList);
-            com.$el.classList.push("el-tree--rightclick");
+        handleNodeRightClick(event, data, node) {
+            let treeproto = this.$refs.tree;
+            console.log(treeproto.getCheckedKeys());
+            let uuid = treeproto.getCheckedKeys().length ? treeproto.getCheckedKeys()[0] : undefined;
+            console.log(uuid, data.uuid);
+            // 先隐藏当前树
+            if (uuid) {
+                treeproto.setChecked(uuid, false);
+                this._evalCode("window.hiddenDOM("
+                    + "'" + uuid + "')");
+            }
+            // 点击节点不同，切换节点，相同则不切换
+            if (uuid !== data.uuid) {
+                node.checked = true;
+                let parent = node.parent;
+                // 如果只设置node，会覆盖唯一父节点
+                while (parent.checked) {
+                    parent.checked = false;
+                    parent = parent.parent;
+                }
+                this._evalCode("window.showDOM("
+                    + "'" + data.uuid + "')");
+            }
         },
         filterNode(filtervalue, data) {
             if (!filtervalue) {

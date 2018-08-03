@@ -20,9 +20,12 @@ export default function () {
         // 通过uuid生成DOM根节点
         if ($.getDOMElement(ccCanvas.uuid).length == 0) {
             let divCanvas = $.createDOMElement(ccCanvas.uuid)
-                .setPositionAndSize(domCanvas.position().top, domCanvas.position().left);
+                .setPositionAndSize(domCanvas.position().top, domCanvas.position().left)
+                .css({
+                    display: "block",
+                    visibility: "hidden",
+                });
             domCanvas.before(divCanvas);
-            window.hiddenDOM();
         }
 
         // 更新DOM树
