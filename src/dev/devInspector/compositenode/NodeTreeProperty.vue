@@ -75,7 +75,7 @@ export default {
         renderTreeContent(h, { node, data, store }) {
             console.log(data);
             return (
-                <span class={true ? "delete-line" : ""}>
+                <span style={true ? "delete-line" : ""}>
                     <span>{data.label}</span>
                 </span>
             );
