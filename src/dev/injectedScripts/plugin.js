@@ -77,6 +77,7 @@ export default function () {
         type: window.Connect.msgType.nodeListInfo, // 标识类型
         uuid: scene.uuid,
         name: scene.name,
+        active: scene.active,
         children: [],
       };
       window.inspectorGameMemoryStorage[scene.uuid] = scene;
@@ -94,13 +95,14 @@ export default function () {
     }
   };
 
-  // 收集节点的儿子信息
+  // 收集节点树的儿子信息
   function getNodeChildren(node, data) {
     window.inspectorGameMemoryStorage[node.uuid] = node;
     // console.log("nodeName: " + node.name);
     let nodeData = {
       uuid: node.uuid,
       name: node.name,
+      active: node.active,
       children: [],
     };
 

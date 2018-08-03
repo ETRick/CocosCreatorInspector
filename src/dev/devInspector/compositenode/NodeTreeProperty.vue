@@ -73,16 +73,9 @@ export default {
         },
         // 渲染树节点
         renderTreeContent(h, { node, data, store }) {
-            let clickFunc = function(event) {
-                let newelement = event.srcElement;
-                if (this.oldelement) {
-                    this.oldelement.className = "custom-tree-node";
-                }
-                this.oldelement = newelement;
-                newelement.className = "custom-tree-node checked-tree-node";
-            }.bind(this);
+            console.log(data);
             return (
-                <span class="custom-tree-node" on-click={clickFunc}>
+                <span class={true ? "delete-line" : ""}>
                     <span>{data.label}</span>
                 </span>
             );
@@ -119,6 +112,10 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+}
+
+.delete-line {
+    text-decoration:line-through;
 }
 
 </style>

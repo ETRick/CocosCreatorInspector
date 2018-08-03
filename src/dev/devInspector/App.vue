@@ -113,9 +113,6 @@ export default {
     );
   },
   methods: {
-    mounted() {
-      console.log("?");
-    },
     onTestData() {
       let testData = {
         type: "cc_Node",
@@ -182,6 +179,7 @@ export default {
         obj["uuid"] = rootData.uuid;
         obj["label"] = rootData.name;
         obj["type"] = rootData.type;
+        obj["active"] = rootData.active;
         obj["children"] = [];
         let rootChildren = rootData.children;
         for (let itemData of rootChildren) {
