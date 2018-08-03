@@ -10,7 +10,8 @@
                     :expand-on-click-node="false" 
                     :render-content="renderTreeContent" 
                     :filter-node-method="filterNode"
-                    @node-click="handleNodeClick">
+                    @node-click="handleNodeClick"
+                    @node-contextmenu="handleNodeRightClick">
             </el-tree>
         </div>
     </div>
@@ -37,6 +38,12 @@ export default {
                 + "'" + data.uuid + "')");
             console.log(data.uuid);
             this._freshNode(data.uuid);
+        },
+        // 右键点击节点触发的函数
+        handleNodeRightClick(event, data, node, com) {
+            console.log(event, data, node, com);
+            console.log(com.$el.classList);
+            com.$el.classList.push("el-tree--rightclick");
         },
         filterNode(filtervalue, data) {
             if (!filtervalue) {

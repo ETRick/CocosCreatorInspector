@@ -30280,6 +30280,10 @@
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
   background-color: #61fff7fb; }
 
+.el-tree--rightclick {
+  background-color: #dd6161;
+}
+
 /* BEM support Func
  -------------------------- */
 /* Element Chalk Variables */
