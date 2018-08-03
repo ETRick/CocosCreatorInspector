@@ -37,6 +37,7 @@ import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
 import injectMain from "../injectedScripts/main.js";
 import injectDebugDOM from "../injectedScripts/debugDOM.js";
+import injectUtil from "..//injectedScripts/util.js"
 
 export default {
   name: "app",
@@ -88,7 +89,7 @@ export default {
               case msgType.nodeInfo: {
                 // 获取节点属性信息
                 this.isShowDebug = true;
-                console.log("node:", Object.keys(message.msg));
+                // console.log("node:", Object.keys(message.msg));
                 this.treeItemData = message.msg;
                 break;
               }
@@ -256,6 +257,8 @@ export default {
       return evalCode;
     },
     onBtnClickUpdatePage() {
+      code = this._getInjectScriptString(injectUtil);
+      chrome.devtools.inspectedWindow.eval(code);
       let code = this._getInjectScriptString(injectPlugin);
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectConnect);

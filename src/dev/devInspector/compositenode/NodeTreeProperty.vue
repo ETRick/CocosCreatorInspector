@@ -35,6 +35,7 @@ export default {
             // 选中DOM节点
             this._evalCode("window.changeDOMBorder("
                 + "'" + data.uuid + "')");
+            console.log(data.uuid);
             this._freshNode(data.uuid);
         },
         filterNode(filtervalue, data) {

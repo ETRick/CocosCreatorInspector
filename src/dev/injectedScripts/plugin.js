@@ -82,7 +82,8 @@ export default function () {
       window.inspectorGameMemoryStorage[scene.uuid] = scene;
 
       let sceneChildren = scene.getChildren();
-      for (let node of sceneChildren) {
+      for (let i = 0; i < sceneChildren.length; i++) {
+        let node = sceneChildren[i];
         getNodeChildren(node, postData.scene.children);
       }
       // console.log(postData);
@@ -95,15 +96,17 @@ export default function () {
 
   // 收集节点的儿子信息
   function getNodeChildren(node, data) {
+    window.inspectorGameMemoryStorage[node.uuid] = node;
     // console.log("nodeName: " + node.name);
     let nodeData = {
       uuid: node.uuid,
       name: node.name,
       children: [],
     };
-    window.inspectorGameMemoryStorage[node.uuid] = node;
+    
     let nodeChildren = node.getChildren();
-    for (let childItem of nodeChildren) {
+    for (let i = 0; i < nodeChildren.length; i++) {
+      let childItem = nodeChildren[i];
       // console.log("childName: " + childItem.name);
       getNodeChildren(childItem, nodeData.children);
     }

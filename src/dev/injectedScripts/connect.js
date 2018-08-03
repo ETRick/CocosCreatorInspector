@@ -24,7 +24,7 @@ export default function () {
         // 过滤掉私有值和函数的值
         for (let key of Object.keys(com)) {
           let value = com[key];
-          if (key[0] != "_" && typeof value != "function") {
+          if (key[0] != "_" && typeof value != "function" && !(value instanceof Array)) {
             // console.log(key, value);
             // object节点无法通过post进行复制，因此在此处修改
             if (value instanceof cc.Object || value instanceof cc.Action) {
