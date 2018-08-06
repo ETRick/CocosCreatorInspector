@@ -28,6 +28,7 @@ export default function () {
             domCanvas.before(divCanvas);
         }
 
+        let num = 0;
         // 更新DOM树
         window.updateDOMTree = (cccanvas => {
             // 使用不动点进行内部递归
@@ -51,18 +52,14 @@ export default function () {
                     } else {
                         // update
                         setAllCSSAttr(domnode).setIdAndUuid(ccnode.uuid);
-                        if (ccnode.name == "textstar") {
-                            console.log(domnode.css("-webkit-transform"));
-                        }
                     }
 
                     // 设置所有和位置相关的属性
                     function setAllCSSAttr(domElement) {
-                        let matrix = ccnode.getNodeToParentTransform();
                         return $(domElement)
                             .setPositionAndSize(tl.top, tl.left, size.width, size.height)
-                            .setAnchor(ccnode.anchorX, 1 - ccnode.anchorY)
-                            .setSkewAndRotate(matrix)
+                            .setAnchor(ccnode.anchorX,  1 - ccnode.anchorY)
+                            .setSkewAndRotate(ccnode.getNodeToParentTransform())
                             .css("display", ccnode.active ? "inherit" : "none");
                     }
 

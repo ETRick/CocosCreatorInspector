@@ -103,8 +103,8 @@ export default function () {
     jQuery.prototype.setSkewAndRotate = function (matrix) {
         return $(this).css(
             "-webkit-transform",
-            "matrix(" + matrix.a + "," + matrix.b + "," +
-                matrix.c + "," + matrix.d + "," +
+            "matrix(" + matrix.a + "," + (-matrix.b) + "," +
+                (-matrix.c) + "," + matrix.d + "," +
                 0 + "," + 0 + ")" 
         );
     };
@@ -122,40 +122,38 @@ export default function () {
      *  y / ccCanvas.height = -top / domCanvas.height()
      * 
      * 要注意的点：
-     *  1. 父节点进行缩放的同时，会影响子节点的位置和长度
+     *  1. 父节点进行缩放的同时，会影响子节点的位置和长度(在CSS3中已经实现)
      *  2. 注意width可能为负数
      */
 
     // 得到至父节点为止的scale参数
-    cc.Node.prototype.getAbsoluteScale = function() {
-        let parent = this.parent;
-        let scale = {
-            x: 1,
-            y: 1,
-        };
-        while (parent) {
-            scale.x *= parent.scaleX;
-            scale.y *= parent.scaleY;
-            parent = parent.parent;
-        }
-        return scale;
-    }
+    // cc.Node.prototype.getAbsoluteScale = function() {
+    //     let parent = this.parent;
+    //     let scale = {
+    //         x: 1,
+    //         y: 1,
+    //     };
+    //     while (parent) {
+    //         scale.x *= parent.scaleX;
+    //         scale.y *= parent.scaleY;
+    //         parent = parent.parent;
+    //     }
+    //     return scale;
+    // }
 
     // 得到子锚点和父锚点的相对位置：C_anchor - P_anchor
     cc.Node.prototype.getRelativeAnchorPosition = function () {
-        let scale = this.getAbsoluteScale();
         return {
-            x: (this.x * scale.x),
-            y: (this.y * scale.y),
+            x: this.x,
+            y: this.y,
         };
     };
 
     // 得到物体左上角距离自己锚点的相对位置：C_lefttop - C_anchor
     cc.Node.prototype.getSelfLeftTopPosition = function () {
-        let scale = this.getAbsoluteScale();
         return {
-            x: (-this.width * this.anchorX + (this.width < 0) * this.width) * this.scaleX * scale.x,
-            y: (this.height * (1 - this.anchorY) - (this.height < 0) * this.height) * this.scaleY * scale.y,
+            x: -this.width * this.anchorX + (this.width < 0) * this.width,
+            y: this.height * (1 - this.anchorY) - (this.height < 0) * this.height,
         };
     };
 
@@ -178,10 +176,9 @@ export default function () {
 
     // 得到DOM上物体的width/height（此时不用取反）
     cc.Node.prototype.getDOMSize = function () {
-        let scale = this.getAbsoluteScale();
         return {
-            width: Math.abs(this.width * scale.x) * this.scaleX * domCanvas.width() / ccCanvas.width,
-            height: Math.abs(this.height * scale.y) * this.scaleY * domCanvas.height() / ccCanvas.height,
+            width: Math.abs(this.width) * domCanvas.width() / ccCanvas.width,
+            height: Math.abs(this.height) * domCanvas.height() / ccCanvas.height,
         };
     };
 
