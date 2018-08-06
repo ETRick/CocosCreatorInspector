@@ -51,6 +51,9 @@ export default function () {
                     } else {
                         // update
                         setAllCSSAttr(domnode).setIdAndUuid(ccnode.uuid);
+                        if (ccnode.name == "textstar") {
+                            console.log(domnode.css("-webkit-transform"));
+                        }
                     }
 
                     // 设置所有和位置相关的属性

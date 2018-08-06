@@ -60,7 +60,7 @@ export default function () {
         // 1.9 2.0版本中有scene的uuid
       default:
         {
-          scene = cc.director.getScene().children[0];
+          scene = cc.director.getScene();
           break;
         }
     }
