@@ -58,7 +58,7 @@ export default function () {
                         return $(domElement)
                             .setPositionAndSize(tl.top, tl.left, size.width, size.height)
                             .setAnchor(ccnode.anchorX, 1 - ccnode.anchorY)
-                            .setSkewAndRotate(-ccnode.skewX, -ccnode.skewY, ccnode.rotation)
+                            .setSkewAndRotate(-ccnode.skewX, -ccnode.skewY, ccnode.scaleX, ccnode.scaleY, ccnode.rotation)
                             .css("display", ccnode.active ? "inherit" : "none");
                     }
 

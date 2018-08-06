@@ -100,15 +100,15 @@ export default function () {
      * 旋转：matrix(cosθ, sinθ, -sinθ, cosθ, 0, 0)  ===  rotate(θ + "deg")
      * 斜切：matrix(1, tan(skewY), tan(skewX), 1, 0, 0)  === skew(skewX + "deg", skewY + "deg")
      */
-    jQuery.prototype.setSkewAndRotate = function (skewX, skewY, rotate) {
+    jQuery.prototype.setSkewAndRotate = function (skewX, skewY, scalex, scaley, rotate) {
         let cosR = Math.cos(Math.angle2Radian(rotate));
         let sinR = Math.sin(Math.angle2Radian(rotate));
         let tanSkewX = Math.tan(Math.angle2Radian(skewX));
         let tanSkewY = Math.tan(Math.angle2Radian(skewY));
         return $(this).css(
             "-webkit-transform",
-            "matrix(" + (cosR + sinR * tanSkewX) + "," + (sinR + cosR * tanSkewY) + "," +
-                (cosR * tanSkewX - sinR) + "," + (cosR - sinR * tanSkewY) + ",0,0)" 
+            "matrix(" + ((cosR + sinR * tanSkewX) * scalex) + "," + (sinR + cosR * tanSkewY) + "," +
+                (cosR * tanSkewX - sinR) + "," + ((cosR - sinR * tanSkewY) * scaley) + ",0,0)" 
         );
     };
 
@@ -157,8 +157,8 @@ export default function () {
     cc.Node.prototype.getSelfLeftTopPosition = function () {
         let scale = this.getAbsoluteScale();
         return {
-            x: (-this.width * this.anchorX + (this.width < 0) * this.width) * this.scaleX * scale.x,
-            y: (this.height * (1 - this.anchorY) - (this.height < 0) * this.height) * this.scaleY * scale.y,
+            x: (-this.width * this.anchorX + (this.width < 0) * this.width),
+            y: (this.height * (1 - this.anchorY) - (this.height < 0) * this.height),
         };
     };
 
@@ -183,8 +183,8 @@ export default function () {
     cc.Node.prototype.getDOMSize = function () {
         let scale = this.getAbsoluteScale();
         return {
-            width: Math.abs(this.width * scale.x) * this.scaleX * domCanvas.width() / ccCanvas.width,
-            height: Math.abs(this.height * scale.y) * this.scaleY * domCanvas.height() / ccCanvas.height,
+            width: Math.abs(this.width) * domCanvas.width() / ccCanvas.width,
+            height: Math.abs(this.height) * domCanvas.height() / ccCanvas.height,
         };
     };
 
