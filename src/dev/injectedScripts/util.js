@@ -151,11 +151,10 @@ export default function () {
 
     // 得到物体左上角距离自己锚点的相对位置：C_lefttop - C_anchor
     cc.Node.prototype.getSelfLeftTopPosition = function () {
+        let anchor = this.getDOMAnchor();
         return {
-            x: this.width > 0 ? -Math.abs(this.width) * this.anchorX : -Math.abs(this.width) * (1 - this.anchorX),
-            y: this.height > 0 ? Math.abs(this.height) * (1 - this.anchorY) : Math.abs(this.height) * this.anchorY,
-            // x: -this.width * this.anchorX,
-            // y: this.height * (1 - this.anchorY),
+            x: -Math.abs(this.width) * anchor.anchorX,
+            y: Math.abs(this.height) * anchor.anchorY,
         };
     };
 
@@ -184,7 +183,15 @@ export default function () {
         };
     };
 
-    // 局部CC节点转换成DOM节点：
+    // 得到DOM上的anchor（主要是为了防止width和height为负）
+    cc.Node.prototype.getDOMAnchor = function () {
+        return {
+            anchorX: this.width > 0 ? this.anchorX : (1 - this.anchorX),
+            anchorY: this.height > 0 ? (1 - this.anchorY) : this.anchorY,
+        };
+    };
+
+    // 局部CC节点转换成DOM节点
     cc.Node.convertRelativeCC2DOM = function (ccpos) {
         return {
             left: ccpos.x * domCanvas.width() / ccCanvas.width,

@@ -60,17 +60,14 @@ export default function () {
         // 1.9 2.0版本中有scene的uuid
       default:
         {
-          scene = cc.director.getScene();
+          scene = cc.director.getScene().children[0];
           break;
         }
     }
 
     if (scene) {
       let postData = {
-        scene: {
-          name: "",
-          children: []
-        },
+        scene: {},
       };
 
       postData.scene = {
@@ -78,9 +75,15 @@ export default function () {
         uuid: scene.uuid,
         name: scene.name,
         active: scene.active,
+        components: [],
         children: [],
       };
       window.inspectorGameMemoryStorage[scene.uuid] = scene;
+
+      let coms = scene._components;
+      for (let com of coms) {
+        postData.scene.components.push(com.__classname__);
+      }
 
       let sceneChildren = scene.getChildren();
       for (let i = 0; i < sceneChildren.length; i++) {
@@ -96,23 +99,28 @@ export default function () {
   };
 
   // 收集节点树的儿子信息
-  function getNodeChildren(node, data) {
+  function getNodeChildren(node, arr) {
     window.inspectorGameMemoryStorage[node.uuid] = node;
     // console.log("nodeName: " + node.name);
     let nodeData = {
       uuid: node.uuid,
       name: node.name,
       active: node.active,
+      components: [],
       children: [],
     };
 
+    let coms = node._components;
+    for (let com of coms) {
+      nodeData.components.push(com.__classname__);
+    }
+
     let nodeChildren = node.getChildren();
-    for (let i = 0; i < nodeChildren.length; i++) {
-      let childItem = nodeChildren[i];
+    for (let childItem of nodeChildren) {
       // console.log("childName: " + childItem.name);
       getNodeChildren(childItem, nodeData.children);
     }
-    data.push(nodeData);
+    arr.push(nodeData);
   }
 
   // 获取节点信息

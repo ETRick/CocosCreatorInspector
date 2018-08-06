@@ -68,8 +68,39 @@ export default {
             if (!filtervalue) {
                 return true;
             }
-            return data.label.toLowerCase().indexOf(filtervalue.toLowerCase()) !== -1 
-                || data.uuid.toLowerCase().indexOf(filtervalue.toLowerCase()) !== -1;
+
+            // 将多项过滤分离
+            let strs = filtervalue.split(" ");
+
+            // 每个过滤信息分别判断
+            for (let str of strs) {
+                switch (str.substr(0, 2)) {
+                    // 通过uuid判断
+                    case "u:": {
+                        if (data.uuid.hasSubstrIgnoreCase(str.substr(2))) {
+                            return true;
+                        }
+                        break;
+                    } 
+                    // 通过type判断
+                    case "t:": {
+                        for (let name of data.components) {
+                            if (name.hasSubstrIgnoreCase(str.substr(2))) {
+                                return true;
+                            }
+                        }
+                        break;
+                    }
+                    // 通过name判断
+                    default: {
+                        if (data.label.hasSubstrIgnoreCase(str)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         },
         // 渲染树节点
         renderTreeContent(h, { node, data, store }) {

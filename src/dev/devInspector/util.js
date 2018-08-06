@@ -7,10 +7,16 @@ export default function () {
     let that = this;
     return that.toString()[0].toUpperCase() + that.toString().slice(1);
   };
+  
   // eraseSubstring 将字符串删去子串部分
   String.prototype.eraseSubstring = function (str) {
     let that = this;
     return that.replace(str, "");
+  };
+
+  // 判断有没有子串，大小写不灵敏
+  String.prototype.hasSubstrIgnoreCase = function (substr) {
+    return this.toLowerCase().indexOf(substr.toLowerCase()) !== -1;
   };
 
   // Array 数组扩展函数
@@ -25,6 +31,7 @@ export default function () {
     }
   };
 
+  // Vue util
   // 刷新节点
   Vue.prototype._freshNode = function (uuid) {
     if (typeof uuid == "undefined") {

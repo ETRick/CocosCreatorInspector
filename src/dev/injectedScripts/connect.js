@@ -16,7 +16,7 @@ export default function () {
     Component(com) {
       if (com instanceof cc.Component) {
         let filterCom = {
-          comptype: com.constructor.name,
+          comptype: com.__classname__,
           uuid: com.uuid,
           enabled: com.enabled
         };
@@ -46,7 +46,7 @@ export default function () {
     Node(node) {
       if (node instanceof cc.Node) {
         let rtnNode = {
-          type: node.constructor.name,
+          type: node.__classname__,
           uuid: node.uuid,
           name: node.name,
           x: node.x,
