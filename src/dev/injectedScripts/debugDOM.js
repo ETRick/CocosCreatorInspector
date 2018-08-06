@@ -56,9 +56,11 @@ export default function () {
 
                     // 设置所有和位置相关的属性
                     function setAllCSSAttr(domElement) {
+                        let anchroX = ccnode.width > 0 ? ccnode.anchorX : 1 - ccnode.anchorX;
+                        let anchroY = ccnode.height > 0 ? 1 - ccnode.anchorY : ccnode.anchorY;
                         return $(domElement)
                             .setPositionAndSize(tl.top, tl.left, size.width, size.height)
-                            .setAnchor(ccnode.anchorX,  1 - ccnode.anchorY)
+                            .setAnchor(anchroX, anchroY)
                             .setSkewAndRotate(ccnode.getNodeToParentTransform())
                             .css("display", ccnode.active ? "inherit" : "none");
                     }
