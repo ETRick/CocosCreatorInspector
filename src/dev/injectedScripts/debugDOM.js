@@ -45,7 +45,7 @@ export default function () {
                     let size = ccnode.getDOMSize();
                     if (domnode.length == 0) {
                         // add 
-                        let domElement = $.createDOMElement(ccnode.uuid)
+                        let domElement = $.createDOMElement(ccnode.uuid);
                         setAllCSSAttr(domElement);
                         domtree.append(domElement);
                     } else {
@@ -55,10 +55,11 @@ export default function () {
 
                     // 设置所有和位置相关的属性
                     function setAllCSSAttr(domElement) {
+                        let matrix = ccnode.getNodeToParentTransform();
                         return $(domElement)
                             .setPositionAndSize(tl.top, tl.left, size.width, size.height)
                             .setAnchor(ccnode.anchorX, 1 - ccnode.anchorY)
-                            .setSkewAndRotate(-ccnode.skewX, -ccnode.skewY, ccnode.rotation)
+                            .setSkewAndRotate(matrix)
                             .css("display", ccnode.active ? "inherit" : "none");
                     }
 

@@ -100,15 +100,12 @@ export default function () {
      * 旋转：matrix(cosθ, sinθ, -sinθ, cosθ, 0, 0)  ===  rotate(θ + "deg")
      * 斜切：matrix(1, tan(skewY), tan(skewX), 1, 0, 0)  === skew(skewX + "deg", skewY + "deg")
      */
-    jQuery.prototype.setSkewAndRotate = function (skewX, skewY, rotate) {
-        let cosR = Math.cos(Math.angle2Radian(rotate));
-        let sinR = Math.sin(Math.angle2Radian(rotate));
-        let tanSkewX = Math.tan(Math.angle2Radian(skewX));
-        let tanSkewY = Math.tan(Math.angle2Radian(skewY));
+    jQuery.prototype.setSkewAndRotate = function (matrix) {
         return $(this).css(
             "-webkit-transform",
-            "matrix(" + (cosR + sinR * tanSkewX) + "," + (sinR + cosR * tanSkewY) + "," +
-                (cosR * tanSkewX - sinR) + "," + (cosR - sinR * tanSkewY) + ",0,0)" 
+            "matrix(" + matrix.a + "," + matrix.b + "," +
+                matrix.c + "," + matrix.d + "," +
+                0 + "," + 0 + ")" 
         );
     };
 
