@@ -28,6 +28,7 @@ export default function () {
             domCanvas.before(divCanvas);
         }
 
+        let num = 0;
         // 更新DOM树
         window.updateDOMTree = (cccanvas => {
             // 使用不动点进行内部递归
@@ -45,7 +46,7 @@ export default function () {
                     let size = ccnode.getDOMSize();
                     if (domnode.length == 0) {
                         // add 
-                        let domElement = $.createDOMElement(ccnode.uuid)
+                        let domElement = $.createDOMElement(ccnode.uuid);
                         setAllCSSAttr(domElement);
                         domtree.append(domElement);
                     } else {
@@ -57,8 +58,8 @@ export default function () {
                     function setAllCSSAttr(domElement) {
                         return $(domElement)
                             .setPositionAndSize(tl.top, tl.left, size.width, size.height)
-                            .setAnchor(ccnode.anchorX, 1 - ccnode.anchorY)
-                            .setSkewAndRotate(-ccnode.skewX, -ccnode.skewY, ccnode.scaleX, ccnode.scaleY, ccnode.rotation)
+                            .setAnchor(ccnode.anchorX,  1 - ccnode.anchorY)
+                            .setSkewAndRotate(ccnode.getNodeToParentTransform())
                             .css("display", ccnode.active ? "inherit" : "none");
                     }
 
