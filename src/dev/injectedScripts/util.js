@@ -153,6 +153,7 @@ export default function () {
     cc.Node.prototype.getSelfLeftTopPosition = function () {
         return {
             x: -this.width * this.anchorX + (this.width < 0) * this.width,
+            // x: -this.width * this.anchorX,
             y: this.height * (1 - this.anchorY) - (this.height < 0) * this.height,
         };
     };
