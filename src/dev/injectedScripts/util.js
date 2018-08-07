@@ -38,6 +38,29 @@ export default function () {
         }
     };
 
+    // 通过叉乘判断某个点是不是在区域内，当叉乘结果全为正或者全为负，则在区域内
+    QuadRangle.prototype.containPoint = function (pos) {
+        let ans = [];
+        for (let i = 0; i < 4; i++) {
+            let vec = ({
+                x: this["p" + (i + 1) % 4].x - this["p" + i].x,
+                y: this["p" + (i + 1) % 4].y - this["p" + i].y,
+            });
+            ans.push(vec.x * pos.y - vec.y * pos.x);
+        }
+        return ans[0] * ans[1] > 0 && 
+               ans[0] * ans[2] > 0 &&
+               ans[0] * ans[3] > 0;
+    };
+
+    // 得到中心点
+    QuadRangle.prototype.getCenter = function () {
+        return {
+            x: (this.p0.x + this.p1.x + this.p2.x + this.p3.x) / 4,
+            y: (this.p0.y + this.p1.y + this.p2.y + this.p3.y) / 4,
+        };
+    };
+
     // 绘制四边形
     cc.Graphics.prototype.drawQuadNode = function (quadnode) {
         if (quadnode) {

@@ -46,7 +46,7 @@ export default function () {
 
       // 添加DOM刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
-        let interval = 0.0;
+        let interval = 2;
         let timer = 0.0;
         return function (event) {
           timer += cc.director._deltaTime;

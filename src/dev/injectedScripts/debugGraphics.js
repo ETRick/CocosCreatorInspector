@@ -86,6 +86,67 @@ export default function () {
             };
         })();
 
+        node.anchorX = 0;
+        node.anchorY = 0;
+        node.width = ccCanvas.width;
+        node.height = ccCanvas.height;
+        node.on(cc.Node.EventType.MOUSE_MOVE, function (e) {
+            getCurrentQuad(e);
+        }, node);
         // window.updateGraphicsTree(window.quadRoot, ccCanvas);
+
+        // 得到当前鼠标位置的四边形
+        function getCurrentQuad(e) {
+            let node = e.target;
+            if (node.active) {
+                let pos = e.getLocation();
+                let quadnodes = getQuadsContainPos(pos);
+                let quadnode = getNearestQuad(quadnodes, pos);
+                console.log(quadnodes, quadnode);
+                node.getComponent("cc.Graphics").drawQuadNode(quadnode);
+            }
+        }
+
+        // 得到包含点的所有Quads
+        function getQuadsContainPos(pos) {
+            let fix = (f) => f(f);
+            let quadnodes = [];
+            (fix(fact => (quadtree, quadnodes) => {
+                let quadchildren = quadtree.children;
+                for (let i = quadchildren.length - 1; i >= 0; i--) {
+                    let quadnode = quadchildren[i];
+                    // 判断是否包含
+                    if (quadnode.quad.containPoint(pos)) {
+                        quadnodes.push(quadnode);
+                    }
+                    fact(fact)(quadchildren, quadnodes);
+                }
+            }))(window.quadRoot, quadnodes);
+            return quadnodes;
+        }
+
+        // 得到多个四边形中，所在点距离四边形中心点最近的四边形
+        function getNearestQuad(quadnodes, pos) {
+            if (quadnodes.length > 0) {
+                let rtnquad = quadnodes[0];
+                let least = getDistance(pos, quadnodes[0].getCenter());
+
+                for (let i = 1; i < quadnodes.length; i++) {
+                    let quadnode = quadnodes[i];
+                    let dis = getDistance(pos, quadnode.getCenter());
+                    if (dis < least) {
+                        least = dis;
+                        rtnquad = quadnode;
+                    }
+                }
+                return rtnquad;
+            }
+
+            function getDistance(pos1, pos2) {
+                let x = pos1.x - pos2.x;
+                let y = pos1.y - pos2.y;
+                return x * x + y * y;
+            }
+        }
     }
 }
