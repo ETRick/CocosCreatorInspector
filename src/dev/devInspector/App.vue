@@ -29,7 +29,7 @@
 import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
 import injectMain from "../injectedScripts/main.js";
-import injectDebugDOM from "../injectedScripts/debugDOM.js";
+import injectDebugDOM from "../injectedScripts/debugGraphics.js";
 import injectUtil from "..//injectedScripts/util.js"
 
 export default {

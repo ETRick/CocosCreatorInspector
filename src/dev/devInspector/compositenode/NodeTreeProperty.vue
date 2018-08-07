@@ -34,21 +34,18 @@ export default {
         // 点击节点的触发函数
         handleNodeClick(data, node) {
             // 选中DOM节点
-            this._evalCode("window.changeDOMBorder("
+            this._evalCode("window.changeGraphicsBorder("
                 + "'" + data.uuid + "')");
-            console.log(data.uuid);
             this._freshNode(data.uuid);
         },
         // 右键点击节点触发的函数
         handleNodeRightClick(event, data, node) {
             let treeproto = this.$refs.tree;
-            console.log(treeproto.getCheckedKeys());
             let uuid = treeproto.getCheckedKeys().length ? treeproto.getCheckedKeys()[0] : undefined;
-            console.log(uuid, data.uuid);
             // 先隐藏当前树
             if (uuid) {
                 treeproto.setChecked(uuid, false);
-                this._evalCode("window.hiddenDOM("
+                this._evalCode("window.hiddenGraphics("
                     + "'" + uuid + "')");
             }
             // 点击节点不同，切换节点，相同则不切换
@@ -60,7 +57,7 @@ export default {
                     parent.checked = false;
                     parent = parent.parent;
                 }
-                this._evalCode("window.showDOM("
+                this._evalCode("window.showGraphics("
                     + "'" + data.uuid + "')");
             }
         },
@@ -104,7 +101,6 @@ export default {
         },
         // 渲染树节点
         renderTreeContent(h, { node, data, store }) {
-            console.log(data);
             return (
                 <span style={true ? "delete-line" : ""}>
                     <span>{data.label}</span>

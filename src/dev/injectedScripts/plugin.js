@@ -48,22 +48,22 @@ export default function () {
 
   // 发送节点信息
   window.sendNodeTreeInfo = function () {
-    let scene;
+    let scene = cc.director.getScene().children[0];
     // 区分版本
-    switch (cc.ENGINE_VERSION.substr(0, 3)) {
-      // 1.4版本中，没有scene的uuid，因此忽略
-      case "1.4":
-        {
-          scene = cc.director.getScene().children[0];
-          break;
-        }
-        // 1.9 2.0版本中有scene的uuid
-      default:
-        {
-          scene = cc.director.getScene().children[0];
-          break;
-        }
-    }
+    // switch (cc.ENGINE_VERSION.substr(0, 3)) {
+    //   // 1.4版本中，没有scene的uuid，因此忽略
+    //   case "1.4":
+    //     {
+    //       scene = cc.director.getScene().children[0];
+    //       break;
+    //     }
+    //     // 1.9 2.0版本中有scene的uuid
+    //   default:
+    //     {
+    //       scene = cc.director.getScene().children[0];
+    //       break;
+    //     }
+    // }
 
     if (scene) {
       let postData = {
@@ -149,40 +149,34 @@ export default function () {
     return ret;
   }
 
-  // 显示DOM边框，并去除之前的DOM边框
-  window.changeDOMBorder = (function () {
-    let olddom;
-    return function (uuidordom) {
-      let config = window.Config.DEBUG_MODE;
-      let newdom = typeof uuidordom == 'string' ? $.getDOMElement(uuidordom) : uuidordom;
+  // 显示QuadRangle边框，并去除之前的QuadRangle边框
+  window.changeGraphicsBorder = (function () {
+    let oldquad = null;
+    return function (uuidorquad) {
+      let newquad = typeof uuidorquad == 'string' ? window.quadStorage[uuidorquad] : uuidorquad;
       // 防止循环递归
-      if (olddom && olddom != newdom) {
-        olddom.css('border-color', config.showCustomBorder ? config.customBorderColor : '#00000000');
+      if (oldquad && newquad && oldquad.uuid != newquad.uuid) {
+        oldquad.clicked = false;
       }
       // 防止节点被删除
-      if (newdom.length != 0) {
-        newdom.css('border-color', config.clickedBroderColor);
-        olddom = newdom;
+      if (newquad) {
+        newquad.clicked = true;
+        oldquad = newquad;
       }
     };
   })();
 
-  // 显示DOM树，只显示指定节点的DOM树
-  window.showDOM = function (uuid) {
+  // 显示指定的QuadRangle和他的子节点
+  window.showGraphics = function (uuid) {
     if (uuid) {
-      let node = $.getDOMElement(uuid);
-      node.css("visibility", "visible");
+      window.rightClickQuad = window.quadStorage[uuid];
     }
   };
 
-  // 隐藏DOM树，只隐藏指定节点的DOM树
-  window.hiddenDOM = function (uuid) {
-    // 去除DOM边框
+  // 隐藏指定的QuadRangle和他的子节点
+  window.hiddenGraphics = function (uuid) {
     if (uuid) {
-      let node = $.getDOMElement(uuid);
-      // 父节点不能设置inherit
-      let attr = uuid == cc.Canvas.instance.node.uuid ? "hidden" : "inherit";
-      node.css("visibility", attr);
+      window.rightClickQuad = null;
     }
   };
 
