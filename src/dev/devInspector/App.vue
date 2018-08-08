@@ -236,6 +236,7 @@ export default {
       // PS:脚本代码行数过多会读不进来，目前测试为230行
       let code = script.toString();
       let array = code.split("\n");
+      console.log(array);
       // 删除开头function() {
       array.splice(0, 1);
       while (array[0].indexOf("//") != -1) {

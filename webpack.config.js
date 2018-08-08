@@ -15,12 +15,6 @@ module.exports = {
     index: path.resolve(__dirname, './src/index/main.js'),
     backgroundScripts: path.resolve(__dirname, './src/dev/backgroundScripts.js'),
     contentScripts: path.resolve(__dirname, './src/dev/contentScripts.js'),
-
-    util: path.resolve(__dirname, './src/dev/devInspector/util.js'),
-    injectPlugin: path.resolve(__dirname, './src/dev/injectedScripts/plugin.js'),
-    injectConnect: path.resolve(__dirname, './src/dev/injectedScripts/connect.js'),
-    injectMain: path.resolve(__dirname, './src/dev/injectedScripts/main.js'),
-    injectDebugDOM: path.resolve(__dirname, './src/dev/injectedScripts/debugGraphics.js')
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -139,11 +133,9 @@ module.exports = {
     inline: true, //实时刷新
     overlay: true
   },
+
   performance: {
     hints: false
-  },
-  externals: {
-
   },
   devtool: '#source-map'
 };
