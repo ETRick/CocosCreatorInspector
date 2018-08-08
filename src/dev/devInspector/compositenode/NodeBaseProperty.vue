@@ -42,7 +42,8 @@
 </template>
 
 <script>
-  import configjs from '../config/nodebase.json'
+  
+  import configjs from 'nodebaseConfig'
 
   export default {
     name: "app",
