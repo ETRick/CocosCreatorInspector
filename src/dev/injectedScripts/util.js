@@ -12,7 +12,7 @@ export default function () {
      *  *------*
      *  p1     p2
      */
-    function QuadRangle(width, height) {
+    QuadRangle = function (width, height) {
         this.p0 = {x:0, y:0};
         this.p1 = {x:width, y:0};
         this.p2 = {x:width, y:height};
@@ -79,7 +79,7 @@ export default function () {
     };
 
     // 对应cc.node的四边形树，用于更新信息
-    function QuadNode(ccnode) {
+    QuadNode = function (ccnode) {
         this.uuid = ccnode.uuid;
         this.active = ccnode.active;
         this.quad = new QuadRangle(ccnode.width, ccnode.height);

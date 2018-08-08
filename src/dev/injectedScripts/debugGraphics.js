@@ -1,6 +1,7 @@
 // Author: huzi(moustache)
 // Date: 18-8-1 10:58
 // Description: 向页面生成DOM节点树，和cc节点树单向绑定，显示cc节点的边框
+import config from '../../config/debugmode'
 export default function () {
     let ccCanvas = cc.Canvas.instance.node;
     // 页面中需要存在cc（js），cc.Canvas实例，并且没有生成Graphics节点
@@ -14,7 +15,7 @@ export default function () {
             showCustomBorder: true,
             customBorderColor: "blue",
         };
-
+        
         // 初始化内存存储结构
         window.quadNodeStorage = window.quadNodeStorage || {};
         window.quadRoot = new QuadNode(ccCanvas);
@@ -22,7 +23,7 @@ export default function () {
 
         // 使用不动点进行内部递归
         let fix = (f) => f(f);
-
+        
         // 生成Graphics挂载节点和Graphics脚本
         let node = new cc.Node();
         node.name = "Debug-Graphics";
@@ -31,13 +32,14 @@ export default function () {
         let config = window.Config.DEBUG_MODE;
         let gracom = node.getComponent("cc.Graphics");
         gracom.lineWidth = config.lineWidth;
-
+        
         // 设置节点属性
         node.active = false;  // 一开始隐藏
         node.anchorX = 0;
         node.anchorY = 0;
         node.width = ccCanvas.width;
         node.height = ccCanvas.height;
+        
         // 绑定hover
         node.on(cc.Node.EventType.MOUSE_MOVE, function (e) {
             // 得到当前鼠标位置的四边形
@@ -61,7 +63,7 @@ export default function () {
                 window.sendMsgToDevTools(window.Connect.msgType.clickedNodeInfo, QuadNode.clicked.uuid);
             }
         }, node);
-
+        
         // 得到包含点的所有Quads
         function getQuadsContainPos(pos) {
             let arr = [];
@@ -78,7 +80,7 @@ export default function () {
             }))(window.quadRoot, arr);
             return arr;
         }
-
+        
         // 得到多个四边形中，所在点距离四边形中心点最近的四边形
         function getNearestQuad(quadnodes, pos) {
             if (quadnodes.length > 0) {
@@ -102,7 +104,7 @@ export default function () {
                 return x * x + y * y;
             }
         }
-
+        
         // 渲染hover和clicked节点，每帧刷新
         window.drawNode = (function () {
             let gra = gracom;
@@ -120,7 +122,7 @@ export default function () {
                 }
             };
         })();
-
+        
         // 更新Graphics树，包括非active
         // PS:只更新不绘制
         window.updateGraphicsTree = function (quadroot, ccroot) {

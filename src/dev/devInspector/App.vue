@@ -240,19 +240,12 @@ export default {
       let code = script.toString();
       console.log(code);
       let array = code.split("\n");
-      // 删除开头function() {
-      array.splice(0, 1);
-      while (array[0].indexOf("//") != -1) {
-        array.splice(0, 1);
-      }
-      // 删除结尾} 使函数直接注入
-      array.splice(-1, 1);
-      let evalCode = "";
-      // 防止注释使代码失效
+      let evalCode = "(";
       for (let i = 0; i < array.length; i++) {
         evalCode += array[i] + "\n";
       }
-      // console.log(evalCode);
+      evalCode += ")()";
+      console.log(evalCode);
       return evalCode;
     },
     onBtnClickUpdatePage() {
