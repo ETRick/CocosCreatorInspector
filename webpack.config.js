@@ -142,5 +142,8 @@ module.exports = {
   performance: {
     hints: false
   },
+  externals: {
+
+  },
   devtool: '#source-map'
 };

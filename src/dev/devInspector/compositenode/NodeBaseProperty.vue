@@ -43,7 +43,7 @@
 
 <script>
   
-  import configjs from 'nodebaseConfig'
+  import configjs from '../config/nodebase.json'
 
   export default {
     name: "app",
