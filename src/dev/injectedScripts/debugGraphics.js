@@ -33,6 +33,7 @@ export default function () {
         gracom.lineWidth = config.lineWidth;
 
         // 设置节点属性
+        node.active = false;  // 一开始隐藏
         node.anchorX = 0;
         node.anchorY = 0;
         node.width = ccCanvas.width;

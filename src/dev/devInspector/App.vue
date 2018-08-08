@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <el-button type="success" class="el-icon-refresh reflesh-button" size="small" @click="onBtnClickUpdatePage">刷新</el-button>
-    
+    <div style="float: right">
+      <el-button type="danger" class="el-icon-view debug-button" size="small" :disabled="!isShowDebug" @click="onBtnClickDebug">
+        {{(isEnterDebugMode ? "退出" : "进入") + "Debug模式"}}
+      </el-button>
+    </div>
+
     <!--<el-button type="success" size="mini" @click="onBtnClickTest">test</el-button>-->
     <div v-show="isShowDebug">
       <el-row>
@@ -260,6 +265,14 @@ export default {
         console.log("刷新成功!");
       });
     },
+    onBtnClickDebug() {
+      this.isEnterDebugMode = !this.isEnterDebugMode;
+      if (this.isEnterDebugMode) {
+        this._evalCode("window.showGraphics()");
+      } else {
+        this._evalCode("window.hiddenGraphics()");
+      }
+    }
   }
 };
 </script>

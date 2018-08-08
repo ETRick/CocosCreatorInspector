@@ -150,6 +150,22 @@ export default function () {
     return ret;
   }
 
+  // 显示Graphics节点
+  window.showGraphics = function () {
+    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
+    if (node) {
+      node.active = true;
+    }
+  };
+
+  // 隐藏Graphics节点
+  window.hiddenGraphics = function () {
+    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
+    if (node) {
+      node.active = false;
+    }
+  };
+
   // 显示QuadRangle边框，并去除之前的QuadRangle边框
   window.clickQuadNode = function (uuid) {
     let quadnode = window.quadNodeStorage[uuid];
