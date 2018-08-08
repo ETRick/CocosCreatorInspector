@@ -4,7 +4,7 @@
 export default function () {
     let ccCanvas = cc.Canvas.instance.node;
     // 页面中需要存在cc（js），cc.Canvas实例，并且没有生成Graphics节点
-    if (cc && cc.Graphics && ccCanvas && !ccCanvas.parent.getChildByName("Debug-Graphics")) {
+    if (cc && ccCanvas && !ccCanvas.parent.getChildByName("Debug-Graphics")) {
         if (!window.Config) {
             window.Config = {};
         }
@@ -14,7 +14,6 @@ export default function () {
             showCustomBorder: true,
             customBorderColor: "blue",
         };
-
 
         // 初始化内存存储结构
         window.quadNodeStorage = window.quadNodeStorage || {};
@@ -39,7 +38,6 @@ export default function () {
         node.anchorY = 0;
         node.width = ccCanvas.width;
         node.height = ccCanvas.height;
-
         // 绑定hover
         node.on(cc.Node.EventType.MOUSE_MOVE, function (e) {
             // 得到当前鼠标位置的四边形

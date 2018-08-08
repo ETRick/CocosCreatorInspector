@@ -2,7 +2,7 @@
   <div id="app">
     <el-button type="success" class="el-icon-refresh reflesh-button" size="small" @click="onBtnClickUpdatePage">刷新</el-button>
     <div style="float: right">
-      <el-button v-if="hasGraphics" type="danger" class="el-icon-view debug-button" size="small" :disabled="!isShowDebug" @click="onBtnClickDebug">
+      <el-button type="danger" class="el-icon-view debug-button" size="small" :disabled="!isShowDebug" @click="onBtnClickDebug">
         {{(isEnterDebugMode ? "退出" : "进入") + "Debug模式"}}
       </el-button>
     </div>
@@ -35,7 +35,7 @@ import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
 import injectMain from "../injectedScripts/main.js";
 import injectDebugDOM from "../injectedScripts/debugGraphics.js";
-import injectUtil from "../injectedScripts/util.js"
+import injectUtil from "..//injectedScripts/util.js"
 
 export default {
   name: "app",
@@ -43,7 +43,6 @@ export default {
     return {
       isShowDebug: false,
       isEnterDebugMode: false,
-      hasGraphics: true,
       treeItemData: {},
       treeData: [],
       oldTreeData: [],
@@ -61,13 +60,17 @@ export default {
       name: btoa("for" + String(chrome.devtools.inspectedWindow.tabId))
     });
 
-    // 定义通讯变量
-    injectConnect();
     backgroundPageConnection.onMessage.addListener(
         function(message) {
           // console.log("getInfo:", message);
           if (message !== null) {
-            const msgType = window.Connect.msgType;
+            const msgType = {
+              clickedNodeInfo: 4, // 出现节点被点击
+              refleshInfo: 3, // 节点刷新信息
+              nodeInfo: 2, // 节点信息
+              nodeListInfo: 1, // 节点列表信息
+              notSupport: 0 // 不支持的游戏
+            };
             switch (message.type) {
               case msgType.nodeListInfo: {
                 // 游戏树节点
@@ -77,13 +80,7 @@ export default {
               } 
               case msgType.notSupport: {
                 // 不支持调试
-                console.log(message.msg);
-                if (message.msg == "不支持调试游戏!") {
-                  this.isShowDebug = false;
-                } else if (message.msg == "不支持Debug模式!") {
-                  console.log(this.hasGraphics);
-                  this.hasGraphics = false;
-                }
+                this.isShowDebug = false;
                 break;
               }
               case msgType.nodeInfo: {
