@@ -44,23 +44,19 @@ export default function () {
         };
       }(), cc.director);
 
-      // 添加DOM刷新帧
+      // 添加Graphics刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
-        let interval = 2;
+        let interval = 0;
         let timer = 0.0;
         return function (event) {
           timer += cc.director._deltaTime;
           if (timer > interval) {
-            if (window.rightClickQuad) {
-              let quadnode = window.rightClickQuad;
-              let ccnode = window.inspectorGameMemoryStorage[quadnode.uuid]
-              window.updateGraphicsTree(quadnode, ccnode);
-              timer = 0.0;
-            } else {
-              cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics").getComponent("cc.Graphics").clear();
-            }
+            window.updateGraphicsTree(window.quadRoot, cc.Canvas.instance.node);
+            window.drawNode();
+            timer = 0.0;
           }
         };
+
       }(), cc.director);
     }
 

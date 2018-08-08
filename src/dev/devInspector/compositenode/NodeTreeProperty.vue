@@ -10,8 +10,7 @@
                     :expand-on-click-node="false" 
                     :render-content="renderTreeContent" 
                     :filter-node-method="filterNode"
-                    @node-click="handleNodeClick"
-                    @node-contextmenu="handleNodeRightClick">
+                    @node-click="handleNodeClick">
             </el-tree>
         </div>
     </div>
@@ -33,33 +32,10 @@ export default {
     methods: {
         // 点击节点的触发函数
         handleNodeClick(data, node) {
-            // 选中DOM节点
-            this._evalCode("window.changeGraphicsBorder("
+            // 选中Graphics中的节点
+            this._evalCode("window.clickQuadNode("
                 + "'" + data.uuid + "')");
             this._freshNode(data.uuid);
-        },
-        // 右键点击节点触发的函数
-        handleNodeRightClick(event, data, node) {
-            let treeproto = this.$refs.tree;
-            let uuid = treeproto.getCheckedKeys().length ? treeproto.getCheckedKeys()[0] : undefined;
-            // 先隐藏当前树
-            if (uuid) {
-                treeproto.setChecked(uuid, false);
-                this._evalCode("window.hiddenGraphics("
-                    + "'" + uuid + "')");
-            }
-            // 点击节点不同，切换节点，相同则不切换
-            if (uuid !== data.uuid) {
-                node.checked = true;
-                let parent = node.parent;
-                // 如果只设置node，会覆盖唯一父节点
-                while (parent.checked) {
-                    parent.checked = false;
-                    parent = parent.parent;
-                }
-                this._evalCode("window.showGraphics("
-                    + "'" + data.uuid + "')");
-            }
         },
         filterNode(filtervalue, data) {
             if (!filtervalue) {

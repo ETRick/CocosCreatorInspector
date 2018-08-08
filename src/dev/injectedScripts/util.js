@@ -42,12 +42,17 @@ export default function () {
     QuadRangle.prototype.containPoint = function (pos) {
         let ans = [];
         for (let i = 0; i < 4; i++) {
-            let vec = ({
+            let vec1 = {
+                x: pos.x - this["p" + i].x,
+                y: pos.y - this["p" + i].y,
+            };
+            let vec2 = ({
                 x: this["p" + (i + 1) % 4].x - this["p" + i].x,
                 y: this["p" + (i + 1) % 4].y - this["p" + i].y,
             });
-            ans.push(vec.x * pos.y - vec.y * pos.x);
+            ans.push(vec1.x * vec2.y - vec1.y * vec2.x);
         }
+        // console.log(ans);
         return ans[0] * ans[1] > 0 && 
                ans[0] * ans[2] > 0 &&
                ans[0] * ans[3] > 0;
@@ -62,23 +67,14 @@ export default function () {
     };
 
     // 绘制四边形
-    cc.Graphics.prototype.drawQuadNode = function (quadnode) {
-        if (quadnode) {
-            let clicked = quadnode.clicked;
-            if (clicked) {
-                this.strokeColor = cc.Color[window.Config.DEBUG_MODE.clickedBorderColor.toUpperCase()];
-            }
-            let quad = quadnode.quad;
+    cc.Graphics.prototype.drawQuad = function (quad) {
+        if (quad) {
             this.moveTo(quad.p0.x, quad.p0.y);
             for (let i = 1; quad["p" + i]; i++) {
                 this.lineTo(quad["p" + i].x, quad["p" + i].y);
             }
             this.lineTo(quad.p0.x, quad.p0.y);
-            // 由于颜色不一致，因此需要立即划线
             this.stroke();
-            if (clicked) {
-                this.strokeColor = cc.Color[window.Config.DEBUG_MODE.customBorderColor.toUpperCase()];
-            }
         }
     };
 
@@ -86,10 +82,22 @@ export default function () {
     function QuadNode(ccnode) {
         this.uuid = ccnode.uuid;
         this.active = ccnode.active;
-        this.clicked = false;  // 只有点击时显示红色
         this.quad = new QuadRangle(ccnode.width, ccnode.height);
         this.quad.transform(ccnode.getNodeToWorldTransform());
         this.children = [];
         return this;
     }
+
+    // 当前点击节点，显示红色
+    QuadNode.clicked = null;
+
+    // 覆盖节点，显示蓝色
+    QuadNode.hover = null;
+
+    // 更新节点
+    QuadNode.prototype.update = function (ccnode) {
+        this.quad = new QuadRangle(ccnode.width, ccnode.height);
+        this.quad.transform(ccnode.getNodeToWorldTransform());
+        this.active = ccnode.active;
+    };
 }

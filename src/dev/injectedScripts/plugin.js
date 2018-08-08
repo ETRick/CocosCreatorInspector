@@ -48,6 +48,7 @@ export default function () {
 
   // 发送节点信息
   window.sendNodeTreeInfo = function () {
+    // 都以Canvus为起始节点
     let scene = cc.director.getScene().children[0];
     // 区分版本
     // switch (cc.ENGINE_VERSION.substr(0, 3)) {
@@ -150,33 +151,10 @@ export default function () {
   }
 
   // 显示QuadRangle边框，并去除之前的QuadRangle边框
-  window.changeGraphicsBorder = (function () {
-    let oldquad = null;
-    return function (uuidorquad) {
-      let newquad = typeof uuidorquad == 'string' ? window.quadStorage[uuidorquad] : uuidorquad;
-      // 防止循环递归
-      if (oldquad && newquad && oldquad.uuid != newquad.uuid) {
-        oldquad.clicked = false;
-      }
-      // 防止节点被删除
-      if (newquad) {
-        newquad.clicked = true;
-        oldquad = newquad;
-      }
-    };
-  })();
-
-  // 显示指定的QuadRangle和他的子节点
-  window.showGraphics = function (uuid) {
-    if (uuid) {
-      window.rightClickQuad = window.quadStorage[uuid];
-    }
-  };
-
-  // 隐藏指定的QuadRangle和他的子节点
-  window.hiddenGraphics = function (uuid) {
-    if (uuid) {
-      window.rightClickQuad = null;
+  window.clickQuadNode = function (uuid) {
+    let quadnode = window.quadNodeStorage[uuid];
+    if (quadnode && QuadNode.clicked != quadnode) {
+      QuadNode.clicked = quadnode;
     }
   };
 
