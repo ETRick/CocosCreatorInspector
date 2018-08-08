@@ -4,7 +4,7 @@
 export default function () {
     let ccCanvas = cc.Canvas.instance.node;
     // 页面中需要存在cc（js），cc.Canvas实例，并且没有生成Graphics节点
-    if (cc && ccCanvas && !ccCanvas.parent.getChildByName("Debug-Graphics")) {
+    if (cc && cc.Graphics && ccCanvas && !ccCanvas.parent.getChildByName("Debug-Graphics")) {
         if (!window.Config) {
             window.Config = {};
         }
