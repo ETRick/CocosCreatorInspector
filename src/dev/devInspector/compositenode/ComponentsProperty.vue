@@ -2,15 +2,18 @@
   <div id="app">
     <div>
       <div>
-        <h4 @click="onClickComp" style="margin-top: 5px;margin-bottom: 1px;font-weight: bold;cursor: pointer">挂载组件:</h4>
-        <hr style="margin-bottom: 2px;margin-top: 2px;"/>
+        <h2 @click="onClickAllComp" style="">挂载组件:</h2>
+        <hr style="margin-bottom: 5px;margin-top: 2px;"/>
       </div>
-      <div v-show="isShowComp" v-for="(comp,index) in components" :key="comp.uuid">
-        <Node :name="'Num:' + index">
-          <span>{{comp.comptype == "" ? "Undefined Type": comp.comptype}}</span>
-        </Node>
-        <ComponentProperty v-if="comp.comptype.slice(0, 3) != 'cc_'" :component="comp">
-        </ComponentProperty>
+      <div v-show="isShowAllComp" v-for="(comp,index) in components" :key="comp.uuid">
+        <div style="margin-top: 5px; margin-bottom: 5px">
+          <i :class="hiddenShowComps[index] ? 'el-icon-caret-right' : 'el-icon-caret-bottom'" class="icon" size="mini"></i>
+          <h4 @click="onClickComp(index)">
+            {{comp.comptype == "" ? "Undefined Type": comp.comptype}}
+          </h4>
+          <ComponentProperty v-show="!hiddenShowComps[index]" :component="comp">
+          </ComponentProperty>
+        </div>
       </div>
     </div>
   </div>
@@ -21,13 +24,20 @@
   export default {
     data() {
       return {
-        isShowComp: true,
+        isShowAllComp: true,
+        hiddenShowComps: [],
       }
     },
     methods: {
-      onClickComp() {
-        // console.log("mouted:", this.components);
-        this.isShowComp = !this.isShowComp;
+      onClickAllComp() {
+        this.isShowAllComp = !this.isShowAllComp;
+      },
+      onClickComp(index) {
+        if (!this.hiddenShowComps[index]) {
+          this.hiddenShowComps[index] = true;
+        } else {
+          this.hiddenShowComps[index] = false;
+        }
       }
     },
     props: [
@@ -37,6 +47,22 @@
 </script>
 
 <style scoped>
+  .icon {
+    margin-top: 5px;
+    margin-bottom: 1px;
+    float: left;
+  }
+  h2 {
+    margin-top: 10px;
+    margin-bottom: 2px;
+    font-weight: bold;
+    cursor: pointer
+  }
+  h4 {
+    margin-top: 5px;
+    margin-bottom: 1px;
+    cursor: pointer; 
+  }
   span {
     color: #fd942b;
   }
