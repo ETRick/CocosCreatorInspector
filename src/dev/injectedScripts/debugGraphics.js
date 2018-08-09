@@ -118,6 +118,10 @@ export default function () {
                     gra.drawQuad(QuadNode.hover.quad);
                 }
                 if (QuadNode.clicked && QuadNode.clicked.active) {
+                    // 防止节点树移动产生bug
+                    if (QuadNode.clicked != window.quadNodeStorage[QuadNode.clicked.uuid]) {
+                        QuadNode.clicked = window.quadNodeStorage[QuadNode.clicked.uuid];
+                    }
                     gra.strokeColor = cc.Color[config.clickedBorderColor.toUpperCase()];
                     gra.drawQuad(QuadNode.clicked.quad);
                 }
