@@ -1,43 +1,51 @@
 <template>
   <div id="app">
-    <!-- uuid -->
-    <SingleNode :itemData="itemData" mykey="uuid" readonly="true"></SingleNode>
-    
-    <!-- 配置文件中属性 -->
-    <div v-for="config in configs" :key="config">
-      <SingleNode v-if="config.type === 'single'" 
-                 :itemData="itemData"
-                 :mykey="config.key"
-                 :readonly="config.readonly"
-                 :step="config.step || 10">
-      </SingleNode>
-      <CheckBox v-else-if="config.type === 'singlebool'"
-                :itemData="itemData"
-                :mykey="config.key">
-      </CheckBox>
-      <MultiNode v-else-if="config.type === 'multi'"
-                :itemData="itemData"
-                :titlename="config.title"
-                :mykeys="config.keys"
-                :readonly="config.readonly"
-                :step="config.step || 10">
-      </MultiNode>
-    </div>
+    <input type="checkbox" class="myCheckBox"
+            :checked="itemData.active"
+            @click="onCheckBoxClick">
+    <h1 @click="onClickNode" :class="{inactiveInHierarchy: !itemData.activeInHierarchy}">
+      {{itemData.name + " (" + itemData.uuid + ")"}}
+    </h1>
+    <hr style="margin-bottom: 10px; margin-top: 4px;"/>
 
-    <!-- 颜色 -->
-    <Node name="color" v-if="typeof itemData['color'] != 'undefined'">
-      <div style="float: left;width: 100%;height: 100%;">
-        <div style="float: left;width: 50%; height: 100%;">
-          <el-color-picker v-model="itemData.color" size="mini"
-                          style="margin: 0;display: flex;align-items: center;flex-wrap: wrap;"
-                          @change="changeColor"></el-color-picker>
-        </div>
-        <div style="float: left;width: 50%;">
-          <span>{{itemData.color}}</span>
-        </div>
+    <div v-if="isShowNode">    
+      <!-- 配置文件中属性 -->
+      <div v-for="config in configs" :key="config">
+        <SingleNodeLine v-if="config.type === 'single'" 
+                  :uuid="itemData.uuid"
+                  :mykey="config.key"
+                  :myvalue="itemData[config.key]"
+                  :readonly="config.readonly"
+                  :step="config.step || 10">
+        </SingleNodeLine>
+        <CheckBox v-else-if="config.type === 'bool'"
+                  :uuid="itemData.uuid"
+                  :mykey="config.key"
+                  :myvalue="itemData[config.key]">
+        </CheckBox>
+        <MultiNodeLine v-else-if="config.type === 'multi'"
+                  :itemData="itemData"
+                  :titlename="config.title"
+                  :mykeys="config.keys"
+                  :readonly="config.readonly"
+                  :step="config.step || 10">
+        </MultiNodeLine>
       </div>
-    </Node>
 
+      <!-- 颜色 -->
+      <Node name="color" v-if="typeof itemData['color'] != 'undefined'">
+        <div style="float: left;width: 100%;height: 100%;">
+          <div style="float: left;width: 50%; height: 100%;">
+            <el-color-picker v-model="itemData.color" size="mini"
+                            style="margin: 0;display: flex;align-items: center;flex-wrap: wrap;"
+                            @change="changeColor"></el-color-picker>
+          </div>
+          <div style="float: left;width: 50%;">
+            <span>{{itemData.color}}</span>
+          </div>
+        </div>
+      </Node>
+    </div>
   </div>
 </template>
 
@@ -50,16 +58,28 @@
     data() {
       return {
         configs: configjs,
+        isShowNode: true,
       }
     },
     methods: {
+      onCheckBoxClick() {
+        this.itemData.active = !this.itemData.active;
+        this._evalCode("window.pluginSetNodeValue('" 
+                    + this.itemData.uuid 
+                    + "','active',"
+                    + this.itemData.active + ");");
+        this._freshNode(this.itemData.uuid);
+      },
+      onClickNode() {
+        this.isShowNode = !this.isShowNode;
+      },
       changeColor() {
         let color = this.itemData.color;
         this._evalCode(
           "window.pluginSetNodeColor('" +
           this.itemData.uuid + "','" +
           color + "');");
-        this._freshNode();
+        this._freshNode(this.itemData.uuid);
       },
     },
     props: [
@@ -72,32 +92,19 @@
   span {
     color: #fd942b;
   }
-
-  .btnSize {
-    padding: 5px 10px;
+  h1 {
+    margin-top: 20px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    cursor: pointer
   }
-
-  .comp {
-    border: 2px solid #a1a1a1;
-    padding: 5px 5px;
-    background: #dddddd;
-    width: 100%;
-    border-radius: 5px;
-    -moz-border-radius: 5px; /* 老的 Firefox */
+  .inactiveInHierarchy {
+    text-decoration: line-through;
   }
-
-  .float-left {
+  .myCheckBox {
+    width: 20px;
+    height: 20px;
+    margin-top: 8px; 
     float: left;
-  }
-
-  .compBorder {
-    border: 1px solid #b3b3b3;
-    background: #ffffff
-  }
-
-  .myInput {
-    width: 90%;
-    border-radius: 5px;
-    color: #fd942b;
   }
 </style>

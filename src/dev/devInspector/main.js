@@ -1,30 +1,30 @@
 import Vue from 'vue';
-import ElementUI from 'element-ui'
-import '../../../theme/index.css'
-// import 'element-ui/lib/theme-chalk/index.css'
+import ElementUI from 'element-ui';
+import '../../../theme/index.css';
+// import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 
-import MyNode from './basenode/Node.vue'
-import SlideNode from './basenode/SlideNode.vue'
-import CheckBox from './basenode/CheckBox.vue'
-import SingleNode from './basenode/SingleNode.vue'
-import MultiNode from './basenode/MultiNode.vue'
+import MyNode from './basenode/Node.vue';
+import SlideNode from './basenode/SlideNode.vue';
+import CheckBox from './basenode/CheckBox.vue';
+import SingleNodeLine from './basenode/SingleNodeLine.vue';
+import MultiNodeLine from './basenode/MultiNodeLine.vue';
 
-import NodeTreeProperty from './compositenode/NodeTreeProperty.vue'
-import NodeBaseProperty from './compositenode/NodeBaseProperty.vue'
-import SceneProperty from './compositenode/SceneProperty.vue'
-import ComponentProperty from './compositenode/ComponentProperty.vue'
+import NodeTreeProperty from './compositenode/NodeTreeProperty.vue';
+import NodeBaseProperty from './compositenode/NodeBaseProperty.vue';
+import SceneProperty from './compositenode/SceneProperty.vue';
+import ComponentProperty from './compositenode/ComponentProperty.vue';
 import ComponentsProperty from './compositenode/ComponentsProperty.vue'
-
+;
 // 自定义util函数加载
-import util from './util.js'
+import util from './util.js';
 util();
 
 Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);
 Vue.component('CheckBox', CheckBox);
-Vue.component('SingleNode', SingleNode);
-Vue.component('MultiNode', MultiNode);
+Vue.component('SingleNodeLine', SingleNodeLine);
+Vue.component('MultiNodeLine', MultiNodeLine);
 
 Vue.component('NodeTreeProperty', NodeTreeProperty);
 Vue.component('NodeBaseProperty', NodeBaseProperty);

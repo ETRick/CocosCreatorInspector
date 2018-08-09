@@ -2,15 +2,15 @@
   <div id="app">
     <SlideNode :name="mykey.firstUpperCase()" 
                :mykey="mykey" :step="step"
-               v-if="typeof itemData[mykey] != 'undefined'"
+               v-if="typeof myvalue != 'undefined'"
                @movestep="changeFloatValueAction">
       <input v-if='!readonly' class="myInput"
         @focus="pauseGame"
         @blur="resumeGame"
         @change="changeValue"
-        :placeholder="itemData[mykey]"
-        v-model="itemData[mykey]">
-      <span v-else> {{itemData[mykey]}}</span>
+        :placeholder="myvalue"
+        v-model="myvalue">
+      <span v-else>{{myvalue}}</span>
     </SlideNode>
   </div>
 </template>
@@ -26,37 +26,38 @@
       changeValue() {
         // 添加uuid，key值
         let code = "window.pluginSetNodeValue(" +
-          "'" + this.itemData.uuid + "'," +
+          "'" + this.uuid + "'," +
           "'" + this.mykey + "',";
         // value值需要判断一下
-        if (typeof this.itemData[this.mykey] == "number") {
-          code += this.itemData[this.mykey] + ")";
+        if (typeof this.myvalue == "number") {
+          code += this.myvalue + ")";
         } else {
-          code += "'" + this.itemData[this.mykey] + "'" + ")";
+          code += "'" + this.myvalue + "'" + ")";
         }
         this._evalCode(code);
-        this._freshNode();
+        this._freshNode(this.uuid);
       },
-      changeFloatValueAction(step, key) {
-        // console.log("changeFloatValueAction", key);
-        if (typeof this.itemData[this.mykey] == "number") {
-          let value = parseFloat(this.itemData[key]);
-          this.itemData[key] = value + step;
-          this.changeValue(key);
+      changeFloatValueAction(step) {
+        if (typeof this.myvalue == "number") {
+          let value = parseFloat(this.myvalue);
+          this.myvalue = value + step;
+          this.changeValue();
         }
       },
       pauseGame() {
         this._evalCode("window.pluginPauseGame()");
-        this._freshNode();
+        this._freshNode(this.uuid);
       },
       resumeGame() {
         this._evalCode("window.pluginResumeGame()");
-        this._freshNode();
+        this._freshNode(this.uuid);
       },
     },
-    props: [
-      'itemData',
+    props: 
+    [
+      'uuid',
       'mykey',
+      'myvalue',
       'step',
       'readonly'
     ]

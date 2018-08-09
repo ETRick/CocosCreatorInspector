@@ -1,8 +1,8 @@
 <template>
-    <Node :name="mykey.firstUpperCase()" v-if="typeof itemData[mykey] != 'undefined'">
+    <Node :name="mykey.firstUpperCase()" v-if="typeof myvalue != 'undefined'">
       <input type="checkbox"
               style="width: 20px;height: 20px;"
-              :checked="itemData[mykey]"
+              :checked="myvalue"
               @click="onBtnClick"
       >
     </Node>
@@ -11,25 +11,23 @@
 <script>
   export default {
     name: "app",
-    // mounted() {
-    //   console.log(this.itemData[this.mykey]);
-    // },
     data() {
       return {
       };
     },
     methods: {
         onBtnClick() {
-            this.itemData[this.mykey] = !this.itemData[this.mykey]; 
+            this.myvalue = !this.myvalue; 
             this._evalCode("window.pluginSetNodeValue('" 
-                        + this.itemData.uuid + "','"
+                        + this.uuid + "','"
                         + this.mykey + "',"
-                        + this.itemData[this.mykey] + ");");
-            this._freshNode();
+                        + this.myvalue + ");");
+            this._freshNode(this.uuid);
         },
     },
     props: [
-        'itemData',
+        'uuid',
+        'myvalue',
         'mykey',
     ]
   }

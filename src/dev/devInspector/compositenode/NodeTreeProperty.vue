@@ -27,11 +27,13 @@ export default {
     watch: {
       filterText(value) {
         this.$refs.tree.filter(value);
+        console.log(this.$refs.tree);
       }
     },
     methods: {
         // 点击节点的触发函数
         handleNodeClick(data, node) {
+            console.log(data, node);
             // 选中Graphics中的节点
             this._evalCode("window.clickQuadNode("
                 + "'" + data.uuid + "')");
@@ -76,12 +78,18 @@ export default {
             return false;
         },
         // 渲染树节点
-        renderTreeContent(h, { node, data, store }) {
+        renderTreeContent(h, {node, data, store}) {
             return (
-                <span style={true ? "delete-line" : ""}>
-                    <span>{data.label}</span>
+                <span style={addStyle()}>
+                    <span>{data.name}</span>
                 </span>
             );
+
+            function addStyle() {
+                if (data.activeInHierarchy === false) {
+                    return {'text-decoration': 'line-through'};
+                }
+            }
         },
     },
     props: [
@@ -105,7 +113,7 @@ export default {
 }
 
 .is-current {
-    background-color: blue !important; 
+    text-decoration: line-through;
 }
 
 .custom-tree-node {
@@ -116,9 +124,4 @@ export default {
   font-size: 14px;
   padding-right: 8px;
 }
-
-.delete-line {
-    text-decoration:line-through;
-}
-
 </style>

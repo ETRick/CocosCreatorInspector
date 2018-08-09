@@ -44,7 +44,7 @@
         } else {
           calcStep = -Math.abs(calcStep);
         }
-        console.log(calcStep, this.mykey);
+        // console.log(calcStep, this.mykey);
         this.$emit("movestep", calcStep, this.mykey);
         this.clientX = x;
       },

@@ -77,11 +77,9 @@ export default {
               } 
               case msgType.notSupport: {
                 // 不支持调试
-                console.log(message.msg);
                 if (message.msg == "不支持调试游戏!") {
                   this.isShowDebug = false;
                 } else if (message.msg == "不支持Debug模式!") {
-                  console.log(this.hasGraphics);
                   this.hasGraphics = false;
                 }
                 break;
@@ -121,84 +119,6 @@ export default {
     );
   },
   methods: {
-    onTestData() {
-      let testData = {
-        type: "cc_Node",
-        uuid: "5cUWX4Yh1MipGk+ssnZ/fL",
-        name: "Canvas",
-        x: 960,
-        y: 540.4931506849315,
-        zIndex: 0,
-        childrenCount: 6,
-        children: [],
-        width: 1920,
-        height: 1080.986301369863,
-        color: "#fff85f",
-        opacity: 255,
-        rotation: 0,
-        rotationX: 0,
-        rotationY: 0,
-        anchorX: 0.5,
-        anchorY: 0.5,
-        scaleX: 1,
-        scaleY: 1,
-        skewX: 0,
-        skewY: 0,
-        components: [
-          {
-            uuid: "Comp.931",
-            type: "cc_Canvas",
-            name: "Canvas<Canvas>"
-          },
-          {
-            uuid: "Comp.932",
-            type: "HotUpdateScene",
-            name: "Canvas<HotUpdateScene>"
-          }
-        ],
-        active: true
-      };
-      this.treeItemData = testData;
-    },
-    _generateTreeData(data) {
-      let treeData = [];
-      let sceneData = data.scene;
-      if (sceneData) {
-        // scene info
-        let dataRoot = {
-          type: sceneData.type,
-          uuid: sceneData.uuid,
-          label: sceneData.name,
-          components: sceneData.components,
-          children: [],
-        };
-        treeData.push(dataRoot);
-
-        // scene children info
-        for (let itemSceneData of sceneData.children) {
-          let sceneItem = {};
-          dealChildrenNode(itemSceneData, sceneItem);
-          treeData[0].children.push(sceneItem);
-        }
-      }
-
-      function dealChildrenNode(rootData, obj) {
-        obj["data"] = rootData;
-        obj["uuid"] = rootData.uuid;
-        obj["label"] = rootData.name;
-        obj["active"] = rootData.active;
-        obj["components"] = rootData.components;
-        obj["children"] = [];
-        let rootChildren = rootData.children;
-        for (let itemData of rootChildren) {
-          let item = {};
-          dealChildrenNode(itemData, item);
-          obj.children.push(item);
-        }
-      }
-
-      return treeData;
-    },
     // 更新树
     _updateTree(oldtree, newtree) {
       let oldchildren = oldtree.children;
@@ -212,8 +132,12 @@ export default {
           oldchildren.splice(i, 1, newchildren[i]);
         } else {
           // update name
-          if (oldchildren[i].label != newchildren[i].label) {
-            oldchildren[i].label = newchildren[i].label
+          if (oldchildren[i].name != newchildren[i].name) {
+            oldchildren[i].name = newchildren[i].name;
+          }
+          // update active
+          if (oldchildren[i].activeInHierarchy !== newchildren[i].activeInHierarchy) {
+            oldchildren[i].activeInHierarchy = newchildren[i].activeInHierarchy;
           }
           this._updateTree(oldchildren[i], newchildren[i]);
         }
@@ -228,24 +152,24 @@ export default {
       // 第一次赋值，渲染右边界面
       if (JSON.stringify(this.treeData) === "[]") {
         // 获得数据
-        this.treeData = this._generateTreeData(data);
+        this.treeData = data;
         this._freshNode(this.treeData[0].uuid);
       } else {
-        let newTree = this._generateTreeData(data);
+        let newTree = data;
         this._updateTree(this.treeData[0], newTree[0]);
       }
     },
     _getInjectScriptString(script) {
       // PS:脚本代码行数过多会读不进来，目前测试为230行
       let code = script.toString();
-      console.log(code);
+      // console.log(code);
       let array = code.split("\n");
       let evalCode = "(";
       for (let i = 0; i < array.length; i++) {
         evalCode += array[i] + "\n";
       }
       evalCode += ")()";
-      console.log(evalCode);
+      // console.log(evalCode);
       return evalCode;
     },
     onBtnClickUpdatePage() {

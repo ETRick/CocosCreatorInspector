@@ -29,6 +29,7 @@ export default function () {
         node.name = "Debug-Graphics";
         node.addComponent("cc.Graphics");
         ccCanvas.parent.addChild(node);
+        window.graphicsNode = node;
         let config = window.Config.DEBUG_MODE;
         let gracom = node.getComponent("cc.Graphics");
         gracom.lineWidth = config.lineWidth;

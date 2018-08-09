@@ -43,9 +43,5 @@
         "title": "skew",
         "keys": ["skewX", "skewY"],
         "step": 1
-    },
-    {
-        "type": "singlebool",
-        "key":  "active"
     }
 ]

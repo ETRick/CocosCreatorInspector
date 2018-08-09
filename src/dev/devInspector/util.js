@@ -7,7 +7,7 @@ export default function () {
     let that = this;
     return that.toString()[0].toUpperCase() + that.toString().slice(1);
   };
-  
+
   // eraseSubstring 将字符串删去子串部分
   String.prototype.eraseSubstring = function (str) {
     let that = this;
@@ -34,11 +34,10 @@ export default function () {
   // Vue util
   // 刷新节点
   Vue.prototype._freshNode = function (uuid) {
-    if (typeof uuid == "undefined") {
-      uuid = this.itemData.uuid;
+    if (uuid) {
+      let code2 = "window.getNodeInfo('" + uuid + "')";
+      this._evalCode(code2);
     }
-    let code2 = "window.getNodeInfo('" + uuid + "')";
-    this._evalCode(code2);
   };
 
   // 执行代码

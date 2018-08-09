@@ -30281,7 +30281,7 @@
   background-color: #61fff7fb; }
 
 .el-tree-node.is-checked {
-  color: red;
+  text-decoration: line-through;
 }
 
 /* BEM support Func

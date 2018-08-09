@@ -39,7 +39,7 @@ export default {
         code += "'" + this.itemData[key] + "'" + ")";
       }
       this._evalCode(code);
-      this._freshNode();
+      this._freshNode(this.itemData.uuid);
     },
     changeFloatValueAction(step, key) {
       // console.log("changeFloatValueAction", key);
@@ -51,11 +51,11 @@ export default {
     },
     pauseGame() {
       this._evalCode("window.pluginPauseGame()");
-      this._freshNode();
+      this._freshNode(this.itemData.uuid);
     },
     resumeGame() {
       this._evalCode("window.pluginResumeGame()");
-      this._freshNode();
+      this._freshNode(this.itemData.uuid);
     },
   },
   props: [

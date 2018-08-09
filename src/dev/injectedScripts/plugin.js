@@ -48,89 +48,57 @@ export default function () {
 
   // 发送节点信息
   window.sendNodeTreeInfo = function () {
-    // 都以Canvus为起始节点
-    let scene = cc.director.getScene().children[0];
+    let scene;
     // 区分版本
-    // switch (cc.ENGINE_VERSION.substr(0, 3)) {
-    //   // 1.4版本中，没有scene的uuid，因此忽略
-    //   case "1.4":
-    //     {
-    //       scene = cc.director.getScene().children[0];
-    //       break;
-    //     }
-    //     // 1.9 2.0版本中有scene的uuid
-    //   default:
-    //     {
-    //       scene = cc.director.getScene().children[0];
-    //       break;
-    //     }
-    // }
+    switch (cc.ENGINE_VERSION.substr(0, 3)) {
+      // 1.4版本中，没有scene的uuid，因此忽略
+      case "1.4":
+        {
+          scene = cc.director.getScene().children[0];
+          break;
+        }
+        // 1.9 2.0版本中有scene的uuid
+      default:
+        {
+          scene = cc.director.getScene();
+          break;
+        }
+    }
 
     if (scene) {
-      let postData = {
-        scene: {},
-      };
-
-      postData.scene = {
-        type: window.Connect.msgType.nodeListInfo, // 标识类型
-        uuid: scene.uuid,
-        name: scene.name,
-        active: scene.active,
-        components: [],
-        children: [],
-      };
-      window.inspectorGameMemoryStorage[scene.uuid] = scene;
-
-      let coms = scene._components;
-      for (let com of coms) {
-        postData.scene.components.push(com.__classname__);
-      }
-
-      let sceneChildren = scene.getChildren();
-      for (let i = 0; i < sceneChildren.length; i++) {
-        let node = sceneChildren[i];
-        getNodeChildren(node, postData.scene.children);
-      }
-      // console.log(postData);
-      window.sendMsgToDevTools(window.Connect.msgType.nodeListInfo, postData);
+      let postRoot = [];
+      // 递归整棵树
+      let fix = f => f(f);
+      (fix(fact => (node, arr) => {
+        // 收集节点信息
+        let postNode = window.Connect.TreeNode(node);
+        // 组件信息
+        node._components.forEach(com => {
+          postNode.components.push(com.__classname__)
+        });
+        // 儿子信息
+        node.getChildren().forEach(childItem => {
+          // 忽略graphicsNode
+          if (!window.quadRoot || childItem.uuid != window.graphicsNode.uuid) {
+            fact(fact)(childItem, postNode.children);
+          }
+        });
+        arr.push(postNode);
+      }))(scene, postRoot);
+      // 发送数据
+      window.sendMsgToDevTools(window.Connect.msgType.nodeListInfo, postRoot);
     } else {
-      postData.scene = null;
       window.sendMsgToDevTools(window.Connect.msgType.notSupport, "不支持调试游戏!");
     }
+
   };
-
-  // 收集节点树的儿子信息
-  function getNodeChildren(node, arr) {
-    window.inspectorGameMemoryStorage[node.uuid] = node;
-    // console.log("nodeName: " + node.name);
-    let nodeData = {
-      uuid: node.uuid,
-      name: node.name,
-      active: node.active,
-      components: [],
-      children: [],
-    };
-
-    let coms = node._components;
-    for (let com of coms) {
-      nodeData.components.push(com.__classname__);
-    }
-
-    let nodeChildren = node.getChildren();
-    for (let childItem of nodeChildren) {
-      // console.log("childName: " + childItem.name);
-      getNodeChildren(childItem, nodeData.children);
-    }
-    arr.push(nodeData);
-  }
 
   // 获取节点信息
   window.getNodeInfo = function (uuid) {
     let node = window.inspectorGameMemoryStorage[uuid];
     if (node) {
-      let nodeComps = getNodeComponentsInfo(node);
       let nodeData = window.Connect.Node(node);
-      nodeData.components = nodeComps;
+      nodeData.components = getNodeComponentsInfo(node);
       window.sendMsgToDevTools(window.Connect.msgType.nodeInfo, nodeData);
     } else {
       // 未获取到节点数据
@@ -141,12 +109,9 @@ export default function () {
   // 收集组件信息
   function getNodeComponentsInfo(node) {
     let ret = [];
-    let nodeComp = node._components;
-    for (let i = 0; i < nodeComp.length; i++) {
-      let com = nodeComp[i];
-      window.inspectorGameMemoryStorage[com.uuid] = com;
-      ret.push(window.Connect.Component(com));
-    }
+    node._components.forEach(com => {
+      ret.push(window.Connect.Component(com))
+    });
     return ret;
   }
 
@@ -176,8 +141,6 @@ export default function () {
 
   // 向devtools发送信息
   window.sendMsgToDevTools = function (type, msg) {
-    // this.console.log("type:", type);
-    // this.console.log("meg:", msg);
     window.postMessage({
       type: type,
       msg: msg
