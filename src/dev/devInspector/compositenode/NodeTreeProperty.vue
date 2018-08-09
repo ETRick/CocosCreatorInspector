@@ -96,7 +96,10 @@ export default {
 
             function addStyle() {
                 if (data.activeInHierarchy === false) {
-                    return {'text-decoration': 'line-through'};
+                    return {
+                        'text-decoration': 'line-through',
+                        'color': '#8c8e92',
+                    };
                 }
             }
         },

@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div class="comp">
-      <input type="checkbox" class="myCheckBox"
+      <input v-if="typeof component.enabled != 'undefined'" type="checkbox" class="myCheckBox"
               :checked="component.enabled"
               @click="onCheckBoxClick">
-      <h4 @click="onClickComp" :class="{inenabledInHierarchy: !component.enabledInHierarchy}">
+      <h4 @click="onClickComp" :class="{inenabledInHierarchy: component.enabledInHierarchy === false}">
         {{(component.type == "" ? "Undefined Type": component.type) + " (" + component.uuid + ")"}}
       </h4>
       <div v-show="isShowComp" v-for="mykey in comp" :key="mykey">
@@ -57,8 +57,7 @@
     color: #ff0015;
   }
   h4 {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin: 8px;
     cursor: pointer; 
   }
   .myCheckBox {

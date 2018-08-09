@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <input type="checkbox" class="myCheckBox"
+    <input v-if="typeof itemData.active != 'undefined'" type="checkbox" class="myCheckBox"
             :checked="itemData.active"
             @click="onCheckBoxClick">
-    <h1 @click="onClickNode" :class="{inactiveInHierarchy: !itemData.activeInHierarchy}">
+    <h1 @click="onClickNode" :class="{inactiveInHierarchy: itemData.activeInHierarchy === false}">
       {{itemData.name + " (" + itemData.uuid + ")"}}
     </h1>
     <hr style="margin-bottom: 10px; margin-top: 4px;"/>
@@ -95,6 +95,7 @@
   h1 {
     margin-top: 20px;
     margin-bottom: 4px;
+    margin-left: 20px;
     font-weight: bold;
     cursor: pointer
   }
