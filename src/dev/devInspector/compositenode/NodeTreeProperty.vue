@@ -10,7 +10,9 @@
                     :expand-on-click-node="false" 
                     :render-content="renderTreeContent" 
                     :filter-node-method="filterNode"
-                    @node-click="handleNodeClick">
+                    @node-click="handleNodeClick"
+                    draggable
+                    @node-drop="dropNode">
             </el-tree>
         </div>
     </div>
@@ -27,18 +29,25 @@ export default {
     watch: {
       filterText(value) {
         this.$refs.tree.filter(value);
-        console.log(this.$refs.tree);
       }
     },
     methods: {
         // 点击节点的触发函数
         handleNodeClick(data, node) {
-            console.log(data, node);
             // 选中Graphics中的节点
             this._evalCode("window.clickQuadNode("
                 + "'" + data.uuid + "')");
             this._freshNode(data.uuid);
         },
+        // 拖拽节点触发的函数
+        dropNode(fromNode, toNode, type) {
+            console.log(fromNode.data.uuid, toNode.data.uuid, type);
+            this._evalCode("window.changeNodeTree("
+                + "'" + fromNode.data.uuid + "',"
+                + "'" + toNode.data.uuid + "',"
+                + "'" + type + "')");
+        },
+        // 过滤节点
         filterNode(filtervalue, data) {
             if (!filtervalue) {
                 return true;

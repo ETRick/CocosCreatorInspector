@@ -139,6 +139,27 @@ export default function () {
     }
   };
 
+  // 修改节点树种节点的层级
+  window.changeNodeTree = function (fromUuid, toUuid, type) {
+    let fromNode = window.inspectorGameMemoryStorage[fromUuid];
+    let toNode = window.inspectorGameMemoryStorage[toUuid];
+    if (fromNode && toNode) {
+      console.log(fromNode, toNode);
+      // 移除原来的节点
+      fromNode.removeFromParent(false);
+      if (type == "inner") {
+        // 插入内部
+        toNode.addChild(fromNode);
+      } else {
+        // 插入同级别
+        let parent = toNode.parent;
+        // after时，位置需要+1
+        let index = parent.children.indexOf(toNode) + (type == "after");
+        parent.insertChild(fromNode, index);
+      }
+    }
+  };
+
   // 向devtools发送信息
   window.sendMsgToDevTools = function (type, msg) {
     window.postMessage({
