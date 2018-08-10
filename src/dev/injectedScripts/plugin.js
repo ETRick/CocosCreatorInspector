@@ -132,7 +132,7 @@ export default function () {
   ccIns.clickQuadNode = function (uuid) {
     // 点击时将点击节点暂存在ccIns.n0变量中
     ccIns.n0 = ccIns.getObjectFromStorage(uuid, "node");
-    
+
     let quadnode = ccIns.getObjectFromStorage(uuid, "quadNode");
     if (quadnode && ccIns.QuadNode.clicked != quadnode) {
       ccIns.QuadNode.clicked = quadnode;

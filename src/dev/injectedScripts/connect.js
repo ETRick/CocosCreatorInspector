@@ -2,16 +2,16 @@
 // Date: 18-7-27 11:19
 // Description: 此文件保存ccIns.Connect，用于通讯。
 export default function () {
-  ccIns = ccIns || {};
   // 用于通讯结构构造
   ccIns.Connect = {
     // 通讯类型定义
     msgType: {
-      clickedNodeInfo: 4, // 出现节点被点击
-      refleshInfo: 3, // 节点刷新信息
-      nodeInfo: 2, // 节点信息
-      nodeListInfo: 1, // 节点列表信息
       notSupport: 0, // 不支持的游戏
+      nodeListInfo: 1, // 节点列表信息
+      nodeInfo: 2, // 节点信息
+      refleshInfo: 3, // 节点刷新信息
+      clickedNodeInfo: 4, // 出现节点被点击
+      refleshDocument: 5, // 出现页面刷新
     },
     CustomType(obj) {
       // cc内部结构

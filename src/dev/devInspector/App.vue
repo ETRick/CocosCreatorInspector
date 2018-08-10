@@ -68,11 +68,12 @@ export default {
           if (message !== null) {
             // 定义通讯变量
             const msgType = {
-              clickedNodeInfo: 4, // 出现节点被点击
-              refleshInfo: 3, // 节点刷新信息
-              nodeInfo: 2, // 节点信息
-              nodeListInfo: 1, // 节点列表信息
               notSupport: 0, // 不支持的游戏
+              nodeListInfo: 1, // 节点列表信息
+              nodeInfo: 2, // 节点信息
+              refleshInfo: 3, // 节点刷新信息
+              clickedNodeInfo: 4, // 出现节点被点击
+              refleshDocument: 5, // 出现页面刷新
             };
             switch (message.type) {
               case msgType.nodeListInfo: {
@@ -93,7 +94,6 @@ export default {
               case msgType.nodeInfo: {
                 // 获取节点属性信息
                 this.isShowDebug = true;
-                // console.log("node:", Object.keys(message.msg));
                 this.treeItemData = message.msg;
                 break;
               }
@@ -118,7 +118,15 @@ export default {
                 treeproto.setCurrentKey(uuid);
                 break;
               }
-              default:
+              case msgType.refleshDocument: {
+                if (this.isShowDebug) {
+                  this.onBtnClickUpdatePage();
+                }
+                break;
+              }
+              default: {
+                console.log(message);
+              }  
             }
           }
       }.bind(this)
@@ -178,21 +186,25 @@ export default {
       // console.log(evalCode);
       return evalCode;
     },
-    _getJsonObjectString(identify, obj) {
-      return identify + " = JSON.parse('" + JSON.stringify(obj) + "');";
+    _getConfigObjString() {
+      let code = getJsonObj("ccIns.Config", {});
+      code += getJsonObj("ccIns.Config.DEBUG_MODE", injectConfig);
+      return code;
+
+      function getJsonObj(identify, obj) {
+        return identify + " = " + "JSON.parse('" + JSON.stringify(obj) + "');";
+      }
     },
     onBtnClickUpdatePage() {
-      // 注入config
-      let code = this._getJsonObjectString("ccIns", {Config: {}});
-      chrome.devtools.inspectedWindow.eval(code);
-      code = this._getJsonObjectString("ccIns.Config.DEBUG_MODE", injectConfig);
-      chrome.devtools.inspectedWindow.eval(code);
       // 注入脚本
+      let code = this._getInjectScriptString(injectUtil);
+      chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectConnect);
       chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectUtil);
-      chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectPlugin);
+      chrome.devtools.inspectedWindow.eval(code);
+      // 注入config
+      code = this._getConfigObjString();
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectDebugDOM);
       chrome.devtools.inspectedWindow.eval(code);

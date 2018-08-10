@@ -12,12 +12,10 @@ chrome.extension.onConnect.addListener(function (port) {
         console.log("执行other");
         chrome.tabs.sendMessage(message.tabId, message, sendResponse);
       }
-
     } else {
-      // console.log(message);
       port.postMessage(message);
     }
-    sendResponse(message);
+    // sendResponse(message);
   };
   chrome.extension.onMessage.addListener(extensionListener);
   port.onDisconnect.addListener(function (port) {
@@ -25,6 +23,7 @@ chrome.extension.onConnect.addListener(function (port) {
   });
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  return true;
-});
+// chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
+//   console.log(message, sender, sendResponse);
+//   return true;
+// });
