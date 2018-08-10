@@ -3,14 +3,15 @@
 // Description: 向页面生成DOM节点树，和cc节点树单向绑定，显示cc节点的边框
 export default function () {
     let ccCanvas = cc.Canvas.instance.node;
-    // 页面中需要存在cc（js），cc.Canvas实例，并且没有生成Graphics节点
-    if (cc && cc.Graphics && ccCanvas && !ccCanvas.parent.getChildByName("Debug-Graphics")) {
+    // 页面中需要存在cc（js），cc.Graphics，并且没有生成Graphics节点
+    if (cc && cc.Graphics && !ccCanvas.parent.getChildByName("Debug-Graphics")) {
         ccIns.QuadNode.root = new ccIns.QuadNode(ccCanvas);
 
         // 使用不动点进行内部递归
         let fix = (f) => f(f);
-    
+
         // 生成Graphics挂载节点和Graphics脚本
+
         let node = new cc.Node();
         node.name = "Debug-Graphics";
         node.addComponent("cc.Graphics");

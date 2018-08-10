@@ -45,8 +45,10 @@ export default function () {
           return function (event) {
             timer += cc.director._deltaTime;
             if (timer > interval) {
-              ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.Canvas.instance.node);
-              ccIns.drawNode();
+              if (ccIns.updateGraphicsTree) {
+                ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.Canvas.instance.node);
+                ccIns.drawNode();
+              }
               timer = 0.0;
             }
           };

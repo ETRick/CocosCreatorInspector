@@ -120,7 +120,18 @@ export default {
               }
               case msgType.refleshDocument: {
                 if (this.isShowDebug) {
+                  sleep(1000);
                   this.onBtnClickUpdatePage();
+                  
+                  function sleep(numberMillis) {
+                      var now = new Date();
+                      var exitTime = now.getTime() + numberMillis;
+                      while (true) {
+                          now = new Date();
+                          if (now.getTime() > exitTime)
+                              return;
+                      }
+                  }
                 }
                 break;
               }
