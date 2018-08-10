@@ -2,17 +2,43 @@
 // Date: 18-8-3 9:42
 // Description: util函数类，包含各种挂载到其他物体上的函数（不作为接口）
 export default function () {
+    // 初始化内存
+    ccIns.gameMemoryStorage = ccIns.gameMemoryStorage || {};
+
+    // 添加物体到内存中
+    ccIns.addObjectToStorage = function (uuid, key, value) {
+        ccIns.gameMemoryStorage[uuid] = ccIns.gameMemoryStorage[uuid] || {};
+        ccIns.gameMemoryStorage[uuid][key] = value;
+    };
+
+    // 从内存中得到物体
+    ccIns.getObjectFromStorage = function (uuid, key) {
+        if (ccIns.gameMemoryStorage[uuid]) {
+            if (typeof key == 'undefined') {
+                return ccIns.gameMemoryStorage[uuid];
+            } else {
+                return ccIns.gameMemoryStorage[uuid][key];
+            }
+        }
+    };
+
+    // 从内存中删除物体
+    ccIns.removeObjectFromStorage = function (uuid) {
+        delete ccIns.gameMemoryStorage[uuid];
+    }
+
     /*
-     * Quad class:
+     * QuadRangle class:
      *  用于描述四边形的类，包含着四个顶点。
      * 四个顶点分别为：
-     *  p4     p3
-     *  *------*
-     *  |      |
-     *  *------*
-     *  p1     p2
+     *  p4          p3
+     *  *------------*
+     *  |            |
+     *  | height     |
+     *  *------------*
+     *  p1  width   p2
      */
-    QuadRangle = function (width, height) {
+    ccIns.QuadRangle = function (width, height) {
         this.p0 = {
             x: 0,
             y: 0
@@ -36,7 +62,7 @@ export default function () {
     //          x   a c tx   ax + cy + tx
     // matrix = y · b d ty = bx + dy + ty
     //          1   0 0  1        1
-    QuadRangle.prototype.transform = function (matrix) {
+    ccIns.QuadRangle.prototype.transform = function (matrix) {
         for (let key of Object.keys(this)) {
             this[key] = mulMatrix(this[key], matrix);
         }
@@ -51,7 +77,7 @@ export default function () {
     };
 
     // 通过叉乘判断某个点是不是在区域内，当叉乘结果全为正或者全为负，则在区域内
-    QuadRangle.prototype.containPoint = function (pos) {
+    ccIns.QuadRangle.prototype.containPoint = function (pos) {
         let ans = [];
         for (let i = 0; i < 4; i++) {
             let vec1 = {
@@ -71,7 +97,7 @@ export default function () {
     };
 
     // 得到中心点
-    QuadRangle.prototype.getCenter = function () {
+    ccIns.QuadRangle.prototype.getCenter = function () {
         return {
             x: (this.p0.x + this.p1.x + this.p2.x + this.p3.x) / 4,
             y: (this.p0.y + this.p1.y + this.p2.y + this.p3.y) / 4,
@@ -91,10 +117,10 @@ export default function () {
     };
 
     // 对应cc.node的四边形树，用于更新信息
-    QuadNode = function (ccnode) {
+    ccIns.QuadNode = function (ccnode) {
         this.uuid = ccnode.uuid;
         this.active = ccnode.active;
-        this.quad = new QuadRangle(ccnode.width, ccnode.height);
+        this.quad = new ccIns.QuadRangle(ccnode.width, ccnode.height);
         // v2.0.0 版本
         if (ccnode.getWorldMatrix) {
             let mat4 = cc.vmath.mat4.create();
@@ -116,18 +142,23 @@ export default function () {
             this.quad.transform(ccnode.getNodeToWorldTransform());
         }
         this.children = [];
+        // 加入Storage
+        ccIns.addObjectToStorage(this.uuid, "quadNode", this);
         return this;
-    }
+    };
+
+    // 根节点
+    ccIns.QuadNode.root = null;
 
     // 当前点击节点，显示红色
-    QuadNode.clicked = null;
+    ccIns.QuadNode.clicked = null;
 
     // 覆盖节点，显示蓝色
-    QuadNode.hover = null;
+    ccIns.QuadNode.hover = null;
 
     // 更新节点
-    QuadNode.prototype.update = function (ccnode) {
-        this.quad = new QuadRangle(ccnode.width, ccnode.height);
+    ccIns.QuadNode.prototype.update = function (ccnode) {
+        this.quad = new ccIns.QuadRangle(ccnode.width, ccnode.height);
         // v2.0.0 版本
         if (ccnode.getWorldMatrix) {
             let mat4 = cc.vmath.mat4.create();
@@ -150,4 +181,5 @@ export default function () {
         }
         this.active = ccnode.active;
     };
+
 }

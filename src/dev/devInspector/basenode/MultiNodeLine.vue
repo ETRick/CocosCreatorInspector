@@ -29,7 +29,7 @@ export default {
     changeValue(key) {
       console.log("changeValue", key);
       // 添加uuid，key值
-      let code = "window.pluginSetNodeValue(" +
+      let code = "ccIns.setNodeValue(" +
         "'" + this.itemData.uuid + "'," +
         "'" + key + "',";
       // value值需要判断一下
@@ -50,11 +50,11 @@ export default {
       }
     },
     pauseGame() {
-      this._evalCode("window.pluginPauseGame()");
+      this._evalCode("ccIns.pauseGame()");
       this._freshNode(this.itemData.uuid);
     },
     resumeGame() {
-      this._evalCode("window.pluginResumeGame()");
+      this._evalCode("ccIns.resumeGame()");
       this._freshNode(this.itemData.uuid);
     },
   },

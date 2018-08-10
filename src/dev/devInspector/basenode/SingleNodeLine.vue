@@ -25,7 +25,7 @@
       // 修改任意key-value属性值
       changeValue() {
         // 添加uuid，key值
-        let code = "window.pluginSetNodeValue(" +
+        let code = "ccIns.setNodeValue(" +
           "'" + this.uuid + "'," +
           "'" + this.mykey + "',";
         // value值需要判断一下
@@ -45,11 +45,11 @@
         }
       },
       pauseGame() {
-        this._evalCode("window.pluginPauseGame()");
+        this._evalCode("ccIns.pauseGame()");
         this._freshNode(this.uuid);
       },
       resumeGame() {
-        this._evalCode("window.pluginResumeGame()");
+        this._evalCode("ccIns.resumeGame()");
         this._freshNode(this.uuid);
       },
     },

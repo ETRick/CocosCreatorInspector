@@ -18,7 +18,7 @@
     methods: {
         onBtnClick() {
             this.myvalue = !this.myvalue; 
-            this._evalCode("window.pluginSetNodeValue('" 
+            this._evalCode("ccIns.setNodeValue('" 
                         + this.uuid + "','"
                         + this.mykey + "',"
                         + this.myvalue + ");");

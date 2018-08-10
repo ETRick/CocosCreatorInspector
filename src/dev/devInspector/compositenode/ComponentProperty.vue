@@ -36,7 +36,7 @@
     methods: {
       onCheckBoxClick() {
         this.component.enabled = !this.component.enabled;
-        this._evalCode("window.pluginSetNodeValue('" 
+        this._evalCode("ccIns.setNodeValue('" 
                     + this.component.uuid 
                     + "','enabled',"
                     + this.component.enabled + ");");

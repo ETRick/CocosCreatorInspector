@@ -35,7 +35,7 @@ export default function () {
   // 刷新节点
   Vue.prototype._freshNode = function (uuid) {
     if (uuid) {
-      let code2 = "window.getNodeInfo('" + uuid + "')";
+      let code2 = "ccIns.getNodeInfo('" + uuid + "')";
       this._evalCode(code2);
     }
   };

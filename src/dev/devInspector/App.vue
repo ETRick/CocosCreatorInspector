@@ -37,6 +37,8 @@ import injectMain from "../injectedScripts/main.js";
 import injectDebugDOM from "../injectedScripts/debugGraphics.js";
 import injectUtil from "../injectedScripts/util.js"
 
+import injectConfig from "../../config/debugmode";
+
 export default {
   name: "app",
   data() {
@@ -61,13 +63,18 @@ export default {
       name: btoa("for" + String(chrome.devtools.inspectedWindow.tabId))
     });
 
-    // 定义通讯变量
-    injectConnect();
     backgroundPageConnection.onMessage.addListener(
         function(message) {
           // console.log("getInfo:", message);
           if (message !== null) {
-            const msgType = window.Connect.msgType;
+            // 定义通讯变量
+            const msgType = {
+              clickedNodeInfo: 4, // 出现节点被点击
+              refleshInfo: 3, // 节点刷新信息
+              nodeInfo: 2, // 节点信息
+              nodeListInfo: 1, // 节点列表信息
+              notSupport: 0, // 不支持的游戏
+            };
             switch (message.type) {
               case msgType.nodeListInfo: {
                 // 游戏树节点
@@ -172,12 +179,21 @@ export default {
       // console.log(evalCode);
       return evalCode;
     },
+    _getJsonObjectString(identify, obj) {
+      return identify + " = JSON.parse('" + JSON.stringify(obj) + "');";
+    },
     onBtnClickUpdatePage() {
+      // 注入config
+      let code = this._getJsonObjectString("ccIns", {Config: {}});
+      chrome.devtools.inspectedWindow.eval(code);
+      code = this._getJsonObjectString("ccIns.Config.DEBUG_MODE", injectConfig);
+      chrome.devtools.inspectedWindow.eval(code);
+      // 注入脚本
+      code = this._getInjectScriptString(injectConnect);
+      chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectUtil);
       chrome.devtools.inspectedWindow.eval(code);
-      let code = this._getInjectScriptString(injectPlugin);
-      chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectConnect);
+      code = this._getInjectScriptString(injectPlugin);
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectDebugDOM);
       chrome.devtools.inspectedWindow.eval(code);
@@ -189,9 +205,9 @@ export default {
     onBtnClickDebug() {
       this.isEnterDebugMode = !this.isEnterDebugMode;
       if (this.isEnterDebugMode) {
-        this._evalCode("window.showGraphics()");
+        this._evalCode("ccIns.showGraphics()");
       } else {
-        this._evalCode("window.hiddenGraphics()");
+        this._evalCode("ccIns.hiddenGraphics()");
       }
     }
   }

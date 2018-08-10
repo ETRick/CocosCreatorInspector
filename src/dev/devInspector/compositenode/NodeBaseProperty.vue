@@ -51,7 +51,7 @@
 
 <script>
   
-  import configjs from '../../../config/nodebase.json'
+  import configjs from '../../../config/nodebase.json';
 
   export default {
     name: "app",
@@ -64,7 +64,7 @@
     methods: {
       onCheckBoxClick() {
         this.itemData.active = !this.itemData.active;
-        this._evalCode("window.pluginSetNodeValue('" 
+        this._evalCode("ccIns.setNodeValue('" 
                     + this.itemData.uuid 
                     + "','active',"
                     + this.itemData.active + ");");
@@ -76,7 +76,7 @@
       changeColor() {
         let color = this.itemData.color;
         this._evalCode(
-          "window.pluginSetNodeColor('" +
+          "ccIns.setNodeColor('" +
           this.itemData.uuid + "','" +
           color + "');");
         this._freshNode(this.itemData.uuid);

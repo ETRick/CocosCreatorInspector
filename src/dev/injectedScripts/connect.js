@@ -1,9 +1,10 @@
 // Author: huzi(moustache)
 // Date: 18-7-27 11:19
-// Description: 此文件保存window.Connect，用于通讯。
+// Description: 此文件保存ccIns.Connect，用于通讯。
 export default function () {
+  ccIns = ccIns || {};
   // 用于通讯结构构造
-  window.Connect = {
+  ccIns.Connect = {
     // 通讯类型定义
     msgType: {
       clickedNodeInfo: 4, // 出现节点被点击
@@ -18,8 +19,8 @@ export default function () {
         let type = node.__classname__.substr(3);
         let rtnObj = {};
         // 自定义类型
-        if (window.Connect[type]) {
-          return window.Connect(obj);
+        if (ccIns.Connect[type]) {
+          return ccIns.Connect[type](obj);
         }
         // 通过__props__获得key值
         for (let key of cc[type].__props__) {
@@ -48,13 +49,11 @@ export default function () {
     TreeNode(node) {
       if (node instanceof cc.Node) {
         // 添加新节点
-        if (!window.inspectorGameMemoryStorage[node.uuid]) {
-          window.inspectorGameMemoryStorage[node.uuid] = node;
-        }
+        ccIns.addObjectToStorage(node.uuid, "node", node);
+
         let rtnNode = {
           uuid: node.uuid,
           name: node.name,
-          
           components: [], // 用来查找
           children: [],
         };
@@ -80,7 +79,7 @@ export default function () {
           children: [],
           width: node.width,
           height: node.height,
-          color: window.Connect.Color(node.color),
+          color: ccIns.Connect.Color(node.color),
           opacity: node.opacity,
           rotation: node.rotation,
           rotationX: node.rotationX,
@@ -105,21 +104,18 @@ export default function () {
     Component(com) {
       if (com instanceof cc.Component) {
         // 添加新组件
-        if (!window.inspectorGameMemoryStorage[com.uuid]) {
-          window.inspectorGameMemoryStorage[com.uuid] = com;
-        }
+        ccIns.addObjectToStorage(com.uuid, "node", com);
+
         let filterCom = {
           type: com.__classname__,
           uuid: com.uuid,
           enabled: com.enabled,
           enabledInHierarchy: com.enabledInHierarchy,
         };
-        // console.log("com:", com);
         // 过滤掉私有值和函数的值
         for (let key of Object.keys(com)) {
           let value = com[key];
           if (key[0] != "_" && typeof value != "function" && !(value instanceof Array)) {
-            // console.log(key, value);
             // object节点无法通过post进行复制，因此在此处修改
             if (value instanceof cc.Object || value instanceof cc.Action) {
               filterCom[key] = {
@@ -129,10 +125,8 @@ export default function () {
             } else {
               filterCom[key] = value;
             }
-            // console.log(key, filterCom[key]);
           }
         }
-        // console.log("filtercom:", filterCom);
         return filterCom;
       }
     },

@@ -5,8 +5,8 @@ export default function () {
   // 检测是否包含cc变量
   // 如果存在cc空间，游戏存在
   if (cc) {
-    if (!window.isNotFirst) {
-      window.isNotFirst = true;
+    if (!ccIns.isNotFirst) {
+      ccIns.isNotFirst = true;
       // 添加节点刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
         let interval = 0.2;
@@ -17,7 +17,7 @@ export default function () {
           // if-2: director没有暂停，则正常计时
           // if-3: 当director暂停时，仍然会进入，此时计时停止（director暂停，此时能渲染界面）
           if (cc.game.isPaused() || (!cc.director.isPaused() && timer > interval)) {
-            window.sendMsgToDevTools(window.Connect.msgType.refleshInfo, {});
+            ccIns.sendMsgToDevTools(ccIns.Connect.msgType.refleshInfo, {});
             timer = 0.0;
           }
         };
@@ -30,7 +30,7 @@ export default function () {
         return function (event) {
           timer += cc.director._deltaTime;
           if (timer > interval) {
-            window.sendNodeTreeInfo();
+            ccIns.sendNodeTreeInfo();
             timer = 0.0;
           }
         };
@@ -45,21 +45,21 @@ export default function () {
           return function (event) {
             timer += cc.director._deltaTime;
             if (timer > interval) {
-              window.updateGraphicsTree(window.quadRoot, cc.Canvas.instance.node);
-              window.drawNode();
+              ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.Canvas.instance.node);
+              ccIns.drawNode();
               timer = 0.0;
             }
           };
         }(), cc.director);
       } else {
-        window.sendMsgToDevTools(window.Connect.msgType.notSupport, "不支持Debug模式!");
+        ccIns.sendMsgToDevTools(ccIns.Connect.msgType.notSupport, "不支持Debug模式!");
         console.log("can't use Debug model");
       }
     }
 
-    window.sendNodeTreeInfo();
+    ccIns.sendNodeTreeInfo();
   } else {
-    window.sendMsgToDevTools(window.Connect.msgType.notSupport, "不支持调试游戏!");
+    ccIns.sendMsgToDevTools(ccIns.Connect.msgType.notSupport, "不支持调试游戏!");
     console.log("not find cocos creator game");
   }
 }

@@ -35,14 +35,14 @@ export default {
         // 点击节点的触发函数
         handleNodeClick(data, node) {
             // 选中Graphics中的节点
-            this._evalCode("window.clickQuadNode("
+            this._evalCode("ccIns.clickQuadNode("
                 + "'" + data.uuid + "')");
             this._freshNode(data.uuid);
         },
         // 拖拽节点触发的函数
         dropNode(fromNode, toNode, type) {
             console.log(fromNode.data.uuid, toNode.data.uuid, type);
-            this._evalCode("window.changeNodeTree("
+            this._evalCode("ccIns.changeNodeTree("
                 + "'" + fromNode.data.uuid + "',"
                 + "'" + toNode.data.uuid + "',"
                 + "'" + type + "')");
