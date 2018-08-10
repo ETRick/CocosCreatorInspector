@@ -40,6 +40,7 @@ export default function () {
                 }
             }
         }, node);
+
         // 绑定click
         node.on(cc.Node.EventType.MOUSE_DOWN, function (e) {
             if (ccIns.QuadNode.clicked != ccIns.QuadNode.hover) {

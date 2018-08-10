@@ -7,7 +7,6 @@
       </el-button>
     </div>
 
-    <!--<el-button type="success" size="mini" @click="onBtnClickTest">test</el-button>-->
     <div v-show="isShowDebug">
       <el-row>
         <el-col :span="10">

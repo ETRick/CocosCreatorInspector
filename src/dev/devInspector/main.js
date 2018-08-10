@@ -12,7 +12,6 @@ import MultiNodeLine from './basenode/MultiNodeLine.vue';
 
 import NodeTreeProperty from './compositenode/NodeTreeProperty.vue';
 import NodeBaseProperty from './compositenode/NodeBaseProperty.vue';
-import SceneProperty from './compositenode/SceneProperty.vue';
 import ComponentProperty from './compositenode/ComponentProperty.vue';
 import ComponentsProperty from './compositenode/ComponentsProperty.vue'
 ;
@@ -28,7 +27,6 @@ Vue.component('MultiNodeLine', MultiNodeLine);
 
 Vue.component('NodeTreeProperty', NodeTreeProperty);
 Vue.component('NodeBaseProperty', NodeBaseProperty);
-Vue.component('SceneProperty', SceneProperty);
 Vue.component('ComponentProperty', ComponentProperty);
 Vue.component('ComponentsProperty', ComponentsProperty);
 

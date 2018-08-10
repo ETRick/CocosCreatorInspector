@@ -41,7 +41,6 @@ export default {
         },
         // 拖拽节点触发的函数
         dropNode(fromNode, toNode, type) {
-            console.log(fromNode.data.uuid, toNode.data.uuid, type);
             this._evalCode("ccIns.changeNodeTree("
                 + "'" + fromNode.data.uuid + "',"
                 + "'" + toNode.data.uuid + "',"

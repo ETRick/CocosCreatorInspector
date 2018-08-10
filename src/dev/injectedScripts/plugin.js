@@ -76,7 +76,7 @@ export default function () {
         // 儿子信息
         node.getChildren().forEach(childItem => {
           // 忽略graphicsNode
-          if (!ccIns.QuadNode.root || childItem.uuid != ccIns.graphicsNode.uuid) {
+          if (!ccIns.graphicsNode || childItem.uuid != ccIns.graphicsNode.uuid) {
             fact(fact)(childItem, postNode.children);
           }
         });
@@ -130,13 +130,16 @@ export default function () {
 
   // 显示QuadRangle边框，并去除之前的QuadRangle边框
   ccIns.clickQuadNode = function (uuid) {
+    // 点击时将点击节点暂存在ccIns.n0变量中
+    ccIns.n0 = ccIns.getObjectFromStorage(uuid, "node");
+    
     let quadnode = ccIns.getObjectFromStorage(uuid, "quadNode");
     if (quadnode && ccIns.QuadNode.clicked != quadnode) {
       ccIns.QuadNode.clicked = quadnode;
     }
   };
 
-  // 修改节点树种节点的层级
+  // 修改节点树中节点的层级
   ccIns.changeNodeTree = function (fromUuid, toUuid, type) {
     let fromNode = ccIns.getObjectFromStorage(fromUuid, "node");
     let toNode = ccIns.getObjectFromStorage(toUuid, "node");
