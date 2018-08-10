@@ -1,7 +1,6 @@
-[
-    {
+[{
         "type": "single",
-        "key":  "name"
+        "key": "name"
     },
     {
         "type": "multi",
@@ -10,7 +9,7 @@
     },
     {
         "type": "single",
-        "key":  "rotation",
+        "key": "rotation",
         "step": 1
     },
     {
@@ -32,11 +31,11 @@
     },
     {
         "type": "single",
-        "key":  "opacity"
+        "key": "opacity"
     },
     {
         "type": "single",
-        "key":  "zIndex"
+        "key": "zIndex"
     },
     {
         "type": "multi",

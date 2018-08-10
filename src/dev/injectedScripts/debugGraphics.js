@@ -102,7 +102,7 @@ export default function () {
             return function () {
                 gra.clear();
                 if (ccIns.QuadNode.hover && ccIns.QuadNode.hover.active) {
-                    gra.strokeColor = cc.Color[config.customBorderColor.toUpperCase()];
+                    gra.strokeColor = cc.Color[config.hoverBorderColor.toUpperCase()];
                     gra.drawQuad(ccIns.QuadNode.hover.quad);
                 }
                 if (ccIns.QuadNode.clicked && ccIns.QuadNode.clicked.active) {

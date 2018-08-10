@@ -1,7 +1,0 @@
-{
-    "mode": "Graphics",
-    "lineWidth": 2,
-    "clickedBorderColor": "red",
-    "showCustomBorder": true,
-    "customBorderColor": "blue"
-}

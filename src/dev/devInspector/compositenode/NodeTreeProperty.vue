@@ -127,7 +127,7 @@ export default {
     text-decoration: line-through;
 }
 
-.custom-tree-node {
+.-tree-node {
   flex: 1;
   display: flex;
   align-items: center;

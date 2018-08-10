@@ -36,7 +36,7 @@ import injectMain from "../injectedScripts/main.js";
 import injectDebugDOM from "../injectedScripts/debugGraphics.js";
 import injectUtil from "../injectedScripts/util.js"
 
-import injectConfig from "../../config/debugmode";
+import injectConfig from "../../config/injectedScripts.json";
 
 export default {
   name: "app",
@@ -198,8 +198,7 @@ export default {
       return evalCode;
     },
     _getConfigObjString() {
-      let code = getJsonObj("ccIns.Config", {});
-      code += getJsonObj("ccIns.Config.DEBUG_MODE", injectConfig);
+      let code = getJsonObj("ccIns.Config", injectConfig);
       return code;
 
       function getJsonObj(identify, obj) {

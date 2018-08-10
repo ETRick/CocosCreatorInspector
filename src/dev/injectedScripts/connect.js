@@ -75,6 +75,7 @@ export default function () {
           name: node.name,
           x: node.x,
           y: node.y,
+          z: node.z,
           childrenCount: node.childrenCount,
           children: [],
           width: node.width,
@@ -90,6 +91,7 @@ export default function () {
           scaleY: node.scaleY,
           skewX: node.skewX,
           skewY: node.skewY,
+          zIndex: node.zIndex,
         };
         // v1.4.0 scene没有active
         // scene没有activeInHierarchy
