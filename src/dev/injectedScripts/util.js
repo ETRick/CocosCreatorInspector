@@ -13,10 +13,22 @@ export default function () {
      *  p1     p2
      */
     QuadRangle = function (width, height) {
-        this.p0 = {x:0, y:0};
-        this.p1 = {x:width, y:0};
-        this.p2 = {x:width, y:height};
-        this.p3 = {x:0, y:height};
+        this.p0 = {
+            x: 0,
+            y: 0
+        };
+        this.p1 = {
+            x: width,
+            y: 0
+        };
+        this.p2 = {
+            x: width,
+            y: height
+        };
+        this.p3 = {
+            x: 0,
+            y: height
+        };
         return this;
     }
 
@@ -30,7 +42,7 @@ export default function () {
         }
         return this;
 
-        function mulMatrix (p, matrix) {
+        function mulMatrix(p, matrix) {
             return {
                 x: p.x * matrix.a + p.y * matrix.c + matrix.tx,
                 y: p.x * matrix.b + p.y * matrix.d + matrix.ty,
@@ -53,9 +65,9 @@ export default function () {
             ans.push(vec1.x * vec2.y - vec1.y * vec2.x);
         }
         // console.log(ans);
-        return ans[0] * ans[1] > 0 && 
-               ans[0] * ans[2] > 0 &&
-               ans[0] * ans[3] > 0;
+        return ans[0] * ans[1] > 0 &&
+            ans[0] * ans[2] > 0 &&
+            ans[0] * ans[3] > 0;
     };
 
     // 得到中心点
@@ -83,7 +95,26 @@ export default function () {
         this.uuid = ccnode.uuid;
         this.active = ccnode.active;
         this.quad = new QuadRangle(ccnode.width, ccnode.height);
-        this.quad.transform(ccnode.getNodeToWorldTransform());
+        // v2.0.0 版本
+        if (ccnode.getWorldMatrix) {
+            let mat4 = cc.vmath.mat4.create();
+            let vec3 = cc.vmath.vec3.create();
+            vec3.x = -ccnode.anchorX * ccnode._contentSize.width;
+            vec3.y = -ccnode.anchorY * ccnode._contentSize.height;
+            ccnode.getWorldMatrix(mat4);
+            cc.vmath.mat4.translate(mat4, mat4, vec3);
+            this.quad.transform({
+                a: mat4.m00,
+                b: mat4.m01,
+                c: mat4.m04,
+                d: mat4.m05,
+                tx: mat4.m12,
+                ty: mat4.m13,
+            });
+        } else {
+            // v1.4.1版本
+            this.quad.transform(ccnode.getNodeToWorldTransform());
+        }
         this.children = [];
         return this;
     }
@@ -97,7 +128,26 @@ export default function () {
     // 更新节点
     QuadNode.prototype.update = function (ccnode) {
         this.quad = new QuadRangle(ccnode.width, ccnode.height);
-        this.quad.transform(ccnode.getNodeToWorldTransform());
+        // v2.0.0 版本
+        if (ccnode.getWorldMatrix) {
+            let mat4 = cc.vmath.mat4.create();
+            let vec3 = cc.vmath.vec3.create();
+            vec3.x = -ccnode.anchorX * ccnode._contentSize.width;
+            vec3.y = -ccnode.anchorY * ccnode._contentSize.height;
+            ccnode.getWorldMatrix(mat4);
+            cc.vmath.mat4.translate(mat4, mat4, vec3);
+            this.quad.transform({
+                a: mat4.m00,
+                b: mat4.m01,
+                c: mat4.m04,
+                d: mat4.m05,
+                tx: mat4.m12,
+                ty: mat4.m13,
+            });
+        } else {
+            // v1.4.1版本
+            this.quad.transform(ccnode.getNodeToWorldTransform());
+        }
         this.active = ccnode.active;
     };
 }
