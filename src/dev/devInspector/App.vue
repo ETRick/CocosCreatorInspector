@@ -199,6 +199,7 @@ export default {
     },
     _getConfigObjString() {
       let code = getJsonObj("ccIns.Config", injectConfig);
+      console.log(code);
       return code;
 
       function getJsonObj(identify, obj) {

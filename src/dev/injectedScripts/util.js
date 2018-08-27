@@ -125,7 +125,7 @@ export default function () {
         // 对应cc.node的四边形树，用于更新信息
         ccIns.QuadNode = function (ccnode) {
             this.uuid = ccnode.uuid;
-            this.active = ccnode.active;
+            this.activeInHierarchy = ccnode.activeInHierarchy;
             this.quad = new ccIns.QuadRangle(ccnode.width, ccnode.height);
             // v2.0.0 版本
             if (ccnode.getWorldMatrix) {

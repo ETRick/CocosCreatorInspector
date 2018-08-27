@@ -9,7 +9,7 @@ export default function () {
       ccIns.isNotFirst = true;
       // 添加节点刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
-        let interval = ccIns.nodeRefleshInterval;
+        let interval = ccIns.Config.nodeRefleshInterval;
         let timer = 0.0;
         return function (event) {
           timer += cc.director._deltaTime;
@@ -25,7 +25,7 @@ export default function () {
 
       // 添加节点树刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
-        let interval = ccIns.nodeTreeRefleshInterval;
+        let interval = ccIns.Config.nodeTreeRefleshInterval;
         let timer = 0.0;
         return function (event) {
           timer += cc.director._deltaTime;
@@ -40,7 +40,7 @@ export default function () {
       if (cc.Graphics) {
         // 添加Graphics刷新帧
         cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
-          let interval = ccIns.graphicsRefleshInterval;
+          let interval = ccIns.Config.graphicsRefleshInterval;
           let timer = 0.0;
           return function (event) {
             timer += cc.director._deltaTime;

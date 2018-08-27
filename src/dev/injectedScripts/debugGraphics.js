@@ -11,7 +11,6 @@ export default function () {
         let fix = (f) => f(f);
 
         // 生成Graphics挂载节点和Graphics脚本
-
         let node = new cc.Node();
         node.name = "Debug-Graphics";
         node.addComponent("cc.Graphics");
@@ -101,11 +100,11 @@ export default function () {
 
             return function () {
                 gra.clear();
-                if (ccIns.QuadNode.hover && ccIns.QuadNode.hover.active) {
+                if (ccIns.QuadNode.hover && ccIns.QuadNode.hover.activeInHierarchy) {
                     gra.strokeColor = cc.Color[config.hoverBorderColor.toUpperCase()];
                     gra.drawQuad(ccIns.QuadNode.hover.quad);
                 }
-                if (ccIns.QuadNode.clicked && ccIns.QuadNode.clicked.active) {
+                if (ccIns.QuadNode.clicked && ccIns.QuadNode.clicked.activeInHierarchy) {
                     // 防止节点树移动产生bug
                     let node = ccIns.getObjectFromStorage(ccIns.QuadNode.clicked.uuid).node;
                     if (!node || !node.isValid) {
