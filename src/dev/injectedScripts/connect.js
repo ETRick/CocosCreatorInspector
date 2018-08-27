@@ -15,18 +15,20 @@ export default function () {
     },
     CustomType(obj) {
       // cc内部结构
-      if (node.__classname__ && node.__classname__.substr(0, 3) == "cc.") {
-        let type = node.__classname__.substr(3);
+      if (obj && obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.") {
+        let type = obj.__classname__.substr(3);
         let rtnObj = {};
         // 自定义类型
         if (ccIns.Connect[type]) {
           return ccIns.Connect[type](obj);
         }
+
         // 通过__props__获得key值
         for (let key of cc[type].__props__) {
+          console.log(key, obj[key]);
           // 忽略私有变量和函数
           if (key[0] != "_" && typeof obj[key] != "function") {
-            rtnObj[key] = CustomType(obj[key]);
+            rtnObj[key] = ccIns.Connect.CustomType(obj[key]);
           }
         }
         return rtnObj;
@@ -34,10 +36,14 @@ export default function () {
         // 数组类型
         let rtnObj = [];
         for (let item of obj) {
-          rtnObj.push(CustomType(item));
+          rtnObj.push(ccIns.Connect.CustomType(item));
         }
+        return rtnObj;
+      } else if (obj instanceof cc.Component) {
+        // 自定义脚本
+        return ccIns.Connect.Component(obj);
       } else {
-        // 基本类型或者对象
+        // 基本类型或者数组
         return obj;
       }
     },
