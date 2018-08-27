@@ -7,9 +7,6 @@ export default function () {
     if (cc && cc.Graphics && !ccCanvas.parent.getChildByName("Debug-Graphics")) {
         ccIns.QuadNode.root = new ccIns.QuadNode(ccCanvas);
 
-        // 使用不动点进行内部递归
-        let fix = (f) => f(f);
-
         // 生成Graphics挂载节点和Graphics脚本
         let node = new cc.Node();
         node.name = "Debug-Graphics";
@@ -52,6 +49,9 @@ export default function () {
             }
         }, node);
 
+        // 使用不动点进行内部递归
+        let fix = (f) => f(f);
+
         // 得到包含点的所有Quads
         function getQuadsContainPos(pos) {
             let arr = [];
@@ -93,7 +93,7 @@ export default function () {
             }
         }
 
-        // 渲染hover和clicked节点，每帧刷新
+        // 绘制hover和clicked节点，每帧刷新
         ccIns.drawNode = (function () {
             let gra = gracom;
             let config = ccIns.Config.DEBUG_MODE;
