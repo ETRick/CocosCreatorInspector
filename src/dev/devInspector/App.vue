@@ -35,7 +35,6 @@ import injectConnect from "../injectedScripts/connect.js";
 import injectMain from "../injectedScripts/main.js";
 import injectDebugDOM from "../injectedScripts/debugGraphics.js";
 import injectUtil from "../injectedScripts/util.js"
-
 import injectConfig from "../../config/injectedScripts.json";
 
 export default {
