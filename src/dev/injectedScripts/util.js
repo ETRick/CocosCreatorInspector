@@ -187,5 +187,15 @@ export default function () {
             }
             this.active = ccnode.active;
         };
+
+        // 判断变量是否为object和public
+        ccIns.isPublicVar = function (obj, key) {
+            return key[0] != "_" && typeof obj[key] != "function";
+        };
+
+        // 判断是不是cc类型
+        ccIns.isCCType = function (obj) {
+            return obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.";
+        }
     }
 }

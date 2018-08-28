@@ -5,9 +5,9 @@
               :checked="component.enabled"
               @click="onCheckBoxClick">
       <h4 @click="onClickComp" :class="{inenabledInHierarchy: component.enabledInHierarchy === false}">
-        {{(component.type == "" ? "Undefined Type": component.type) + " (" + component.uuid + ")"}}
+        {{(component.comtype == "" ? "Undefined Type": component.comtype) + " (" + component.uuid + ")"}}
       </h4>
-      <div v-show="isShowComp" v-for="mykey in comp" :key="mykey">
+      <div v-show="isShowComp" v-for="mykey in compkeys" :key="mykey">
           <CheckBox v-if="typeof component[mykey] == 'boolean'" :uuid="component.uuid" :mykey="mykey" :myvalue="component[mykey]">
           </CheckBox>
           <SingleNodeLine v-else-if="typeof component[mykey] != 'object'" :uuid="component.uuid" :mykey="mykey" :myvalue="component[mykey]">
@@ -27,9 +27,10 @@
     data() {
       return {
         // 得到主键，除去comptype和uuid
-        comp: Object.keys(this.component).filter(function(key) {
-          return key[0] != "_";
-        }).slice(4),
+        compkeys: Object.keys(this.component).filter(function(key) {
+          return key[0] != "_" && key != "comtype" && key != "uuid"
+            && key != "enabled" && key != "enabledInHierarchy";
+        }),
         isShowComp: true,
       }
     },

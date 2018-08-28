@@ -14,38 +14,43 @@ export default function () {
       refleshDocument: 5, // 出现页面刷新
     },
     CustomType(obj) {
+      // null
+      if (obj === null) {
+        return null;
+      }
+
       // cc内部结构
-      if (obj && obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.") {
+      if (ccIns.isCCType(obj)) {
         let type = obj.__classname__.substr(3);
         let rtnObj = {};
-        // 自定义类型
+        // 自己适配过的cc类型，使用自己的构造函数
         if (ccIns.Connect[type]) {
           return ccIns.Connect[type](obj);
         }
 
+        // 不是自己适配过的cc类型，使用公有构造函数
         // 通过__props__获得key值
         for (let key of cc[type].__props__) {
-          console.log(key, obj[key]);
           // 忽略私有变量和函数
-          if (key[0] != "_" && typeof obj[key] != "function") {
+          if (ccIns.isPublicVar(obj, key)) {
             rtnObj[key] = ccIns.Connect.CustomType(obj[key]);
           }
         }
         return rtnObj;
-      } else if (obj instanceof Array) {
+      }
+
+      // Array
+      if (obj instanceof Array) {
         // 数组类型
         let rtnObj = [];
         for (let item of obj) {
           rtnObj.push(ccIns.Connect.CustomType(item));
         }
         return rtnObj;
-      } else if (obj instanceof cc.Component) {
-        // 自定义脚本
-        return ccIns.Connect.Component(obj);
-      } else {
-        // 基本类型或者数组
-        return obj;
       }
+
+      // 基本类型
+      return obj;
     },
     // 将颜色转换成16进制
     Color(color) {
@@ -108,14 +113,54 @@ export default function () {
         return rtnNode;
       }
     },
+
+    // 组件构造：构造自定义组件。
+    // Component(com) {
+    //   if (com instanceof cc.Component) {
+    //     // 添加新组件
+    //     ccIns.addObjectToStorage(com.uuid, "node", com);
+
+    //     let filterCom = {
+    //       comtype: com.__classname__,
+    //       uuid: com.uuid,
+    //       enabled: com.enabled,
+    //       enabledInHierarchy: com.enabledInHierarchy,
+    //     };
+    //     // 过滤掉私有值和函数的值
+    //     for (let key of Object.keys(com)) {
+    //       let value = com[key];
+    //       if (key[0] != "_" && typeof value != "function" && !(value instanceof Array)) {
+    //         // object节点无法通过post进行复制，因此在此处修改
+    //         if (value instanceof cc.Object || value instanceof cc.Action) {
+    //           filterCom[key] = {
+    //             name: value.name,
+    //             uuid: value.uuid,
+    //           };
+    //         } else {
+    //           filterCom[key] = value;
+    //         }
+    //       }
+    //     }
+    //     return filterCom;
+    //   }
+    // },
+
     // 组件构造：构造自定义组件。
     Component(com) {
       if (com instanceof cc.Component) {
         // 添加新组件
         ccIns.addObjectToStorage(com.uuid, "node", com);
 
+        // 构造cc类型
+        if (ccIns.isCCType(com)) {
+          let obj = ccIns.Connect.CustomType(com);
+          obj.comtype = com.__classname__;
+          return obj;
+        }
+
+        // 构造自定义脚本类型
         let filterCom = {
-          type: com.__classname__,
+          comtype: com.__classname__,
           uuid: com.uuid,
           enabled: com.enabled,
           enabledInHierarchy: com.enabledInHierarchy,
@@ -123,7 +168,7 @@ export default function () {
         // 过滤掉私有值和函数的值
         for (let key of Object.keys(com)) {
           let value = com[key];
-          if (key[0] != "_" && typeof value != "function" && !(value instanceof Array)) {
+          if (ccIns.isPublicVar(com, key) && !(value instanceof Array)) {
             // object节点无法通过post进行复制，因此在此处修改
             if (value instanceof cc.Object || value instanceof cc.Action) {
               filterCom[key] = {
