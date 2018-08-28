@@ -155,6 +155,8 @@ export default function () {
         if (ccIns.isCCType(com)) {
           let obj = ccIns.Connect.CustomType(com);
           obj.comtype = com.__classname__;
+          // v1.4版本内，不存在uuid
+          obj.uuid = com.uuid;
           return obj;
         }
 

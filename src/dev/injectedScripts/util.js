@@ -62,7 +62,7 @@ export default function () {
                 y: height
             };
             return this;
-        }
+        };
 
         // 通过matrix2D进行顶点转换
         //          x   a c tx   ax + cy + tx
@@ -111,16 +111,18 @@ export default function () {
         };
 
         // 绘制四边形
-        cc.Graphics.prototype.drawQuad = function (quad) {
-            if (quad) {
-                this.moveTo(quad.p0.x, quad.p0.y);
-                for (let i = 1; quad["p" + i]; i++) {
-                    this.lineTo(quad["p" + i].x, quad["p" + i].y);
+        if (cc.Graphics) {
+            cc.Graphics.prototype.drawQuad = function (quad) {
+                if (quad) {
+                    this.moveTo(quad.p0.x, quad.p0.y);
+                    for (let i = 1; quad["p" + i]; i++) {
+                        this.lineTo(quad["p" + i].x, quad["p" + i].y);
+                    }
+                    this.lineTo(quad.p0.x, quad.p0.y);
+                    this.stroke();
                 }
-                this.lineTo(quad.p0.x, quad.p0.y);
-                this.stroke();
-            }
-        };
+            };
+        }
 
         // 对应cc.node的四边形树，用于更新信息
         ccIns.QuadNode = function (ccnode) {
@@ -196,6 +198,6 @@ export default function () {
         // 判断是不是cc类型
         ccIns.isCCType = function (obj) {
             return obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.";
-        }
+        };
     }
 }

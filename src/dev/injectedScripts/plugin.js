@@ -16,7 +16,7 @@ export default function () {
   // 设置节点状态（通过key-value）
   ccIns.setNodeValue = function (uuid, key, value) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
-    // console.log("SetNodeValue:", uuid, node, key, value);
+
     if (node) {
       // 判断类型
       if (typeof node[key] == 'number') {
@@ -87,7 +87,6 @@ export default function () {
     } else {
       ccIns.sendMsgToDevTools(ccIns.Connect.msgType.notSupport, "不支持调试游戏!");
     }
-
   };
 
   // 获取节点信息
@@ -106,7 +105,7 @@ export default function () {
     function getNodeComponentsInfo(node) {
       let ret = [];
       node._components.forEach(com => {
-        ret.push(ccIns.Connect.Component(com))
+        ret.push(ccIns.Connect.Component(com));
       });
       return ret;
     }
