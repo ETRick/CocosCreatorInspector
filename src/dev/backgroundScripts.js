@@ -1,3 +1,6 @@
+// Author: huzi(moustache)
+// Date: 18-8-29 14:52
+// Description: 背景脚本，用于建立和devtools和content-scripts的双向连接。
 chrome.extension.onConnect.addListener(function (port) {
   console.log("backgroundScripts connect!");
   let extensionListener = function (message, sender, sendResponse) {
@@ -22,8 +25,3 @@ chrome.extension.onConnect.addListener(function (port) {
     chrome.extension.onMessage.removeListener(extensionListener);
   });
 });
-
-// chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
-//   console.log(message, sender, sendResponse);
-//   return true;
-// });
