@@ -199,5 +199,10 @@ export default function () {
         ccIns.isCCType = function (obj) {
             return obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.";
         };
+
+        // 判断是不是枚举类型
+        ccIns.isEnumType = function (obj, key) {
+            return key[0] != "_" && obj[key] instanceof cc.Enum;
+        };
     }
 }

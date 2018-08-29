@@ -12,6 +12,7 @@ export default function () {
       refleshInfo: 3, // 节点刷新信息
       clickedNodeInfo: 4, // 出现节点被点击
       refleshDocument: 5, // 出现页面刷新
+      enumType: 6, // 节点中的枚举信息
     },
     CustomType(obj) {
       // null
@@ -115,37 +116,6 @@ export default function () {
     },
 
     // 组件构造：构造自定义组件。
-    // Component(com) {
-    //   if (com instanceof cc.Component) {
-    //     // 添加新组件
-    //     ccIns.addObjectToStorage(com.uuid, "node", com);
-
-    //     let filterCom = {
-    //       comtype: com.__classname__,
-    //       uuid: com.uuid,
-    //       enabled: com.enabled,
-    //       enabledInHierarchy: com.enabledInHierarchy,
-    //     };
-    //     // 过滤掉私有值和函数的值
-    //     for (let key of Object.keys(com)) {
-    //       let value = com[key];
-    //       if (key[0] != "_" && typeof value != "function" && !(value instanceof Array)) {
-    //         // object节点无法通过post进行复制，因此在此处修改
-    //         if (value instanceof cc.Object || value instanceof cc.Action) {
-    //           filterCom[key] = {
-    //             name: value.name,
-    //             uuid: value.uuid,
-    //           };
-    //         } else {
-    //           filterCom[key] = value;
-    //         }
-    //       }
-    //     }
-    //     return filterCom;
-    //   }
-    // },
-
-    // 组件构造：构造自定义组件。
     Component(com) {
       if (com instanceof cc.Component) {
         // 添加新组件
@@ -155,7 +125,7 @@ export default function () {
         if (ccIns.isCCType(com)) {
           let obj = ccIns.Connect.CustomType(com);
           obj.comtype = com.__classname__;
-          // v1.4版本内，不存在uuid
+          // v1.4版本内，__props__不存在uuid
           obj.uuid = com.uuid;
           return obj;
         }
