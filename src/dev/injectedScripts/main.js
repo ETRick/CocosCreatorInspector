@@ -7,6 +7,8 @@ export default function () {
   if (cc) {
     if (!ccIns.isNotFirst) {
       ccIns.isNotFirst = true;
+      // 初始化debug模式
+      ccIns.initDebugGraphics();
       // 添加节点刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
         let interval = ccIns.Config.nodeRefleshInterval;
@@ -46,8 +48,10 @@ export default function () {
             timer += cc.director._deltaTime;
             if (timer > interval) {
               if (ccIns.updateGraphicsTree) {
-                ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.Canvas.instance.node);
-                ccIns.drawNode();
+                let ccCanvas = cc.Canvas.instance.node;
+                let gra = ccCanvas.parent.getChildByName("Debug-Graphics").getComponent("cc.Graphics");
+                ccIns.updateGraphicsTree(ccIns.QuadNode.root, ccCanvas);
+                ccIns.drawNode(gra);
               }
               timer = 0.0;
             }
@@ -60,8 +64,10 @@ export default function () {
     }
 
     ccIns.sendNodeTreeInfo();
+    return true;
   } else {
     ccIns.sendMsgToDevTools(ccIns.Connect.msgType.notSupport, "不支持调试游戏!");
     console.log("not find cocos creator game");
+    return false;
   }
 }

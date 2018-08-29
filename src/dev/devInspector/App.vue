@@ -33,7 +33,7 @@
 import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
 import injectMain from "../injectedScripts/main.js";
-import injectDebugDOM from "../injectedScripts/debugGraphics.js";
+import injectDebugGraphics from "../injectedScripts/debugGraphics.js";
 import injectUtil from "../injectedScripts/util.js"
 import injectConfig from "../../config/injectedScripts.json";
 
@@ -119,17 +119,30 @@ export default {
               }
               case msgType.refleshDocument: {
                 if (this.isShowDebug) {
-                  sleep(1000);
-                  this.onBtnClickUpdatePage();
-                  
-                  function sleep(numberMillis) {
-                      var now = new Date();
-                      var exitTime = now.getTime() + numberMillis;
-                      while (true) {
-                          now = new Date();
-                          if (now.getTime() > exitTime)
-                              return;
+                  // 刷新新的节点
+                  sleep(1500);
+                  // 注入函数的回调
+                  let callback = function (success) {
+                    if (!success) {
+                      sleep(1500);
+                      this.onBtnClickUpdatePage(callback);
+                    } else {
+                      // 刷新debug模式
+                      if (this.isEnterDebugMode) {
+                        this._evalCode("ccIns.showGraphics()");
                       }
+                    }
+                  }.bind(this);
+                  this.onBtnClickUpdatePage(callback);
+                }
+
+                function sleep(numberMillis) {
+                  var now = new Date();
+                  var exitTime = now.getTime() + numberMillis;
+                  while (true) {
+                    now = new Date();
+                    if (now.getTime() > exitTime)
+                      return;
                   }
                 }
                 break;
@@ -205,7 +218,7 @@ export default {
         return identify + " = " + "JSON.parse('" + JSON.stringify(obj) + "');";
       }
     },
-    onBtnClickUpdatePage() {
+    onBtnClickUpdatePage(e) {
       // 注入脚本
       let code = this._getInjectScriptString(injectUtil);
       chrome.devtools.inspectedWindow.eval(code);
@@ -216,11 +229,16 @@ export default {
       // 注入config
       code = this._getConfigObjString();
       chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectDebugDOM);
+      code = this._getInjectScriptString(injectDebugGraphics);
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectMain);
-      chrome.devtools.inspectedWindow.eval(code, function() {
+      chrome.devtools.inspectedWindow.eval(code, function(rtn) {
         console.log("刷新成功!");
+        // 执行回调函数
+        if (typeof e == "function") {
+          let func = e;
+          func(rtn);
+        }
       });
     },
     onBtnClickDebug() {

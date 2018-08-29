@@ -1,9 +1,12 @@
 window.addEventListener('message', function () {
   // 页面刷新后，提示devtools刷新
-  chrome.extension.sendMessage({type: 5});
+  let refleshDocument = 5;
+  chrome.extension.sendMessage({
+    type: refleshDocument
+  });
+
   return function (event) {
-    let data = event.data;
-    chrome.extension.sendMessage(data);
+    chrome.extension.sendMessage(event.data);
   };
 }(), false);
 
