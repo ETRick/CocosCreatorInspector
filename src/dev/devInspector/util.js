@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
 export default function () {
   // String 字符串扩展函数
@@ -56,17 +56,6 @@ export default function () {
   // 添加枚举类型
   Vue.enumStorage.add = function (obj) {
     Vue.enumStorage[obj.key] = obj.value;
-    // 添加反向引用
-    // for (let prop of Object.keys(obj.value)) {
-    //   setMapping(Vue.enumStorage[obj.key][prop]);
-    // }
-
-    // function setMapping(obj) {
-    //   for (let key of Object.keys(obj)) {
-    //     let value = obj[key];
-    //     obj[value] = key;
-    //   }
-    // }
   };
 
   // 获得枚举类型
@@ -80,7 +69,5 @@ export default function () {
         return Vue.enumStorage[comptype][key];
       }
     }
-    // console.log("Vue.enumStorage.get Error!");
-    // return undefined;
   };
 }

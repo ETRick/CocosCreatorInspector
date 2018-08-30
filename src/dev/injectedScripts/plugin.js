@@ -101,7 +101,7 @@ export default function () {
   ccIns.getNodeInfo = function (uuid) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
     if (node) {
-      let nodeData = ccIns.Connect.Node(node);
+      let nodeData = ccIns.Connect.CustomType(node);
       nodeData.components = getNodeComponentsInfo(node);
       ccIns.sendMsgToDevTools(ccIns.Connect.msgType.nodeInfo, nodeData);
     } else {

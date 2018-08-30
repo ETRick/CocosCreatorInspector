@@ -39,7 +39,7 @@ export default function () {
         // 从内存中删除物体
         ccIns.removeObjectFromStorage = function (uuid) {
             delete ccIns.gameMemoryStorage[uuid];
-        }
+        };
 
         /*
          * QuadRangle class:

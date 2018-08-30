@@ -14,6 +14,19 @@ export default function () {
       refleshDocument: 5, // 出现页面刷新
       enumType: 6, // 节点中的枚举信息
     },
+    // 通过过滤函数，过滤不想取得的key值
+    CCType(obj, filterFunc) {
+      let rtnObj = {};
+      let objType = obj.__classname__.substr(3);
+      // 通过__props__获得key值
+      for (let key of cc[objType].__props__) {
+        // 忽略私有变量和函数
+        if ((typeof filterFunc == "undefined" || filterFunc(key)) && ccIns.isPublicVar(obj, key)) {
+          rtnObj[key] = ccIns.Connect.CustomType(obj[key]);
+        }
+      }
+      return rtnObj;
+    },
     CustomType(obj) {
       // null
       if (obj === null) {
@@ -30,15 +43,7 @@ export default function () {
         }
 
         // 不是自己适配过的cc类型，使用公有构造函数
-        // 通过__props__获得key值
-        let rtnObj = {};
-        for (let key of cc[type].__props__) {
-          // 忽略私有变量和函数
-          if (ccIns.isPublicVar(obj, key)) {
-            rtnObj[key] = ccIns.Connect.CustomType(obj[key]);
-          }
-        }
-        return rtnObj;
+        return ccIns.Connect.CCType(obj);
       }
 
       // Array
@@ -78,42 +83,17 @@ export default function () {
         return rtnNode;
       }
     },
-    // 节点构造：构造自定义节点
-    Node(node) {
-      if (node instanceof cc.Node) {
-        // 此处不需要添加新节点
-        let rtnNode = {
-          type: node.__classname__,
-          uuid: node.uuid,
-          name: node.name,
-          x: node.x,
-          y: node.y,
-          z: node.z,
-          childrenCount: node.childrenCount,
-          children: [],
-          width: node.width,
-          height: node.height,
-          color: ccIns.Connect.Color(node.color),
-          opacity: node.opacity,
-          rotation: node.rotation,
-          rotationX: node.rotationX,
-          rotationY: node.rotationY,
-          anchorX: node.anchorX,
-          anchorY: node.anchorY,
-          scaleX: node.scaleX,
-          scaleY: node.scaleY,
-          skewX: node.skewX,
-          skewY: node.skewY,
-          zIndex: node.zIndex,
-        };
-        // v1.4.0 scene没有active
-        // scene没有activeInHierarchy
-        if (!(node instanceof cc.Scene)) {
-          rtnNode.active = node.active;
-          rtnNode.activeInHierarchy = node.activeInHierarchy;
-        }
-        return rtnNode;
-      }
+    // 为了防止递归，不放置components
+    Node(obj) {
+      return ccIns.Connect.CCType(obj, key => {
+        return ["components", "children"].indexOf(key) == -1;
+      });
+    },
+    // Scene中不存在active
+    Scene(obj) {
+      return ccIns.Connect.CCType(obj, key => {
+        return ["components", "children", "active", "activeInHierarchy"].indexOf(key) == -1;
+      });
     },
 
     // 组件构造：构造自定义组件。
@@ -122,10 +102,8 @@ export default function () {
         // 添加新组件
         ccIns.addObjectToStorage(com.uuid, "node", com);
 
-        // 构造cc类型
+        // 构造cc基本脚本类型
         if (ccIns.isCCType(com)) {
-
-
           let obj = ccIns.Connect.CustomType(com);
           obj.comtype = com.__classname__;
           // v1.4版本内，__props__不存在uuid
