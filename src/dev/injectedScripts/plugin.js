@@ -45,22 +45,7 @@ export default function () {
 
   // 发送节点信息
   ccIns.sendNodeTreeInfo = function () {
-    let scene;
-    // 区分版本
-    switch (cc.ENGINE_VERSION.substr(0, 3)) {
-      // 1.4版本中，没有scene的uuid，因此忽略
-      case "1.4":
-        {
-          scene = cc.director.getScene().children[0];
-          break;
-        }
-        // 1.9 2.0版本中有scene的uuid
-      default:
-        {
-          scene = cc.director.getScene();
-          break;
-        }
-    }
+    let scene = cc.director.getScene();
 
     if (scene) {
       let postRoot = [];
