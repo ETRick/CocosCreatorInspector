@@ -30,20 +30,27 @@ export default function () {
     CustomType(obj) {
       // null
       if (obj === null) {
-        return null;
+        return {
+          type: "null",
+          value: null,
+        };
       }
 
       // cc内部结构
       if (ccIns.isCCType(obj)) {
         let type = obj.__classname__.substr(3);
-
-        // 自己适配过的cc类型，使用自己的构造函数
-        if (ccIns.Connect[type]) {
-          return ccIns.Connect[type](obj);
-        }
-
+        // 如果是自己适配过的cc类型，使用自己的构造函数
         // 不是自己适配过的cc类型，使用公有构造函数
-        return ccIns.Connect.CCType(obj);
+        let value = ccIns.Connect[type] ? ccIns.Connect[type](obj) : ccIns.Connect.CCType(obj);
+        return {
+          type: type,
+          value: value,
+        };
+      }
+
+      // 自定义的脚本
+      if (obj.__classname__) {
+        return ccIns.Connect.CustomComponent(obj);
       }
 
       // Array
@@ -53,15 +60,24 @@ export default function () {
         for (let item of obj) {
           rtnObj.push(ccIns.Connect.CustomType(item));
         }
-        return rtnObj;
+        return {
+          type: "Array",
+          value: rtnObj,
+        };
       }
 
       // 基本类型
-      return obj;
+      return {
+        type: typeof obj,
+        value: obj,
+      };
     },
     // 将颜色转换成16进制
     Color(color) {
-      return color.toCSS();
+      return {
+        type: "Color",
+        value: color.toCSS()
+      };
     },
     // 树节点构造：只需要node中的其中一些属性
     TreeNode(node) {
@@ -75,10 +91,25 @@ export default function () {
           components: [], // 用来查找
           children: [],
         };
-
         if (!(node instanceof cc.Scene)) {
           rtnNode.activeInHierarchy = node.activeInHierarchy; // 用来添加删除线
         }
+
+        // 组件信息
+        node._components.forEach(com => {
+          // 添加新组件
+          ccIns.addObjectToStorage(com.uuid, "node", com);
+
+          rtnNode.components.push(com.__classname__);
+          // 添加该脚本的枚举属性
+          if (ccIns.Enum.add(com)) {
+            // 发送该枚举属性
+            ccIns.sendMsgToDevTools(ccIns.Connect.msgType.enumType, {
+              key: com.__classname__.substr(3),
+              value: ccIns.Enum.get(com)
+            });
+          }
+        });
 
         return rtnNode;
       }
@@ -97,23 +128,10 @@ export default function () {
     },
 
     // 组件构造：构造自定义组件。
-    Component(com) {
+    CustomComponent(com) {
       if (com instanceof cc.Component) {
-        // 添加新组件
-        ccIns.addObjectToStorage(com.uuid, "node", com);
-
-        // 构造cc基本脚本类型
-        if (ccIns.isCCType(com)) {
-          let obj = ccIns.Connect.CustomType(com);
-          obj.comtype = com.__classname__;
-          // v1.4版本内，__props__不存在uuid
-          obj.uuid = com.uuid;
-          return obj;
-        }
-
         // 构造自定义脚本类型
         let filterCom = {
-          comtype: com.__classname__,
           uuid: com.uuid,
           enabled: com.enabled,
           enabledInHierarchy: com.enabledInHierarchy,
@@ -133,7 +151,10 @@ export default function () {
             }
           }
         }
-        return filterCom;
+        return {
+          type: com.__classname__,
+          value: filterCom,
+        };
       }
     },
   };
