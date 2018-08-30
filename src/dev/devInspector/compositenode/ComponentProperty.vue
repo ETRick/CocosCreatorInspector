@@ -1,3 +1,4 @@
+
 <template>
   <div id="app">
     <div class="comp">
@@ -10,6 +11,12 @@
       <div v-show="isShowComp" v-for="mykey in compkeys" :key="mykey">
           <CheckBox v-if="typeof component[mykey] == 'boolean'" :uuid="component.uuid" :mykey="mykey" :myvalue="component[mykey]">
           </CheckBox>
+          <EnumNode v-else-if="isEnumType(component.comtype.substr(3), mykey)" 
+                    :enumTypes="getEnumType(component.comtype.substr(3), mykey)" 
+                    :uuid="component.uuid" 
+                    :mykey="mykey" 
+                    :myvalue="component[mykey]">
+          </EnumNode>
           <SingleNodeLine v-else-if="typeof component[mykey] != 'object'" :uuid="component.uuid" :mykey="mykey" :myvalue="component[mykey]">
           </SingleNodeLine>
           <Node v-else-if="component[mykey] && component[mykey].name" :name="mykey.firstUpperCase()">
@@ -21,36 +28,46 @@
 </template>
 
 <script>
-  export default {
-    mounted() {
+import Vue from 'vue';
+
+export default {
+  mounted() {
+  },
+  data() {
+    return {
+      // 得到主键，除去comptype和uuid
+      compkeys: Object.keys(this.component).filter(function(key) {
+        return key[0] != "_" && key != "comtype" && key != "uuid"
+          && key != "enabled" && key != "enabledInHierarchy";
+      }),
+      isShowComp: true,
+    }
+  },
+  methods: {
+    onCheckBoxClick() {
+      this.component.enabled = !this.component.enabled;
+      this._evalCode("ccIns.setNodeValue('" 
+                  + this.component.uuid 
+                  + "','enabled',"
+                  + this.component.enabled + ");");
+      this._freshNode(this.component.uuid);
     },
-    data() {
-      return {
-        // 得到主键，除去comptype和uuid
-        compkeys: Object.keys(this.component).filter(function(key) {
-          return key[0] != "_" && key != "comtype" && key != "uuid"
-            && key != "enabled" && key != "enabledInHierarchy";
-        }),
-        isShowComp: true,
-      }
+    onClickComp() {
+      this.isShowComp = !this.isShowComp;
+    },    
+    // 判断是否为枚举类型
+    isEnumType(comptype, key) {
+      return typeof Vue.enumStorage.get(comptype, key) != "undefined";
     },
-    methods: {
-      onCheckBoxClick() {
-        this.component.enabled = !this.component.enabled;
-        this._evalCode("ccIns.setNodeValue('" 
-                    + this.component.uuid 
-                    + "','enabled',"
-                    + this.component.enabled + ");");
-        this._freshNode(this.component.uuid);
-      },
-      onClickComp() {
-        this.isShowComp = !this.isShowComp;
-      }
+    // 由于传入参数不能使用Vue，因此改成这种方式 
+    getEnumType(comptype, key) {
+      return Vue.enumStorage.get(comptype, key);
     },
-    props: [
-      'component'
-    ]
-  }
+  },
+  props: [
+    'component'
+  ]
+}
 </script>
 
 <style scoped>

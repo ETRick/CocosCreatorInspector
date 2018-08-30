@@ -71,7 +71,15 @@ export default function () {
         let postNode = ccIns.Connect.TreeNode(node);
         // 组件信息
         node._components.forEach(com => {
-          postNode.components.push(com.__classname__)
+          postNode.components.push(com.__classname__);
+          // 添加该脚本的枚举属性
+          if (ccIns.Enum.add(com)) {
+            // 发送该枚举属性
+            ccIns.sendMsgToDevTools(ccIns.Connect.msgType.enumType, {
+              key: com.__classname__.substr(3),
+              value: ccIns.Enum.get(com)
+            });
+          }
         });
         // 儿子信息
         node.getChildren().forEach(childItem => {

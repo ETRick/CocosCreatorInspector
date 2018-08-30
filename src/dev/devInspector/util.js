@@ -19,15 +19,6 @@ export default function () {
     return this.toLowerCase().indexOf(substr.toLowerCase()) !== -1;
   };
 
-  // 将首字母大写
-  String.prototype.capitalize = function () {
-    let c = this.charCodeAt(0);
-    if (97 <= c && c <= 122) {
-      c -= 32;
-    }
-    return String.fromCharCode(c) + this.slice(1);
-  };
-
   // Array 数组扩展函数
   // sliceByObj 通过给定的obj切分数组，只取前半部分
   Array.prototype.sliceByObj = function (obj) {
@@ -40,7 +31,7 @@ export default function () {
     }
   };
 
-  // Vue util
+  // Vue Vue脚本扩展函数
   // 刷新节点
   Vue.prototype._freshNode = function (uuid) {
     if (uuid) {
@@ -58,26 +49,38 @@ export default function () {
     }
   };
 
+  // 用于处理枚举属性
   // 枚举类型储存的地方
   Vue.enumStorage = {};
 
   // 添加枚举类型
-  Vue.addEnumType = function (comp, type, data) {
-    if (!Vue.enumStorage[comp]) {
-      Vue.enumStorage[comp] = {};
-    }
-    Vue.enumStorage[comp][type] = data;
+  Vue.enumStorage.add = function (obj) {
+    Vue.enumStorage[obj.key] = obj.value;
+    // 添加反向引用
+    // for (let prop of Object.keys(obj.value)) {
+    //   setMapping(Vue.enumStorage[obj.key][prop]);
+    // }
+
+    // function setMapping(obj) {
+    //   for (let key of Object.keys(obj)) {
+    //     let value = obj[key];
+    //     obj[value] = key;
+    //   }
+    // }
   };
 
   // 获得枚举类型
-  Vue.getEnumType = function (comp, type) {
-    return Vue.enumStorage[comp][type];
+  Vue.enumStorage.get = function (comptype, key) {
+    comptype = comptype.firstUpperCase();
+    key = key.firstUpperCase();
+    if (arguments.length == 1) {
+      return Vue.enumStorage[comptype];
+    } else if (arguments.length == 2) {
+      if (Vue.enumStorage[comptype]) {
+        return Vue.enumStorage[comptype][key];
+      }
+    }
+    // console.log("Vue.enumStorage.get Error!");
+    // return undefined;
   };
-
-  // 判断是否为枚举类型
-  Vue.isEnumType = function (comp, type) {
-    comp = comp.capitalize();
-    type = type.capitalize();
-    return Vue.enumStorage[comp] && Vue.enumStorage[comp][type];
-  }
 }

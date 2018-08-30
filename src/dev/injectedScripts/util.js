@@ -2,9 +2,17 @@
 // Date: 18-8-3 9:42
 // Description: util函数类，包含各种挂载到其他物体上的函数（不作为接口）
 export default function () {
+    // firstUpperCase 将字符串首字母大写
+    String.prototype.firstUpperCase = function () {
+        let that = this;
+        return that.toString()[0].toUpperCase() + that.toString().slice(1);
+    };
+
     // 初始化ccIns空间
     if (typeof ccIns == 'undefined') {
         ccIns = {};
+        ccIns.Config = {};
+        ccIns.Enum = {};
     }
 
     if (!ccIns.isNotFirst) {
@@ -200,9 +208,40 @@ export default function () {
             return obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.";
         };
 
-        // 判断是不是枚举类型
-        ccIns.isEnumType = function (obj, key) {
-            return key[0] != "_" && obj[key] instanceof cc.Enum;
+        // 添加一个脚本的枚举属性，不重复添加
+        ccIns.Enum.add = function (com) {
+            let comptype = com.__classname__.substr(3);
+            if (cc[comptype] && !ccIns.Enum[comptype]) {
+                ccIns.Enum[comptype] = {};
+
+                // 特例：srcBlendFactor和dstBlendFactor
+                if (cc.macro) {
+                    ccIns.Enum[comptype]["SrcBlendFactor"] = cc.macro.BlendFactor;
+                    ccIns.Enum[comptype]["DstBlendFactor"] = cc.macro.BlendFactor;
+                }
+
+                let staticClass = cc[comptype];
+                // 通过__props__获取值
+                for (let key of cc[comptype].__props__) {
+                    key = key.firstUpperCase();
+                    if (isEnumType(key)) {
+                        ccIns.Enum[comptype][key] = staticClass[key];
+                    }
+                }
+                return true;
+
+                // 通过判断有没有__enums__属性判断是否为枚举属性
+                function isEnumType(key) {
+                    return staticClass[key] && staticClass[key].__enums__;
+                }
+            }
+            return false;
+        };
+
+        // 得到枚举量
+        ccIns.Enum.get = function (com) {
+            let comptype = com.__classname__.substr(3);
+            return ccIns.Enum[comptype];
         };
     }
 }

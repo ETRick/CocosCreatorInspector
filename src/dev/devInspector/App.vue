@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
 import injectMain from "../injectedScripts/main.js";
@@ -73,6 +75,7 @@ export default {
               refleshInfo: 3, // 节点刷新信息
               clickedNodeInfo: 4, // 出现节点被点击
               refleshDocument: 5, // 出现页面刷新
+              enumType: 6, // 节点中的枚举信息
             };
             switch (message.type) {
               case msgType.nodeListInfo: {
@@ -147,6 +150,11 @@ export default {
                 }
                 break;
               }
+              case msgType.enumType: {
+                // 直接添加枚举值
+                Vue.enumStorage.add(message.msg);
+                break;
+              }
               default: {
                 console.log(message);
               }  
@@ -211,7 +219,6 @@ export default {
     },
     _getConfigObjString() {
       let code = getJsonObj("ccIns.Config", injectConfig);
-      console.log(code);
       return code;
 
       function getJsonObj(identify, obj) {

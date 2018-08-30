@@ -23,7 +23,7 @@ export default function () {
       // cc内部结构
       if (ccIns.isCCType(obj)) {
         let type = obj.__classname__.substr(3);
-        let rtnObj = {};
+
         // 自己适配过的cc类型，使用自己的构造函数
         if (ccIns.Connect[type]) {
           return ccIns.Connect[type](obj);
@@ -31,6 +31,7 @@ export default function () {
 
         // 不是自己适配过的cc类型，使用公有构造函数
         // 通过__props__获得key值
+        let rtnObj = {};
         for (let key of cc[type].__props__) {
           // 忽略私有变量和函数
           if (ccIns.isPublicVar(obj, key)) {
@@ -123,6 +124,8 @@ export default function () {
 
         // 构造cc类型
         if (ccIns.isCCType(com)) {
+
+
           let obj = ccIns.Connect.CustomType(com);
           obj.comtype = com.__classname__;
           // v1.4版本内，__props__不存在uuid
