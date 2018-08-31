@@ -37,10 +37,14 @@
                     :mykey="mykey" 
                     :myvalue="component[mykey].value">
         </ColorPicker>
-        <Node v-else-if="component[mykey].type != 'null' && component[mykey].value.name" 
+        <ArrayNode v-else-if="component[mykey].type == 'Array'"
+                   :uuid="component.uuid.value" 
+                   :mykey="mykey" 
+                   :myarray="component[mykey].value">
+        </ArrayNode>
+        <Node v-else-if="component[mykey].type != 'null' && component[mykey].value.name"
               :name="mykey.firstUpperCase()">
-          <span style="float: left; width: 50%;">{{component[mykey].type}}</span>
-          <span style="float: left; width: 50%;">{{component[mykey].value.name.value}}</span>
+          <span>{{component[mykey].value.name.value}}</span>
         </Node>
     </div>
   </div>
@@ -51,8 +55,6 @@ import Vue from 'vue';
 
 export default {
   mounted() {
-    // console.log(this.component);
-    // console.log(this.compkeys);
   },
   data() {
     return {

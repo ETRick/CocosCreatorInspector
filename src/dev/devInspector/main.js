@@ -9,8 +9,9 @@ import SlideNode from './basenode/SlideNode.vue';
 import CheckBox from './basenode/CheckBox.vue';
 import EnumNode from './basenode/EnumNode.vue';
 import NumberNode from './basenode/NumberNode.vue';
-import StringNode from './basenode/StringNode.vue'
-import ColorPicker from './basenode/ColorPicker.vue'
+import StringNode from './basenode/StringNode.vue';
+import ColorPicker from './basenode/ColorPicker.vue';
+import ArrayNode from './basenode/ArrayNode.vue';
 import MultiNumberNode from './basenode/MultiNumberNode.vue';
 
 import NodeTreeProperty from './compositenode/NodeTreeProperty.vue';
@@ -29,6 +30,7 @@ Vue.component('EnumNode', EnumNode);
 Vue.component('NumberNode', NumberNode);
 Vue.component('StringNode', StringNode);
 Vue.component('ColorPicker', ColorPicker);
+Vue.component('ArrayNode', ArrayNode);
 Vue.component('MultiNumberNode', MultiNumberNode);
 
 Vue.component('NodeTreeProperty', NodeTreeProperty);

@@ -29,6 +29,11 @@
                     :myvalue="itemData[config.key].value"
                     :readonly="config.readonly">
         </StringNode>
+        <ColorPicker v-else-if="itemData[config.key].type == 'Color'" 
+                     :uuid="itemData.uuid.value"
+                     :mykey="config.key"
+                     :myvalue="itemData[config.key].value">
+        </ColorPicker>
       </div>
       <MultiNumberNode v-else-if="config.keys"
                       :itemData="itemData"
@@ -38,12 +43,6 @@
                       :step="config.step || 10">
       </MultiNumberNode> 
     </div>
-
-    <!-- 颜色 -->
-    <ColorPicker :uuid="itemData.uuid.value"
-                  mykey="color"
-                  :myvalue="itemData.color.value">
-    </ColorPicker>
   </div>
 </template>
 

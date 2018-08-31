@@ -16,14 +16,53 @@ export default function () {
   // 设置节点状态（通过key-value）
   ccIns.setNodeValue = function (uuid, key, value) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
-
     if (node) {
-      // 判断类型
-      if (typeof node[key] == 'number') {
-        node[key] = parseFloat(value);
-      } else {
-        node[key] = value;
+      node[key] = value;
+    }
+  };
+
+  // 设置节点中数组的状态
+  ccIns.setNodeArrayLength = function (uuid, arraykey, length) {
+    let node = ccIns.getObjectFromStorage(uuid, "node");
+    if (node) {
+      let oneElement = ccIns.getObjectFromStorage(uuid, arraykey + "type");
+      if (!oneElement && node[arraykey].length > 0) {
+        oneElement = node[arraykey][0];
+        ccIns.addObjectToStorage(uuid, arraykey + "type", oneElement);
       }
+      node[arraykey].resize(length, getDefaultValue(oneElement));
+    }
+
+    // 通过其中一个元素得到该类型的默认值
+    function getDefaultValue(oneElement) {
+      // 处理null和undefined
+      if (oneElement === undefined || oneElement === null) {
+        return null;
+      }
+
+      // 处理cctype
+      if (oneElement.__classname__) {
+        let type = oneElement.__classname__.substr(3);
+        return cc[type]();
+      }
+
+      // 基本类型
+      if (typeof oneElement == "boolean") {
+        return false;
+      } else if (typeof oneElement == "number") {
+        return 0;
+      } else if (typeof oneElement == "string") {
+        return "";
+      }
+      return null;
+    }
+  };
+
+  // 设置节点中数组中某一项的值
+  ccIns.setNodeArrayValue = function (uuid, arraykey, index, value) {
+    let node = ccIns.getObjectFromStorage(uuid, "node");
+    if (node) {
+      node[arraykey][index] = value;
     }
   };
 

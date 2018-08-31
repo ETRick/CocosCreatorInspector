@@ -102,7 +102,9 @@ export default {
               }
               case msgType.refleshInfo: {
                 // 刷新节点
-                this._freshNode(this.treeItemData.uuid.value);
+                if (this.treeItemData.uuid) {
+                  this._freshNode(this.treeItemData.uuid.value);
+                }
                 break;
               }
               case msgType.clickedNodeInfo: {

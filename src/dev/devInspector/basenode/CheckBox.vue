@@ -1,34 +1,33 @@
 <template>
-    <Node v-if="typeof myvalue != 'undefined'" :name="mykey.firstUpperCase()">
-      <input type="checkbox"
-              style="width: 20px;height: 20px;"
-              :checked="myvalue"
-              @click="onBtnClick"
-      >
-    </Node>
+  <Node v-if="typeof myvalue != 'undefined'" :name="mykey.firstUpperCase()">
+    <input type="checkbox"
+           style="width: 20px;height: 20px;"
+           :checked="myvalue"
+           @click="onBtnClick">
+  </Node>
 </template>
 
 <script>
   export default {
     name: "app",
     data() {
-      return {
-      };
+      return {};
     },
     methods: {
-        onBtnClick() {
-            this.myvalue = !this.myvalue; 
-            this._evalCode("ccIns.setNodeValue('" 
-                        + this.uuid + "','"
-                        + this.mykey + "',"
-                        + this.myvalue + ");");
-            this._freshNode(this.uuid);
-        },
+      onBtnClick() {
+        this.myvalue = !this.myvalue; 
+        this._evalCode("ccIns.setNodeValue('" 
+                    + this.uuid + "','"
+                    + this.mykey + "',"
+                    + this.myvalue + ");");
+        this._freshNode(this.uuid);
+      },
     },
     props: [
-        'uuid',
-        'myvalue',
-        'mykey',
+      'uuid',
+      'myvalue',
+      'mykey',
+      'clickFunc',
     ]
   }
 </script>

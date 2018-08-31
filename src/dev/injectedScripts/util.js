@@ -8,6 +8,14 @@ export default function () {
         return that.toString()[0].toUpperCase() + that.toString().slice(1);
     };
 
+    // 修改数组的长度
+    Array.prototype.resize = function(newSize, defaultValue) {
+        while(newSize > this.length) {
+            this.push(defaultValue);
+        }
+        this.length = newSize;
+    };
+
     // 初始化ccIns空间
     if (typeof ccIns == 'undefined') {
         ccIns = {};

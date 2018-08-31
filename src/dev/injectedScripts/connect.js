@@ -149,11 +149,12 @@ export default function () {
         // 过滤掉私有值和函数的值
         for (let key of Object.keys(com)) {
           let value = com[key];
-          if (ccIns.isPublicVar(com, key) && !(value instanceof Array)) {
+          if (ccIns.isPublicVar(com, key)) {
             // object节点无法通过post进行复制，因此在此处修改
             filterCom[key] = this.CustomType(value);
           }
         }
+
         return {
           type: com.__classname__,
           value: filterCom,
