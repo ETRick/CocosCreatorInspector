@@ -2,7 +2,7 @@
   <div id="app">
     <Node :name="titlename.firstUpperCase()">
       <div style="float: left;width: 100%;">
-        <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey] != 'undefined'"
+        <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey].value != 'undefined'"
                   :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
                   class="ui" :style="{width: 100 / mykeys.length + '%'}"
                   @movestep="changeFloatValueAction" :step="step">
@@ -10,9 +10,9 @@
                   @focus="pauseGame"
                   @blur="resumeGame"
                   @change="changeValue(mykey)"
-                  :placeholder="itemData[mykey]"
-                  v-model="itemData[mykey]">
-          <span v-else> {{itemData[mykey]}} </span>
+                  :placeholder="itemData[mykey].value"
+                  v-model="itemData[mykey].value">
+          <span v-else> {{itemData[mykey].value}} </span>
         </SlideNode>
       </div>
     </Node>
@@ -27,35 +27,32 @@ export default {
   },
   methods: {
     changeValue(key) {
-      console.log("changeValue", key);
       // 添加uuid，key值
+      let uuid = this.itemData.uuid.value;
+      let value = this.itemData[key].value;
       let code = "ccIns.setNodeValue(" +
-        "'" + this.itemData.uuid + "'," +
-        "'" + key + "',";
-      // value值需要判断一下
-      if (typeof this.itemData[key] == "number") {
-        code += this.itemData[key] + ")";
-      } else {
-        code += "'" + this.itemData[key] + "'" + ")";
-      }
+        "'" + uuid + "'," +
+        "'" + key + "'," +
+        value + ")";
       this._evalCode(code);
-      this._freshNode(this.itemData.uuid);
+      this._freshNode(uuid);
     },
     changeFloatValueAction(step, key) {
-      // console.log("changeFloatValueAction", key);
-      if (typeof this.itemData[key] == "number") {
-        let value = parseFloat(this.itemData[key]);
-        this.itemData[key] = value + step;
+      let value = parseFloat(this.itemData[key].value);
+      if (!isNaN(value)) {
+        this.itemData[key].value = value + step;
         this.changeValue(key);
       }
     },
     pauseGame() {
+      let uuid = this.itemData.uuid.value;
       this._evalCode("ccIns.pauseGame()");
-      this._freshNode(this.itemData.uuid);
+      this._freshNode(uuid);
     },
     resumeGame() {
+      let uuid = this.itemData.uuid.value;
       this._evalCode("ccIns.resumeGame()");
-      this._freshNode(this.itemData.uuid);
+      this._freshNode(uuid);
     },
   },
   props: [

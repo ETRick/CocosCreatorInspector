@@ -1,51 +1,49 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="itemData.uuid">
     <input v-if="typeof itemData.active != 'undefined'" type="checkbox" class="myCheckBox"
-            :checked="itemData.active"
+            :checked="itemData.active.value"
             @click="onCheckBoxClick">
-    <h1 @click="onClickNode" :class="{inactiveInHierarchy: itemData.activeInHierarchy === false}">
-      {{itemData.name + " (" + itemData.uuid + ")"}}
+    <h1 @click="onClickNode" :class="{inactiveInHierarchy: itemData.activeInHierarchy && itemData.activeInHierarchy.value === false}">
+      {{itemData.name.value + " (" + itemData.uuid.value + ")"}}
     </h1>
     <hr style="margin-bottom: 10px; margin-top: 4px;"/>
 
-    <div v-if="isShowNode">    
-      <!-- 配置文件中属性 -->
-      <div v-for="config in configs" :key="config">
-        <SingleNodeLine v-if="config.type === 'single'" 
-                  :uuid="itemData.uuid"
+    <!-- 配置文件中属性 -->
+    <div v-show="isShowNode" v-for="config in configs" :key="config">
+      <div v-if="config.key && itemData[config.key]">
+        <CheckBox v-if="itemData[config.key].type === 'boolean'"
+                  :uuid="itemData.uuid.value"
                   :mykey="config.key"
-                  :myvalue="itemData[config.key]"
-                  :readonly="config.readonly"
-                  :step="config.step || 10">
-        </SingleNodeLine>
-        <CheckBox v-else-if="config.type === 'bool'"
-                  :uuid="itemData.uuid"
-                  :mykey="config.key"
-                  :myvalue="itemData[config.key]">
+                  :myvalue="itemData[config.key].value">
         </CheckBox>
-        <MultiNodeLine v-else-if="config.type === 'multi'"
-                  :itemData="itemData"
-                  :titlename="config.title"
-                  :mykeys="config.keys"
-                  :readonly="config.readonly"
-                  :step="config.step || 10">
-        </MultiNodeLine>
+        <NumberNode v-else-if="itemData[config.key].type == 'number'"
+                    :uuid="itemData.uuid.value"
+                    :mykey="config.key"
+                    :myvalue="itemData[config.key].value"
+                    :readonly="config.readonly"
+                    :step="config.step || 10">
+        </NumberNode>
+        <StringNode v-else-if="itemData[config.key].type == 'string'"
+                    :uuid="itemData.uuid.value"
+                    :mykey="config.key"
+                    :myvalue="itemData[config.key].value"
+                    :readonly="config.readonly">
+        </StringNode>
       </div>
-
-      <!-- 颜色 -->
-      <Node name="color" v-if="typeof itemData['color'] != 'undefined'">
-        <div style="float: left;width: 100%;height: 100%;">
-          <div style="float: left;width: 50%; height: 100%;">
-            <el-color-picker v-model="itemData.color" size="mini"
-                            style="margin: 0;display: flex;align-items: center;flex-wrap: wrap;"
-                            @change="changeColor"></el-color-picker>
-          </div>
-          <div style="float: left;width: 50%;">
-            <span>{{itemData.color}}</span>
-          </div>
-        </div>
-      </Node>
+      <MultiNumberNode v-else-if="config.keys"
+                      :itemData="itemData"
+                      :titlename="config.title"
+                      :mykeys="config.keys"
+                      :readonly="config.readonly"
+                      :step="config.step || 10">
+      </MultiNumberNode> 
     </div>
+
+    <!-- 颜色 -->
+    <ColorPicker :uuid="itemData.uuid.value"
+                  mykey="color"
+                  :myvalue="itemData.color.value">
+    </ColorPicker>
   </div>
 </template>
 
@@ -63,23 +61,15 @@
     },
     methods: {
       onCheckBoxClick() {
-        this.itemData.active = !this.itemData.active;
+        this.itemData.active.value = !this.itemData.active.value;
         this._evalCode("ccIns.setNodeValue('" 
-                    + this.itemData.uuid 
+                    + this.itemData.uuid.value 
                     + "','active',"
-                    + this.itemData.active + ");");
-        this._freshNode(this.itemData.uuid);
+                    + this.itemData.active.value + ");");
+        this._freshNode(this.itemData.uuid.value);
       },
       onClickNode() {
         this.isShowNode = !this.isShowNode;
-      },
-      changeColor() {
-        let color = this.itemData.color;
-        this._evalCode(
-          "ccIns.setNodeColor('" +
-          this.itemData.uuid + "','" +
-          color + "');");
-        this._freshNode(this.itemData.uuid);
       },
     },
     props: [

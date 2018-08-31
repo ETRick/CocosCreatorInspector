@@ -74,21 +74,17 @@ export default function () {
   ccIns.getNodeInfo = function (uuid) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
     if (node) {
+      // 判断是节点还是脚本（Scene不存在脚本）
+      if (!(node instanceof cc.Node || node instanceof cc.Scene)) {
+        node = node.node;
+      }
+
       let nodeData = ccIns.Connect.CustomType(node);
-      nodeData.components = getNodeComponentsInfo(node);
+      nodeData.value.components = ccIns.Connect.CustomType(node._components);
       ccIns.sendMsgToDevTools(ccIns.Connect.msgType.nodeInfo, nodeData);
     } else {
       // 未获取到节点数据
       console.log("未获取到节点数据");
-    }
-
-    // 收集组件信息
-    function getNodeComponentsInfo(node) {
-      let ret = [];
-      node._components.forEach(com => {
-        ret.push(ccIns.Connect.Component(com));
-      });
-      return ret;
     }
   };
 

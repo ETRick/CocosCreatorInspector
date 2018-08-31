@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Node :name="mykey.firstUpperCase()" v-if="typeof myvalue != 'undefined'">
+    <Node v-if="typeof myvalue != 'undefined'" :name="mykey.firstUpperCase()">
       <el-select v-model="myvalue" size="mini">
         <el-option
           v-for="type in Object.keys(enumTypes)"
@@ -17,9 +17,7 @@
   export default {
     name: "app",
     data() {
-      return {
-        enums: Object.keys(this.enumTypes),
-      }
+      return {}
     },
     watch: {
       // 属性修改时，直接更新节点

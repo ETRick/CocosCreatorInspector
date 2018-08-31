@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <SlideNode :name="mykey.firstUpperCase()" 
+    <SlideNode v-if="typeof myvalue != 'undefined'"
+               :name="mykey.firstUpperCase()" 
                :mykey="mykey" :step="step"
-               v-if="typeof myvalue != 'undefined'"
                @movestep="changeFloatValueAction">
       <input v-if='!readonly' class="myInput"
         @focus="pauseGame"
@@ -27,19 +27,14 @@
         // 添加uuid，key值
         let code = "ccIns.setNodeValue(" +
           "'" + this.uuid + "'," +
-          "'" + this.mykey + "',";
-        // value值需要判断一下
-        if (typeof this.myvalue == "number") {
-          code += this.myvalue + ")";
-        } else {
-          code += "'" + this.myvalue + "'" + ")";
-        }
+          "'" + this.mykey + "'," +
+          this.myvalue + ")";
         this._evalCode(code);
         this._freshNode(this.uuid);
       },
       changeFloatValueAction(step) {
-        if (typeof this.myvalue == "number") {
-          let value = parseFloat(this.myvalue);
+        let value = parseFloat(this.myvalue);
+        if (!isNaN(value)) {
           this.myvalue = value + step;
           this.changeValue();
         }

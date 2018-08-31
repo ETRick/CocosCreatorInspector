@@ -1,5 +1,5 @@
 <template>
-    <Node :name="mykey.firstUpperCase()" v-if="typeof myvalue != 'undefined'">
+    <Node v-if="typeof myvalue != 'undefined'" :name="mykey.firstUpperCase()">
       <input type="checkbox"
               style="width: 20px;height: 20px;"
               :checked="myvalue"

@@ -96,12 +96,13 @@ export default {
               case msgType.nodeInfo: {
                 // 获取节点属性信息
                 this.isShowDebug = true;
-                this.treeItemData = message.msg;
+                this.treeItemData = message.msg.value;
+                // console.log(this.treeItemData.components);
                 break;
               }
               case msgType.refleshInfo: {
                 // 刷新节点
-                this._freshNode(this.treeItemData.uuid);
+                this._freshNode(this.treeItemData.uuid.value);
                 break;
               }
               case msgType.clickedNodeInfo: {

@@ -1,28 +1,47 @@
 
 <template>
-  <div id="app">
-    <div class="comp">
-      <input v-if="typeof component.enabled != 'undefined'" type="checkbox" class="myCheckBox"
-              :checked="component.enabled"
-              @click="onCheckBoxClick">
-      <h4 @click="onClickComp" :class="{inenabledInHierarchy: component.enabledInHierarchy === false}">
-        {{(component.comtype == "" ? "Undefined Type": component.comtype) + " (" + component.uuid + ")"}}
-      </h4>
-      <div v-show="isShowComp" v-for="mykey in compkeys" :key="mykey">
-          <CheckBox v-if="typeof component[mykey] == 'boolean'" :uuid="component.uuid" :mykey="mykey" :myvalue="component[mykey]">
-          </CheckBox>
-          <EnumNode v-else-if="isEnumType(component.comtype.substr(3), mykey)" 
-                    :enumTypes="getEnumType(component.comtype.substr(3), mykey)" 
-                    :uuid="component.uuid" 
+  <div id="app" class="component" v-if="component">
+    <input v-if="typeof component.enabled != 'undefined'" type="checkbox" class="myCheckBox"
+            :checked="component.enabled.value"
+            @click="onCheckBoxClick">
+    <h4 @click="onClickComp" :class="{inenabledInHierarchy: component.enabledInHierarchy && component.enabledInHierarchy.value === false}">
+      {{comptype + " (" + component.uuid.value + ")"}}
+    </h4>
+
+    <!-- 根据type类型生成模板 -->
+    <div v-show="isShowComp" v-for="mykey in compkeys" :key="mykey">
+        <EnumNode v-if="isEnumType(comptype, mykey)" 
+                  :enumTypes="getEnumType(comptype, mykey)" 
+                  :uuid="component.uuid.value" 
+                  :mykey="mykey" 
+                  :myvalue="component[mykey].value">
+        </EnumNode>
+        <CheckBox v-else-if="component[mykey].type == 'boolean'"
+                  :uuid="component.uuid.value" 
+                  :mykey="mykey" 
+                  :myvalue="component[mykey].value">
+        </CheckBox>
+        <NumberNode v-else-if="component[mykey].type == 'number'" 
+                    :uuid="component.uuid.value" 
                     :mykey="mykey" 
-                    :myvalue="component[mykey]">
-          </EnumNode>
-          <SingleNodeLine v-else-if="typeof component[mykey] != 'object'" :uuid="component.uuid" :mykey="mykey" :myvalue="component[mykey]">
-          </SingleNodeLine>
-          <Node v-else-if="component[mykey] && component[mykey].name" :name="mykey.firstUpperCase()">
-            <span> {{component[mykey].name}} </span>
-          </Node>
-      </div>
+                    :myvalue="component[mykey].value"
+                    :step="10">
+        </NumberNode>
+        <StringNode v-else-if="component[mykey].type == 'string'"
+                    :uuid="component.uuid.value" 
+                    :mykey="mykey" 
+                    :myvalue="component[mykey].value">
+        </StringNode>
+        <ColorPicker v-else-if="component[mykey].type == 'Color'"
+                    :uuid="component.uuid.value" 
+                    :mykey="mykey" 
+                    :myvalue="component[mykey].value">
+        </ColorPicker>
+        <Node v-else-if="component[mykey].type != 'null' && component[mykey].value.name" 
+              :name="mykey.firstUpperCase()">
+          <span style="float: left; width: 50%;">{{component[mykey].type}}</span>
+          <span style="float: left; width: 50%;">{{component[mykey].value.name.value}}</span>
+        </Node>
     </div>
   </div>
 </template>
@@ -32,28 +51,33 @@ import Vue from 'vue';
 
 export default {
   mounted() {
+    // console.log(this.component);
+    // console.log(this.compkeys);
   },
   data() {
     return {
       // 得到主键，除去comptype和uuid
-      compkeys: Object.keys(this.component).filter(function(key) {
-        return key[0] != "_" && key != "comtype" && key != "uuid"
-          && key != "enabled" && key != "enabledInHierarchy";
+      compkeys: Object.keys(this.component ? this.component : {}).filter(function(key) {
+        return key[0] != "_" && key != "uuid" && key != "enabled" && key != "enabledInHierarchy";
       }),
       isShowComp: true,
     }
   },
   methods: {
     onCheckBoxClick() {
-      this.component.enabled = !this.component.enabled;
-      this._evalCode("ccIns.setNodeValue('" 
-                  + this.component.uuid 
-                  + "','enabled',"
-                  + this.component.enabled + ");");
-      this._freshNode(this.component.uuid);
+      this.component.enabled.value = !this.component.enabled.value;
+
+      let uuid = this.component.uuid.value;
+      let enabled = this.component.enabled.value;
+      this._evalCode("ccIns.setNodeValue(" 
+                  + "'" + uuid + "'"
+                  + ",'enabled',"
+                  + enabled + ");");
+      this._freshNode(uuid);
     },
     onClickComp() {
       this.isShowComp = !this.isShowComp;
+      console.log(this.isShowComp);
     },    
     // 判断是否为枚举类型
     isEnumType(comptype, key) {
@@ -65,7 +89,8 @@ export default {
     },
   },
   props: [
-    'component'
+    'comptype',
+    'component',
   ]
 }
 </script>
@@ -87,7 +112,7 @@ export default {
   .inenabledInHierarchy {
     text-decoration: line-through;
   }
-  .comp {
+  .component {
     border: 2px solid #a1a1a1;
     padding: 5px 5px;
     background: #dddddd;

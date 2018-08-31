@@ -8,8 +8,10 @@ import MyNode from './basenode/Node.vue';
 import SlideNode from './basenode/SlideNode.vue';
 import CheckBox from './basenode/CheckBox.vue';
 import EnumNode from './basenode/EnumNode.vue';
-import SingleNodeLine from './basenode/SingleNodeLine.vue';
-import MultiNodeLine from './basenode/MultiNodeLine.vue';
+import NumberNode from './basenode/NumberNode.vue';
+import StringNode from './basenode/StringNode.vue'
+import ColorPicker from './basenode/ColorPicker.vue'
+import MultiNumberNode from './basenode/MultiNumberNode.vue';
 
 import NodeTreeProperty from './compositenode/NodeTreeProperty.vue';
 import NodeBaseProperty from './compositenode/NodeBaseProperty.vue';
@@ -24,8 +26,10 @@ Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);
 Vue.component('CheckBox', CheckBox);
 Vue.component('EnumNode', EnumNode);
-Vue.component('SingleNodeLine', SingleNodeLine);
-Vue.component('MultiNodeLine', MultiNodeLine);
+Vue.component('NumberNode', NumberNode);
+Vue.component('StringNode', StringNode);
+Vue.component('ColorPicker', ColorPicker);
+Vue.component('MultiNumberNode', MultiNumberNode);
 
 Vue.component('NodeTreeProperty', NodeTreeProperty);
 Vue.component('NodeBaseProperty', NodeBaseProperty);
