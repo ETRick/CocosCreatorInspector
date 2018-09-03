@@ -61,11 +61,7 @@
     methods: {
       onCheckBoxClick() {
         this.itemData.active.value = !this.itemData.active.value;
-        this._evalCode("ccIns.setNodeValue('" 
-                    + this.itemData.uuid.value 
-                    + "','active',"
-                    + this.itemData.active.value + ");");
-        this._freshNode(this.itemData.uuid.value);
+        this.setNodeValue(this.itemData.uuid.value, "active", this.itemData.active.value);
       },
       onClickNode() {
         this.isShowNode = !this.isShowNode;

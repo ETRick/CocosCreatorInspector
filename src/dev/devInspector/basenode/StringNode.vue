@@ -5,7 +5,7 @@
       <input v-if='!readonly' class="myInput"
         @focus="pauseGame(uuid)"
         @blur="resumeGame(uuid)"
-        @change="changeValue"
+        @change="setNodeValue(uuid, mykey, myvalue)"
         :placeholder="myvalue"
         v-model="myvalue">
       <span v-else>{{myvalue}}</span>
@@ -16,21 +16,6 @@
 <script>
   export default {
     name: "app",
-    data() {
-      return {}
-    },
-    methods: {
-      // 修改任意key-value属性值
-      changeValue() {
-        // 添加uuid，key值
-        let code = "ccIns.setNodeValue(" +
-          "'" + this.uuid + "'," +
-          "'" + this.mykey + "'," +
-          "'" + this.myvalue + "'" + ")";
-        this._evalCode(code);
-        this._freshNode(this.uuid);
-      },
-    },
     props: 
     [
       'uuid',

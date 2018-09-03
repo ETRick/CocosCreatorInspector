@@ -20,20 +20,9 @@
 <script>
 export default {
   name: "app",
-  data() {
-    return {}
-  },
   methods: {
     changeValue(key) {
-      // 添加uuid，key值
-      let uuid = this.itemData.uuid.value;
-      let value = this.itemData[key].value;
-      let code = "ccIns.setNodeValue(" +
-        "'" + uuid + "'," +
-        "'" + key + "'," +
-        value + ")";
-      this._evalCode(code);
-      this._freshNode(uuid);
+      this.setNodeValue(this.itemData.uuid.value, key, this.itemData[key].value)
     },
     changeFloatValueAction(step, key) {
       let value = parseFloat(this.itemData[key].value);

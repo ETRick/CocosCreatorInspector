@@ -73,18 +73,10 @@ export default {
   methods: {
     onCheckBoxClick() {
       this.component.enabled.value = !this.component.enabled.value;
-
-      let uuid = this.component.uuid.value;
-      let enabled = this.component.enabled.value;
-      this._evalCode("ccIns.setNodeValue(" 
-                  + "'" + uuid + "'"
-                  + ",'enabled',"
-                  + enabled + ");");
-      this._freshNode(uuid);
+      this.setNodeValue(this.component.uuid.value, "enabled", this.component.enabled.value);
     },
     onClickComp() {
       this.isShowComp = !this.isShowComp;
-      console.log(this.isShowComp);
     },    
     // 判断是否为枚举类型
     isEnumType(comptype, key) {

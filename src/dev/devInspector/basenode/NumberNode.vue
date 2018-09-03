@@ -22,15 +22,8 @@
       return {}
     },
     methods: {
-      // 修改任意key-value属性值
       changeValue() {
-        // 添加uuid，key值
-        let code = "ccIns.setNodeValue(" +
-          "'" + this.uuid + "'," +
-          "'" + this.mykey + "'," +
-          this.myvalue + ")";
-        this._evalCode(code);
-        this._freshNode(this.uuid);
+        this.setNodeValue(this.uuid, this.mykey, this.myvalue)
       },
       changeFloatValueAction(step) {
         let value = parseFloat(this.myvalue);

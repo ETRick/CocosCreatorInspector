@@ -52,9 +52,6 @@
 <script>
   export default {
     name: "app",
-    data() {
-      return {};
-    },
     methods: {
       // bool点击触发函数
       onBtnClick(index) {
@@ -80,7 +77,7 @@
         for (let key of seckeys) {
           value[key] = this.myarray[index].value[key].value;
         }
-       this.setNodeValue(uuid, [this.mykey, index], value);
+        this.setNodeValue(this.uuid, [this.mykey, index], value);
       },
     },
     props: [

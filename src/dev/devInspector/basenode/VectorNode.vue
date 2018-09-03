@@ -21,8 +21,6 @@
 
 <script>
 export default {
-  mounted() {
-  },
   name: "app",
   data() {
     return {
@@ -36,12 +34,7 @@ export default {
       for (let key of this.seckeys) {
         value[key] = this.myvalue[key].value;
       }
-      let code = "ccIns.setNodeValue("
-              + "'" + this.uuid + "',"
-              + "'" + this.mykey + "',"
-              + JSON.stringify(value) + ")";
-      this._evalCode(code);
-      this._freshNode(this.uuid);
+      this.setNodeValue(this.uuid, this.mykey, value);
     },
     // 将两种情况写到一起
     changeFloatValueAction(step, key) {

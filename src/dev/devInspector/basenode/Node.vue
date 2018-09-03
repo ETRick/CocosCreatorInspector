@@ -18,9 +18,6 @@
 <script>
   export default {
     name: "app",
-    data() {
-      return {};
-    },
     props: [
       'name',
       'isTextCenter'

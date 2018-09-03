@@ -20,9 +20,9 @@ export default function () {
     // 设置节点属性值
     Vue.prototype.setNodeValue = function (uuid, key, value) {
         console.log('ccIns.setNodeValue("' +
-        uuid + '",' +
-        JSON.stringify(key) + ',' +
-        JSON.stringify(value) + ')');
+            uuid + '",' +
+            JSON.stringify(key) + ',' +
+            JSON.stringify(value) + ')');
         this._evalCode('ccIns.setNodeValue("' +
             uuid + '",' +
             JSON.stringify(key) + ',' +
@@ -37,6 +37,14 @@ export default function () {
             "'" + key + "'," +
             length + ")");
         this._freshNode(this.uuid);
+    };
+
+    // 设置颜色
+    Vue.prototype.setNodeColor = function (uuid, value) {
+        this._evalCode("ccIns.setNodeColor('" +
+            uuid + "','" +
+            value + "');");
+        this._freshNode(uuid);
     };
 
     // 刷新节点

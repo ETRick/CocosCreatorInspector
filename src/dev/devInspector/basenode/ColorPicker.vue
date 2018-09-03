@@ -3,7 +3,7 @@
     <div style="float: left;width: 100%;height: 100%;">
       <div style="float: left;width: 50%; height: 100%;">
         <el-color-picker v-model="myvalue" size="mini" class="colorPicker"
-                         @change="changeColor">
+                         @change="setNodeColor(uuid, myvalue)">
         </el-color-picker>
       </div>
       <div style="float: left;width: 50%;">
@@ -16,18 +16,6 @@
 <script>
   export default {
     name: "app",
-    data() {
-      return {};
-    },
-    methods: {
-      changeColor() {
-        this._evalCode(
-          "ccIns.setNodeColor('" +
-          this.uuid + "','" +
-          this.myvalue + "');");
-        this._freshNode(this.uuid);
-      },
-    },
     props: [
         'uuid',
         'myvalue',

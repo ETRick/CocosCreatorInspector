@@ -10,9 +10,6 @@
 <script>
   export default {
     name: "app",
-    data() {
-      return {};
-    },
     methods: {
       onBtnClick() {
         this.myvalue = !this.myvalue; 
