@@ -14,14 +14,26 @@
           :isTextCenter="true">
       <input v-if="obj.type == 'boolean'" type="checkbox"
             style="width: 20px; height: 20px;"
-            :checked="myarray[index].value"
+            :checked="obj.value"
             @click="onBtnClick(index)">
       <input v-else-if="obj.type == 'number' || obj.type == 'string'" class="myInput"
             @focus="pauseGame"
             @blur="resumeGame"
             @change="changeArrayValue(index)"
-            :placeholder="myarray[index].value"
-            v-model="myarray[index].value">
+            :placeholder="obj.value"
+            v-model="obj.value">
+      <div v-else-if="['Size', 'Vec2', 'Vec3'].hasValue(obj.type)">
+        <Node v-for="seckey in Object.keys(obj.value)" :key="seckey" 
+                   :name="seckey.eraseSubstring(titlename).firstUpperCase()[0]"
+                   class="ui" :style="{width: 100 / Object.keys(obj.value).length + '%'}">
+          <input class="myInput"
+                @focus="pauseGame"
+                @blur="resumeGame"
+                @change="changeVecValue(index)"
+                :placeholder="obj.value[seckey].value"
+                v-model="obj.value[seckey].value">
+        </Node>
+      </div>
       <div v-else-if="obj.type != 'null'">
         <span style="float: left; width: 50%;">{{myarray[index].type}}</span>
         <span style="float: left; width: 50%;">{{obj.value.name ? myarray[index].value.name.value : "Undefined Name!"}}</span>
@@ -81,6 +93,21 @@
         }
         this._freshNode(this.uuid);
       },
+      changeVecValue(index) {
+        let seckeys = Object.keys(this.myarray[index].value);
+        // 构造要赋值的value
+        let value = {};
+        for (let key of seckeys) {
+          value[key] = this.myarray[index].value[key].value;
+        }
+        let code = "ccIns.setNodeValue("
+                + "'" + this.uuid + "',"
+                + "['" + this.mykey + "'," + index + "],"
+                + JSON.stringify(value) + ")";
+        console.log(code);
+        this._evalCode(code);
+        this._freshNode(this.uuid);
+      },
       pauseGame() {
         this._evalCode("ccIns.pauseGame()");
         this._freshNode(this.uuid);
@@ -114,5 +141,11 @@
     height: 100%;
     float: left;
     background-color: #4a4a4a;
+  }
+
+
+  .ui {
+    float : left;
+    cursor : ew-resize;
   }
 </style>

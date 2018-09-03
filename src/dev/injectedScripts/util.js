@@ -2,6 +2,14 @@
 // Date: 18-8-3 9:42
 // Description: util函数类，包含各种挂载到其他物体上的函数（不作为接口）
 export default function () {
+    if (typeof ccIns == "undefined") {
+        ccIns = {};
+    }
+
+    // 初始化ccIns空间
+    ccIns.Config = ccIns.Config || {};
+    ccIns.Enum = ccIns.Enum || {};
+
     // firstUpperCase 将字符串首字母大写
     String.prototype.firstUpperCase = function () {
         let that = this;
@@ -9,19 +17,12 @@ export default function () {
     };
 
     // 修改数组的长度
-    Array.prototype.resize = function(newSize, defaultValue) {
-        while(newSize > this.length) {
+    Array.prototype.resize = function (newSize, defaultValue) {
+        while (newSize > this.length) {
             this.push(defaultValue);
         }
         this.length = newSize;
     };
-
-    // 初始化ccIns空间
-    if (typeof ccIns == 'undefined') {
-        ccIns = {};
-        ccIns.Config = {};
-        ccIns.Enum = {};
-    }
 
     if (!ccIns.isNotFirst) {
         // 初始化内存

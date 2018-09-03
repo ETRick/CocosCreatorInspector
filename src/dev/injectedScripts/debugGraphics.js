@@ -2,6 +2,11 @@
 // Date: 18-8-1 10:58
 // Description: 向页面生成DOM节点树，和cc节点树单向绑定，显示cc节点的边框
 export default function () {
+    if (typeof ccIns == "undefined") {
+        ccIns = {};
+    }
+
+    // 初始化DebugGraphics
     ccIns.initDebugGraphics = function () {
         let ccCanvas = cc.Canvas.instance.node;
         // 页面中需要存在cc（js），cc.Graphics，并且没有生成Graphics节点

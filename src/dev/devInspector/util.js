@@ -37,23 +37,6 @@ export default function () {
   };
 
   // Vue Vue脚本扩展函数
-  // 刷新节点
-  Vue.prototype._freshNode = function (uuid) {
-    if (uuid) {
-      let code2 = "ccIns.getNodeInfo('" + uuid + "')";
-      this._evalCode(code2);
-    }
-  };
-
-  // 执行代码
-  Vue.prototype._evalCode = function (code) {
-    if (chrome && chrome.devtools) {
-      chrome.devtools.inspectedWindow.eval(code);
-    } else {
-      console.log(code);
-    }
-  };
-
   // 用于处理枚举属性
   // 枚举类型储存的地方
   Vue.enumStorage = {};

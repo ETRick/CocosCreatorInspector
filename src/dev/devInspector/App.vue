@@ -32,7 +32,7 @@
 <script>
 import Vue from 'vue';
 
-import injectPlugin from "../injectedScripts/plugin.js";
+import injectPlugin from "../plugin/injectedScripts.js";
 import injectConnect from "../injectedScripts/connect.js";
 import injectMain from "../injectedScripts/main.js";
 import injectDebugGraphics from "../injectedScripts/debugGraphics.js";

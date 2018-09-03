@@ -24,6 +24,10 @@ import ComponentsProperty from './compositenode/ComponentsProperty.vue';
 import util from './util.js';
 util();
 
+// 自定义接口函数加载
+import plugin from '../plugin/devInspector.js';
+plugin();
+
 Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);
 Vue.component('CheckBox', CheckBox);

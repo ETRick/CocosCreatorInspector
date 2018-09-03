@@ -2,6 +2,10 @@
 // Date: 18-7-27 11:19
 // Description: 此文件保存ccIns.Connect，用于通讯。
 export default function () {
+  if (typeof ccIns == "undefined") {
+    ccIns = {};
+  }
+
   // 用于通讯结构构造
   ccIns.Connect = {
     // 通讯类型定义
@@ -145,7 +149,7 @@ export default function () {
             value: com.enabledInHierarchy,
           },
         };
-        
+
         // 过滤掉私有值和函数的值
         for (let key of Object.keys(com)) {
           let value = com[key];
