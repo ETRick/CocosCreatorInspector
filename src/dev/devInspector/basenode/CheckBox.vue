@@ -16,11 +16,7 @@
     methods: {
       onBtnClick() {
         this.myvalue = !this.myvalue; 
-        this._evalCode("ccIns.setNodeValue('" 
-                    + this.uuid + "','"
-                    + this.mykey + "',"
-                    + this.myvalue + ");");
-        this._freshNode(this.uuid);
+        this.setNodeValue(this.uuid, this.mykey, this.myvalue);
       },
     },
     props: [

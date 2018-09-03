@@ -3,8 +3,8 @@
     <Node v-if="typeof myvalue != 'undefined'"
           :name="mykey.firstUpperCase()">
       <input v-if='!readonly' class="myInput"
-        @focus="pauseGame"
-        @blur="resumeGame"
+        @focus="pauseGame(uuid)"
+        @blur="resumeGame(uuid)"
         @change="changeValue"
         :placeholder="myvalue"
         v-model="myvalue">
@@ -28,14 +28,6 @@
           "'" + this.mykey + "'," +
           "'" + this.myvalue + "'" + ")";
         this._evalCode(code);
-        this._freshNode(this.uuid);
-      },
-      pauseGame() {
-        this._evalCode("ccIns.pauseGame()");
-        this._freshNode(this.uuid);
-      },
-      resumeGame() {
-        this._evalCode("ccIns.resumeGame()");
         this._freshNode(this.uuid);
       },
     },

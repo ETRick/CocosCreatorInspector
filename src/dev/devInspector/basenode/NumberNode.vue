@@ -5,8 +5,8 @@
                :mykey="mykey" :step="step"
                @movestep="changeFloatValueAction">
       <input v-if='!readonly' class="myInput"
-        @focus="pauseGame"
-        @blur="resumeGame"
+        @focus="pauseGame(uuid)"
+        @blur="resumeGame(uuid)"
         @change="changeValue"
         :placeholder="myvalue"
         v-model="myvalue">
@@ -38,14 +38,6 @@
           this.myvalue = value + step;
           this.changeValue();
         }
-      },
-      pauseGame() {
-        this._evalCode("ccIns.pauseGame()");
-        this._freshNode(this.uuid);
-      },
-      resumeGame() {
-        this._evalCode("ccIns.resumeGame()");
-        this._freshNode(this.uuid);
       },
     },
     props: 

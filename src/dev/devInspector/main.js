@@ -25,8 +25,8 @@ import util from './util.js';
 util();
 
 // 自定义接口函数加载
-import plugin from '../plugin/devInspector.js';
-plugin();
+import plugin from './plugin.js';
+Vue.use(plugin);
 
 Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);

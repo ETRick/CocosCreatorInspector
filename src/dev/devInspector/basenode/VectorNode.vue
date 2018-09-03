@@ -8,8 +8,8 @@
                 class="ui" :style="{width: 100 / seckeys.length + '%'}"
                 @movestep="changeFloatValueAction" :step="step">
         <input v-if="!readonly" class="myInput"
-              @focus="pauseGame"
-              @blur="resumeGame"
+              @focus="pauseGame(uuid)"
+              @blur="resumeGame(uuid)"
               @change="changeValue()"
               :placeholder="myvalue[seckey].value"
               v-model="myvalue[seckey].value">
@@ -40,7 +40,6 @@ export default {
               + "'" + this.uuid + "',"
               + "'" + this.mykey + "',"
               + JSON.stringify(value) + ")";
-      console.log(code);
       this._evalCode(code);
       this._freshNode(this.uuid);
     },
@@ -51,14 +50,6 @@ export default {
         this.myvalue[key].value = value + step;
         this.changeValue();
       }
-    },
-    pauseGame() {
-      this._evalCode("ccIns.pauseGame()");
-      this._freshNode(this.uuid);
-    },
-    resumeGame() {
-      this._evalCode("ccIns.resumeGame()");
-      this._freshNode(this.uuid);
     },
   },
   props: [

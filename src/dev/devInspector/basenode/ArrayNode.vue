@@ -2,9 +2,9 @@
   <div id="app">
     <Node v-if="typeof myarray != 'undefined'" :name="mykey.firstUpperCase()" >
       <input class="myInput"
-        @focus="pauseGame"
-        @blur="resumeGame"
-        @change="changeLength"
+        @focus="pauseGame(uuid)"
+        @blur="resumeGame(uuid)"
+        @change="setNodeArrayLength(uuid, mykey, myarray.length)"
         :placeholder="myarray.length"
         v-model="myarray.length">
     </Node>
@@ -16,10 +16,16 @@
             style="width: 20px; height: 20px;"
             :checked="obj.value"
             @click="onBtnClick(index)">
-      <input v-else-if="obj.type == 'number' || obj.type == 'string'" class="myInput"
-            @focus="pauseGame"
-            @blur="resumeGame"
-            @change="changeArrayValue(index)"
+      <input v-else-if="obj.type == 'number'" class="myInput"
+            @focus="pauseGame(uuid)"
+            @blur="resumeGame(uuid)"
+            @change="changeNumberValue(index)"
+            :placeholder="obj.value"
+            v-model="obj.value">
+      <input v-else-if="obj.type == 'string'" class="myInput"
+            @focus="pauseGame(uuid)"
+            @blur="resumeGame(uuid)"
+            @change="changeStringValue(index)"
             :placeholder="obj.value"
             v-model="obj.value">
       <div v-else-if="['Size', 'Vec2', 'Vec3'].hasValue(obj.type)">
@@ -27,8 +33,8 @@
                    :name="seckey.eraseSubstring(titlename).firstUpperCase()[0]"
                    class="ui" :style="{width: 100 / Object.keys(obj.value).length + '%'}">
           <input class="myInput"
-                @focus="pauseGame"
-                @blur="resumeGame"
+                @focus="pauseGame(uuid)"
+                @blur="resumeGame(uuid)"
                 @change="changeVecValue(index)"
                 :placeholder="obj.value[seckey].value"
                 v-model="obj.value[seckey].value">
@@ -50,49 +56,23 @@
       return {};
     },
     methods: {
-      // 改变数组长度
-      changeLength() {
-        let code = "ccIns.setNodeArrayLength(" +
-          "'" + this.uuid + "'," +
-          "'" + this.mykey + "'," +
-          this.myarray.length + ")";
-        this._evalCode(code);
-        this._freshNode(this.uuid);
-      },
-      // CheckBox点击触发函数
+      // bool点击触发函数
       onBtnClick(index) {
         this.myarray[index].value = !this.myarray[index].value; 
-        let value = this.myarray[index].value;
-        let code = "ccIns.setNodeValue('" 
-                    + this.uuid + "',"
-                    + "['" + this.mykey + "'," + index + "],"
-                    + value + ");";
-        this._evalCode(code);
-        this._freshNode(this.uuid);
+        this.setNodeValue(this.uuid, [this.mykey, index], this.myarray[index].value);
       },
-      // string或者number点击触发函数
-      changeArrayValue(index) {
-        // number类型
-        if (this.myarray[index].type == "number") {
-          let value = parseFloat(this.myarray[index].value);
-          if (!isNaN(value)) {
-            let code = "ccIns.setNodeValue('" 
-                    + this.uuid + "',"
-                    + "['" + this.mykey + "'," + index + "],"
-                    + value + ");";
-            this._evalCode(code);
-          }
-        } else {
-          // string类型
-          let value = this.myarray[index].value;
-          let code = "ccIns.setNodeValue('" 
-                    + this.uuid + "',"
-                    + "['" + this.mykey + "'," + index + "],"
-                    + "'" + value + "');";
-          this._evalCode(code);
+      // number点击触发函数
+      changeNumberValue(index) {
+        let value = parseFloat(this.myarray[index].value);
+        if (!isNaN(value)) {
+          this.setNodeValue(this.uuid, [this.mykey, index], value);
         }
-        this._freshNode(this.uuid);
       },
+      // string点击触发函数
+      changeStringValue(index) {
+        this.setNodeValue(this.uuid, [this.mykey, index], this.myarray[index].value);
+      },
+      // vector点击触发函数
       changeVecValue(index) {
         let seckeys = Object.keys(this.myarray[index].value);
         // 构造要赋值的value
@@ -100,21 +80,7 @@
         for (let key of seckeys) {
           value[key] = this.myarray[index].value[key].value;
         }
-        let code = "ccIns.setNodeValue("
-                + "'" + this.uuid + "',"
-                + "['" + this.mykey + "'," + index + "],"
-                + JSON.stringify(value) + ")";
-        console.log(code);
-        this._evalCode(code);
-        this._freshNode(this.uuid);
-      },
-      pauseGame() {
-        this._evalCode("ccIns.pauseGame()");
-        this._freshNode(this.uuid);
-      },
-      resumeGame() {
-        this._evalCode("ccIns.resumeGame()");
-        this._freshNode(this.uuid);
+       this.setNodeValue(uuid, [this.mykey, index], value);
       },
     },
     props: [

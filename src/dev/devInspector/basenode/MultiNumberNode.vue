@@ -6,8 +6,8 @@
                 class="ui" :style="{width: 100 / mykeys.length + '%'}"
                 @movestep="changeFloatValueAction" :step="step">
         <input v-if="!readonly" class="myInput"
-                @focus="pauseGame"
-                @blur="resumeGame"
+                @focus="pauseGame(itemData.uuid.value)"
+                @blur="resumeGame(itemData.uuid.value)"
                 @change="changeValue(mykey)"
                 :placeholder="itemData[mykey].value"
                 v-model="itemData[mykey].value">
@@ -41,16 +41,6 @@ export default {
         this.itemData[key].value = value + step;
         this.changeValue(key);
       }
-    },
-    pauseGame() {
-      let uuid = this.itemData.uuid.value;
-      this._evalCode("ccIns.pauseGame()");
-      this._freshNode(uuid);
-    },
-    resumeGame() {
-      let uuid = this.itemData.uuid.value;
-      this._evalCode("ccIns.resumeGame()");
-      this._freshNode(uuid);
     },
   },
   props: [
