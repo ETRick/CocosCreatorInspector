@@ -31,6 +31,11 @@ export default function () {
     }
   };
 
+  // hasValue 判断数组中有没有value值
+  Array.prototype.hasValue = function (value) {
+    return this.indexOf(value) != -1;
+  };
+
   // Vue Vue脚本扩展函数
   // 刷新节点
   Vue.prototype._freshNode = function (uuid) {

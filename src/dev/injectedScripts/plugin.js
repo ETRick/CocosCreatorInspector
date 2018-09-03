@@ -14,14 +14,29 @@ export default function () {
   };
 
   // 设置节点状态（通过key-value）
-  ccIns.setNodeValue = function (uuid, key, value) {
+  //  其中节点可以多层递进
+  //  例如：a.b.c.d[1] --- keys == [b, c, d, 1]
+  ccIns.setNodeValue = function (uuid, keyorkeys, value) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
     if (node) {
-      node[key] = value;
+      if (!(keyorkeys instanceof Array)) {
+        let key = keyorkeys;
+        node[key] = value;
+      } else {
+        let keys = keyorkeys;
+        let i = 0;
+        for (; i < keys.length - 1; i++) {
+          node = node[keys[i]];
+          if (!node) {
+            return;
+          }
+        }
+        node[keys[i]] = value;
+      }
     }
   };
 
-  // 设置节点中数组的状态
+  // 设置节点中数组的长度
   ccIns.setNodeArrayLength = function (uuid, arraykey, length) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
     if (node) {
@@ -55,14 +70,6 @@ export default function () {
         return "";
       }
       return null;
-    }
-  };
-
-  // 设置节点中数组中某一项的值
-  ccIns.setNodeArrayValue = function (uuid, arraykey, index, value) {
-    let node = ccIns.getObjectFromStorage(uuid, "node");
-    if (node) {
-      node[arraykey][index] = value;
     }
   };
 

@@ -21,7 +21,7 @@
                     :mykey="config.key"
                     :myvalue="itemData[config.key].value"
                     :readonly="config.readonly"
-                    :step="config.step || 10">
+                    :step="config.step">
         </NumberNode>
         <StringNode v-else-if="itemData[config.key].type == 'string'"
                     :uuid="itemData.uuid.value"
@@ -40,7 +40,7 @@
                       :titlename="config.title"
                       :mykeys="config.keys"
                       :readonly="config.readonly"
-                      :step="config.step || 10">
+                      :step="config.step">
       </MultiNumberNode> 
     </div>
   </div>

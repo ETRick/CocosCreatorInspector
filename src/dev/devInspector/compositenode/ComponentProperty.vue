@@ -42,6 +42,11 @@
                    :mykey="mykey" 
                    :myarray="component[mykey].value">
         </ArrayNode>
+        <VectorNode v-else-if="['Size', 'Vec2', 'Vec3'].hasValue(component[mykey].type)"
+                    :uuid="component.uuid.value" 
+                    :mykey="mykey" 
+                    :myvalue="component[mykey].value">
+        </VectorNode>
         <Node v-else-if="component[mykey].type != 'null' && component[mykey].value.name"
               :name="mykey.firstUpperCase()">
           <span>{{component[mykey].value.name.value}}</span>

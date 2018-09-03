@@ -1,20 +1,18 @@
 <template>
   <div id="app">
     <Node :name="titlename.firstUpperCase()">
-      <div style="float: left;width: 100%;">
-        <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey].value != 'undefined'"
-                  :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
-                  class="ui" :style="{width: 100 / mykeys.length + '%'}"
-                  @movestep="changeFloatValueAction" :step="step">
-          <input v-if="!readonly" class="myInput"
-                  @focus="pauseGame"
-                  @blur="resumeGame"
-                  @change="changeValue(mykey)"
-                  :placeholder="itemData[mykey].value"
-                  v-model="itemData[mykey].value">
-          <span v-else> {{itemData[mykey].value}} </span>
-        </SlideNode>
-      </div>
+      <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey].value != 'undefined'"
+                :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
+                class="ui" :style="{width: 100 / mykeys.length + '%'}"
+                @movestep="changeFloatValueAction" :step="step">
+        <input v-if="!readonly" class="myInput"
+                @focus="pauseGame"
+                @blur="resumeGame"
+                @change="changeValue(mykey)"
+                :placeholder="itemData[mykey].value"
+                v-model="itemData[mykey].value">
+        <span v-else> {{itemData[mykey].value}} </span>
+      </SlideNode>
     </Node>
   </div>
 </template>

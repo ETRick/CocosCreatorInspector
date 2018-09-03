@@ -8,8 +8,10 @@
         :placeholder="myarray.length"
         v-model="myarray.length">
     </Node>
+    
     <Node v-for="(obj, index) in myarray" :key="index"
-          :name="'└── [' + index + ']'">
+          :name="'[' + index + ']'"
+          :isTextCenter="true">
       <input v-if="obj.type == 'boolean'" type="checkbox"
             style="width: 20px; height: 20px;"
             :checked="myarray[index].value"
@@ -49,12 +51,11 @@
       onBtnClick(index) {
         this.myarray[index].value = !this.myarray[index].value; 
         let value = this.myarray[index].value;
-        this._evalCode("ccIns.setNodeArrayValue('" 
-                    + this.uuid + "','"
-                    + this.mykey + "',"
-                    + index + ","
-                    + value + ");");
-                  
+        let code = "ccIns.setNodeValue('" 
+                    + this.uuid + "',"
+                    + "['" + this.mykey + "'," + index + "],"
+                    + value + ");";
+        this._evalCode(code);
         this._freshNode(this.uuid);
       },
       // string或者number点击触发函数
@@ -63,20 +64,20 @@
         if (this.myarray[index].type == "number") {
           let value = parseFloat(this.myarray[index].value);
           if (!isNaN(value)) {
-            this._evalCode("ccIns.setNodeArrayValue('" 
-                        + this.uuid + "','"
-                        + this.mykey + "',"
-                        + index + ","
-                        + value + ");");
+            let code = "ccIns.setNodeValue('" 
+                    + this.uuid + "',"
+                    + "['" + this.mykey + "'," + index + "],"
+                    + value + ");";
+            this._evalCode(code);
           }
         } else {
           // string类型
           let value = this.myarray[index].value;
-          this._evalCode("ccIns.setNodeArrayValue('" 
-                      + this.uuid + "','"
-                      + this.mykey + "',"
-                      + index + ","
-                      + "'" + value + "');");
+          let code = "ccIns.setNodeValue('" 
+                    + this.uuid + "',"
+                    + "['" + this.mykey + "'," + index + "],"
+                    + "'" + value + "');";
+          this._evalCode(code);
         }
         this._freshNode(this.uuid);
       },

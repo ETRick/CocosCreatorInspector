@@ -12,6 +12,7 @@ import NumberNode from './basenode/NumberNode.vue';
 import StringNode from './basenode/StringNode.vue';
 import ColorPicker from './basenode/ColorPicker.vue';
 import ArrayNode from './basenode/ArrayNode.vue';
+import VectorNode from './basenode/VectorNode.vue';
 import MultiNumberNode from './basenode/MultiNumberNode.vue';
 
 import NodeTreeProperty from './compositenode/NodeTreeProperty.vue';
@@ -31,6 +32,7 @@ Vue.component('NumberNode', NumberNode);
 Vue.component('StringNode', StringNode);
 Vue.component('ColorPicker', ColorPicker);
 Vue.component('ArrayNode', ArrayNode);
+Vue.component('VectorNode', VectorNode);
 Vue.component('MultiNumberNode', MultiNumberNode);
 
 Vue.component('NodeTreeProperty', NodeTreeProperty);

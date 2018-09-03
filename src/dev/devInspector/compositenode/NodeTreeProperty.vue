@@ -45,6 +45,7 @@ export default {
                 + "'" + fromNode.data.uuid + "',"
                 + "'" + toNode.data.uuid + "',"
                 + "'" + type + "')");
+            this._freshNode(fromNode.data.uuid);
         },
         // 过滤节点
         filterNode(filtervalue, data) {
