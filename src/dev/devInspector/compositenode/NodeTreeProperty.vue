@@ -20,96 +20,85 @@
 
 <script>
 export default {
-    name: "app",
-    data() {
-        return {
-            filterText: "",
-        };
+  name: "app",
+  data() {
+    return {
+      filterText: ""
+    };
+  },
+  watch: {
+    filterText(value) {
+      this.$refs.tree.filter(value);
+    }
+  },
+  methods: {
+    // 点击节点的触发函数
+    handleNodeClick(data, node) {
+      this.clickQuadNode(data.uuid);
     },
-    watch: {
-      filterText(value) {
-        this.$refs.tree.filter(value);
+    // 拖拽节点触发的函数
+    dropNode(fromNode, toNode, type) {
+      this.changeNodeTree(fromNode.data.uuid, toNode.data.uuid, type);
+    },
+    // 过滤节点
+    filterNode(filtervalue, data) {
+      if (!filtervalue) {
+        return true;
       }
-    },
-    methods: {
-        // 点击节点的触发函数
-        handleNodeClick(data, node) {
-            // 选中Graphics中的节点
-            this._evalCode("ccIns.clickQuadNode("
-                + "'" + data.uuid + "')");
-            this._freshNode(data.uuid);
-        },
-        // 拖拽节点触发的函数
-        dropNode(fromNode, toNode, type) {
-            this._evalCode("ccIns.changeNodeTree("
-                + "'" + fromNode.data.uuid + "',"
-                + "'" + toNode.data.uuid + "',"
-                + "'" + type + "')");
-            this._freshNode(fromNode.data.uuid);
-        },
-        // 过滤节点
-        filterNode(filtervalue, data) {
-            if (!filtervalue) {
+
+      // 将多项过滤分离
+      let strs = filtervalue.split(" ");
+
+      // 每个过滤信息分别判断
+      for (let str of strs) {
+        switch (str.substr(0, 2)) {
+          // 通过uuid判断
+          case "u:": {
+            if (data.uuid.hasSubstrIgnoreCase(str.substr(2))) {
+              return true;
+            }
+            break;
+          }
+          // 通过type判断
+          case "t:": {
+            for (let name of data.components) {
+              if (name.hasSubstrIgnoreCase(str.substr(2))) {
                 return true;
+              }
             }
-
-            // 将多项过滤分离
-            let strs = filtervalue.split(" ");
-
-            // 每个过滤信息分别判断
-            for (let str of strs) {
-                switch (str.substr(0, 2)) {
-                    // 通过uuid判断
-                    case "u:": {
-                        if (data.uuid.hasSubstrIgnoreCase(str.substr(2))) {
-                            return true;
-                        }
-                        break;
-                    } 
-                    // 通过type判断
-                    case "t:": {
-                        for (let name of data.components) {
-                            if (name.hasSubstrIgnoreCase(str.substr(2))) {
-                                return true;
-                            }
-                        }
-                        break;
-                    }
-                    // 通过name判断
-                    default: {
-                        if (data.label.hasSubstrIgnoreCase(str)) {
-                            return true;
-                        }
-                    }
-                }
+            break;
+          }
+          // 通过name判断
+          default: {
+            if (data.label.hasSubstrIgnoreCase(str)) {
+              return true;
             }
+          }
+        }
+      }
 
-            return false;
-        },
-        // 渲染树节点
-        renderTreeContent(h, {node, data, store}) {
-            return (
-                <span style={addStyle()}>
-                    <span>{data.name}</span>
-                </span>
-            );
-
-            function addStyle() {
-                if (data.activeInHierarchy === false) {
-                    return {
-                        'text-decoration': 'line-through',
-                        'color': '#8c8e92',
-                    };
-                }
-            }
-        },
+      return false;
     },
-    props: [
-        "treeData",
-        "nodeKey",
-        "treeProps",
-    ],
-}
+    // 渲染树节点
+    renderTreeContent(h, { node, data, store }) {
+      return (
+        <span style={addStyle()}>
+          <span>{data.name}</span>
+        </span>
+      );
+
+      function addStyle() {
+        if (data.activeInHierarchy === false) {
+          return {
+            "text-decoration": "line-through",
+            color: "#8c8e92"
+          };
+        }
+      }
+    }
+  },
+  props: ["treeData", "nodeKey", "treeProps"]
+};
 </script>
 
 <style scoped>
@@ -125,7 +114,7 @@ export default {
 }
 
 .is-current {
-    text-decoration: line-through;
+  text-decoration: line-through;
 }
 
 .-tree-node {

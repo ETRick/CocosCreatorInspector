@@ -47,6 +47,22 @@ export default function () {
         this._freshNode(uuid);
     };
 
+    // DEBUG模式下，点击节点
+    Vue.prototype.clickQuadNode = function (uuid) {
+        this._evalCode("ccIns.clickQuadNode(" +
+            "'" + uuid + "')");
+        this._freshNode(uuid);
+    };
+
+    // 改变节点树
+    Vue.prototype.changeNodeTree = function (fromuuid, touuid, type) {
+        this._evalCode("ccIns.changeNodeTree(" +
+            "'" + fromuuid + "'," +
+            "'" + touuid + "'," +
+            "'" + type + "')");
+        this._freshNode(fromuuid);
+    };
+
     // 刷新节点
     Vue.prototype._freshNode = function (uuid) {
         this._evalCode("ccIns.getNodeInfo('" + uuid + "')");
