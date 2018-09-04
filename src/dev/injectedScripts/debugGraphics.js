@@ -73,7 +73,6 @@ export default function () {
                 });
                 ans.push(vec1.x * vec2.y - vec1.y * vec2.x);
             }
-            // console.log(ans);
             return ans[0] * ans[1] > 0 &&
                 ans[0] * ans[2] > 0 &&
                 ans[0] * ans[3] > 0;
@@ -205,7 +204,6 @@ export default function () {
                     let pos = e.getLocation();
                     let quadnodes = getQuadsContainPos(pos);
                     let quadnode = getNearestQuad(quadnodes, pos);
-                    console.log(quadnodes, quadnode);
                     if (ccIns.QuadNode.hover != quadnode) {
                         ccIns.QuadNode.hover = quadnode;
                     }
@@ -233,10 +231,12 @@ export default function () {
                     for (let i = quadchildren.length - 1; i >= 0; i--) {
                         let quadnode = quadchildren[i];
                         // 判断是否包含
-                        if (quadnode.active && quadnode.quad.containPoint(pos)) {
-                            arr.push(quadnode);
+                        if (quadnode.activeInHierarchy) {
+                            if (quadnode.quad.containPoint(pos)) {
+                                arr.push(quadnode);
+                            }
+                            fact(fact)(quadnode, arr);
                         }
-                        fact(fact)(quadnode, arr);
                     }
                 }))(ccIns.QuadNode.root, arr);
                 return arr;
