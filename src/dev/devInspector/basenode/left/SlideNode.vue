@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height: 30px;overflow: hidden;width: 100%;">
+  <div style="height: 30px;overflow: hidden;width: 100%;">
     <div style="width: 20%;float: left;background-color: #4a4a4a;text-align: left;"
          @mousedown="changePositionMouseAction"
          onselectstart="return false;"
@@ -19,7 +19,6 @@
 
 <script>
   export default {
-    name: "app",
     data() {
       return {
         clientX: 0,
@@ -37,8 +36,6 @@
       _onMouseMove(event) {
         let x = event.clientX;
         let calcStep = parseFloat(this.step) || 10;// 默认值为10
-        // console.log("curentX: " + x);
-        // console.log("clientX: " + this.clientX);
         if (x > this.clientX) {
           calcStep = Math.abs(calcStep);
         } else {

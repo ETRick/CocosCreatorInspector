@@ -1,5 +1,5 @@
 {
-    "nodeRefleshInterval": 0.2,
+    "nodeRefleshInterval": 10000,
     "nodeTreeRefleshInterval": 0.2,
     "graphicsRefleshInterval": 0,
     "DEBUG_MODE": {

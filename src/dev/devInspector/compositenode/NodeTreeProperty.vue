@@ -1,33 +1,32 @@
 <template>
-    <div>
-        <el-input placeholder="输入name和uuid进行搜索" v-model="filterText">
-        </el-input>
-        <div class="grid-content treeList">
-            <el-tree :data="treeData" ref="tree" 
-                    :props="treeProps" 
-                    highlight-current 
-                    :node-key="nodeKey"
-                    :expand-on-click-node="false" 
-                    :render-content="renderTreeContent" 
-                    :filter-node-method="filterNode"
-                    @node-click="handleNodeClick"
-                    draggable
-                    @node-drop="dropNode">
-            </el-tree>
-        </div>
-    </div>
+  <div>
+    <el-input placeholder="输入name和uuid进行搜索" v-model="filterText" />
+    <el-tree :data="treeData" ref="tree" 
+            class="grid-content treeList"
+            :props="treeProps" 
+            highlight-current 
+            :node-key="nodeKey"
+            :expand-on-click-node="false" 
+            :render-content="renderTreeContent" 
+            :filter-node-method="filterNode"
+            @node-click="handleNodeClick"
+            draggable
+            @node-drop="dropNode">
+    </el-tree>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "app",
   data() {
     return {
       filterText: ""
     };
   },
   watch: {
+    // 用于节点框过滤
     filterText(value) {
+      console.log(value);
       this.$refs.tree.filter(value);
     }
   },
@@ -40,15 +39,14 @@ export default {
     dropNode(fromNode, toNode, type) {
       this.changeNodeTree(fromNode.data.uuid, toNode.data.uuid, type);
     },
-    // 过滤节点
+    // 过滤节点函数
     filterNode(filtervalue, data) {
       if (!filtervalue) {
         return true;
       }
-
+      console.log(data);
       // 将多项过滤分离
       let strs = filtervalue.split(" ");
-
       // 每个过滤信息分别判断
       for (let str of strs) {
         switch (str.substr(0, 2)) {
@@ -61,8 +59,8 @@ export default {
           }
           // 通过type判断
           case "t:": {
-            for (let name of data.components) {
-              if (name.hasSubstrIgnoreCase(str.substr(2))) {
+            for (let compname of data.components) {
+              if (compname.hasSubstrIgnoreCase(str.substr(2))) {
                 return true;
               }
             }
@@ -70,7 +68,7 @@ export default {
           }
           // 通过name判断
           default: {
-            if (data.label.hasSubstrIgnoreCase(str)) {
+            if (data.name.hasSubstrIgnoreCase(str)) {
               return true;
             }
           }
@@ -79,7 +77,7 @@ export default {
 
       return false;
     },
-    // 渲染树节点
+    // 渲染树节点函数
     renderTreeContent(h, { node, data, store }) {
       return (
         <span style={addStyle()}>
@@ -87,6 +85,7 @@ export default {
         </span>
       );
 
+      // 根据属性添加删除线
       function addStyle() {
         if (data.activeInHierarchy === false) {
           return {
@@ -97,32 +96,36 @@ export default {
       }
     }
   },
-  props: ["treeData", "nodeKey", "treeProps"]
+  props: [
+    "treeData",
+    "nodeKey",
+    "treeProps"
+  ]
 };
 </script>
 
 <style scoped>
-.treeList {
-  overflow-x: auto;
-  height: 100%;
-  width: 100%;
-}
+  .treeList {
+    overflow-x: auto;
+    height: 100%;
+    width: 100%;
+  }
 
-.grid-content {
-  border-radius: 4px;
-  min-height: 20px;
-}
+  .grid-content {
+    border-radius: 4px;
+    min-height: 20px;
+  }
 
-.is-current {
-  text-decoration: line-through;
-}
+  .is-current {
+    text-decoration: line-through;
+  }
 
-.-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-}
+  .-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+  }
 </style>

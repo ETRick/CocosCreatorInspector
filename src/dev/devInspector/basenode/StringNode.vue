@@ -1,23 +1,12 @@
 <template>
-  <div id="app">
-    <Node v-if="typeof myvalue != 'undefined'"
-          :name="mykey.firstUpperCase()">
-      <input v-if='!readonly' class="myInput"
-        @focus="pauseGame(uuid)"
-        @blur="resumeGame(uuid)"
-        @change="setNodeValue(uuid, mykey, myvalue)"
-        :placeholder="myvalue"
-        v-model="myvalue">
-      <span v-else>{{myvalue}}</span>
-    </Node>
-  </div>
+  <Node v-if="typeof myvalue != 'undefined'" :name="mykey.firstUpperCase()">
+    <InputBox :uuid="uuid" :mykey="mykey" :myvalue="myvalue" :readonly="readonly" />
+  </Node>
 </template>
 
 <script>
   export default {
-    name: "app",
-    props: 
-    [
+    props: [
       'uuid',
       'mykey',
       'myvalue',

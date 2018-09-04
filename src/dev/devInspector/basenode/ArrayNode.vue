@@ -1,48 +1,29 @@
 <template>
-  <div id="app">
+  <div>
+    <!-- 显示数组的长度 -->
     <Node v-if="typeof myarray != 'undefined'" :name="mykey.firstUpperCase()" >
-      <input class="myInput"
-        @focus="pauseGame(uuid)"
-        @blur="resumeGame(uuid)"
-        @change="setNodeArrayLength(uuid, mykey, myarray.length)"
-        :placeholder="myarray.length"
-        v-model="myarray.length">
+      <InputBox :uuid="uuid" :myvalue="myarray.length" :changeFunc="changeArrLength" />
     </Node>
-    
+
+    <!-- 显示数组的其他属性值 -->
     <Node v-for="(obj, index) in myarray" :key="index"
           :name="'[' + index + ']'"
           :isTextCenter="true">
-      <input v-if="obj.type == 'boolean'" type="checkbox"
-            style="width: 20px; height: 20px;"
-            :checked="obj.value"
-            @click="onBtnClick(index)">
-      <input v-else-if="obj.type == 'number'" class="myInput"
-            @focus="pauseGame(uuid)"
-            @blur="resumeGame(uuid)"
-            @change="changeNumberValue(index)"
-            :placeholder="obj.value"
-            v-model="obj.value">
-      <input v-else-if="obj.type == 'string'" class="myInput"
-            @focus="pauseGame(uuid)"
-            @blur="resumeGame(uuid)"
-            @change="changeStringValue(index)"
-            :placeholder="obj.value"
-            v-model="obj.value">
-      <div v-else-if="['Size', 'Vec2', 'Vec3'].hasValue(obj.type)">
-        <Node v-for="seckey in Object.keys(obj.value)" :key="seckey" 
-                   :name="seckey.eraseSubstring(titlename).firstUpperCase()[0]"
-                   class="ui" :style="{width: 100 / Object.keys(obj.value).length + '%'}">
-          <input class="myInput"
-                @focus="pauseGame(uuid)"
-                @blur="resumeGame(uuid)"
-                @change="changeVecValue(index)"
-                :placeholder="obj.value[seckey].value"
-                v-model="obj.value[seckey].value">
-        </Node>
-      </div>
+      <CheckBox v-if="obj.type == 'boolean'"
+                 :uuid="uuid" :mykey="[mykey, index]" :myvalue="obj.value" />
+      <InputBox v-else-if="obj.type == 'number'"
+                 :uuid="uuid" :mykey="[mykey, index]" :myvalue="obj.value" />
+      <InputBox v-else-if="obj.type == 'string'"
+                 :uuid="uuid" :mykey="[mykey, index]" :myvalue="obj.value" />
+      <Node v-else-if="['Size', 'Vec2', 'Vec3'].hasValue(obj.type)"
+              v-for="seckey in Object.keys(obj.value)" :key="seckey" 
+              :name="seckey.eraseSubstring(titlename).firstUpperCase()[0]"
+              class="ui" :style="{width: 100 / Object.keys(obj.value).length + '%'}">
+        <InputBox :uuid="uuid" :myvalue="obj.value[seckey].value" :changeFunc="changeVecValue(index)" />
+      </Node>
       <div v-else-if="obj.type != 'null'">
         <span style="float: left; width: 50%;">{{myarray[index].type}}</span>
-        <span style="float: left; width: 50%;">{{obj.value.name ? myarray[index].value.name.value : "Undefined Name!"}}</span>
+        <span style="float: left; width: 50%;">{{obj.value.name ? myarray[index].value.name.value : "No Name!"}}</span>
       </div>
       <span v-else>NULL</span>
     </Node>
@@ -51,23 +32,10 @@
 
 <script>
   export default {
-    name: "app",
     methods: {
-      // bool点击触发函数
-      onBtnClick(index) {
-        this.myarray[index].value = !this.myarray[index].value; 
-        this.setNodeValue(this.uuid, [this.mykey, index], this.myarray[index].value);
-      },
-      // number点击触发函数
-      changeNumberValue(index) {
-        let value = parseFloat(this.myarray[index].value);
-        if (!isNaN(value)) {
-          this.setNodeValue(this.uuid, [this.mykey, index], value);
-        }
-      },
-      // string点击触发函数
-      changeStringValue(index) {
-        this.setNodeValue(this.uuid, [this.mykey, index], this.myarray[index].value);
+      // 数组长度修改触发函数
+      changeArrLength() {
+        this.setNodeArrayLength(this.uuid, this.mykey, this.myarray.length);
       },
       // vector点击触发函数
       changeVecValue(index) {
@@ -92,20 +60,6 @@
   span {
     color: #fd942b;
   }
-
-  .myInput {
-    width: 90%;
-    border-radius: 5px;
-    color: #fd942b;
-  }
-
-  .icon {
-    width: 10%;
-    height: 100%;
-    float: left;
-    background-color: #4a4a4a;
-  }
-
 
   .ui {
     float : left;

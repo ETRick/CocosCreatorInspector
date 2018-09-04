@@ -1,57 +1,33 @@
 <template>
-  <div id="app">
-    <SlideNode v-if="typeof myvalue != 'undefined'"
-               :name="mykey.firstUpperCase()" 
-               :mykey="mykey" :step="step"
-               @movestep="changeFloatValueAction">
-      <input v-if='!readonly' class="myInput"
-        @focus="pauseGame(uuid)"
-        @blur="resumeGame(uuid)"
-        @change="changeValue"
-        :placeholder="myvalue"
-        v-model="myvalue">
-      <span v-else>{{myvalue}}</span>
-    </SlideNode>
-  </div>
+  <SlideNode v-if="typeof myvalue != 'undefined'"
+              :name="mykey.firstUpperCase()" 
+              :mykey="mykey" :step="step"
+              @movestep="changeFloatValueAction">
+    <InputBox :uuid="uuid" :mykey="mykey" :myvalue="myvalue" :readonly="readonly" />
+  </SlideNode>
 </template>
 
 <script>
   export default {
-    name: "app",
-    data() {
-      return {}
-    },
     methods: {
-      changeValue() {
-        this.setNodeValue(this.uuid, this.mykey, this.myvalue)
-      },
+      // 根据鼠标拖动修改值
       changeFloatValueAction(step) {
         let value = parseFloat(this.myvalue);
         if (!isNaN(value)) {
           this.myvalue = value + step;
-          this.changeValue();
+          this.setNodeValue(this.uuid, this.mykey, this.myvalue);
         }
       },
     },
-    props: 
-    [
+    props: [
       'uuid',
       'mykey',
       'myvalue',
       'step',
-      'readonly'
+      'readonly',
     ]
   }
 </script>
 
 <style scoped>
-  span {
-    color: #fd942b;
-  }
-  
-  .myInput {
-    width: 90%;
-    border-radius: 5px;
-    color: #fd942b;
-  }
 </style>

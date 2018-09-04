@@ -1,20 +1,17 @@
 <template>
-  <div id="app" v-if="components">
+  <div v-if="components">
     <h2 @click="onClickAllComp">挂载组件:</h2>
-    <hr style="margin-bottom: 5px;margin-top: 2px;"/>
+    <hr />
  
+    <!-- 依次展示脚本 -->
     <div v-show="isShowComps" v-for="comp in components.value" :key="comp.value.uuid.value">
-      <ComponentProperty :comptype="comp.type" :component="comp.value">
-      </ComponentProperty>
+      <ComponentProperty :comptype="comp.type" :component="comp.value" />
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    mounted() {
-    },
-    name: "app",
     data() {
       return {
         isShowComps: true,
@@ -38,7 +35,9 @@
     font-weight: bold;
     cursor: pointer
   }
-  span {
-    color: #fd942b;
+
+  hr {
+    margin-bottom: 5px;
+    margin-top: 2px;
   }
 </style>

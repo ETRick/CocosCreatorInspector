@@ -1,6 +1,6 @@
 // Author: huzi(moustache)
 // Date: 18-7-27 11:24
-// Description: eval注入脚本的代码,变量尽量使用var,后来发现在import之后,let会自动变为var
+// Description: 注入脚本并且真正运行的代码
 export default function () {
   // 检测是否包含cc变量
   // 如果存在cc空间，游戏存在
@@ -8,7 +8,8 @@ export default function () {
     if (!ccIns.isNotFirst) {
       ccIns.isNotFirst = true;
       // 初始化debug模式
-      ccIns.initDebugGraphics();
+      ccIns.initDebugGraphicsNode();
+
       // 添加节点刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, function () {
         let interval = ccIns.Config.nodeRefleshInterval;
@@ -48,15 +49,21 @@ export default function () {
             timer += cc.director._deltaTime;
             if (timer > interval) {
               if (ccIns.updateGraphicsTree) {
-                let ccCanvas = cc.Canvas.instance.node;
-                let gra = ccCanvas.parent.getChildByName("Debug-Graphics").getComponent("cc.Graphics");
-                ccIns.updateGraphicsTree(ccIns.QuadNode.root, ccCanvas);
-                ccIns.drawNode(gra);
+                ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.director._scene);
+                ccIns.drawNode(ccIns.graphicsNode.getComponent("cc.Graphics"));
               }
               timer = 0.0;
             }
           };
         }(), cc.director);
+
+        // 添加新场景刷新时的触发器
+        //  场景重启时，重新挂载drawnode节点，并恢复DEBUG模式
+        cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
+          let active = ccIns.graphicsNode.active;
+          ccIns.initDebugGraphicsNode();
+          ccIns.graphicsNode.active = active;
+        }, cc.director);
       } else {
         ccIns.sendMsgToDevTools(ccIns.Connect.msgType.notSupport, "不支持Debug模式!");
         console.log("can't use Debug model");

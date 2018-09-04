@@ -1,9 +1,11 @@
 
 <template>
-  <div id="app" class="component" v-if="component">
-    <input v-if="typeof component.enabled != 'undefined'" type="checkbox" class="myCheckBox"
-            :checked="component.enabled.value"
-            @click="onCheckBoxClick">
+  <div class="component" v-if="component">
+    <!-- 选择框绑定active -->
+    <CheckBox v-if="typeof component.enabled != 'undefined'" class="myCheckBox"
+              :uuid="component.uuid.value" mykey="enabled" :myvalue="component.enabled.value" />
+
+    <!-- 显示节点type和uuid -->
     <h4 @click="onClickComp" :class="{inenabledInHierarchy: component.enabledInHierarchy && component.enabledInHierarchy.value === false}">
       {{comptype + " (" + component.uuid.value + ")"}}
     </h4>
@@ -16,11 +18,11 @@
                   :mykey="mykey" 
                   :myvalue="component[mykey].value">
         </EnumNode>
-        <CheckBox v-else-if="component[mykey].type == 'boolean'"
+        <BoolNode v-else-if="component[mykey].type == 'boolean'"
                   :uuid="component.uuid.value" 
                   :mykey="mykey" 
                   :myvalue="component[mykey].value">
-        </CheckBox>
+        </BoolNode>
         <NumberNode v-else-if="component[mykey].type == 'number'" 
                     :uuid="component.uuid.value" 
                     :mykey="mykey" 
@@ -32,11 +34,11 @@
                     :mykey="mykey" 
                     :myvalue="component[mykey].value">
         </StringNode>
-        <ColorPicker v-else-if="component[mykey].type == 'Color'"
+        <ColorNode v-else-if="component[mykey].type == 'Color'"
                     :uuid="component.uuid.value" 
                     :mykey="mykey" 
                     :myvalue="component[mykey].value">
-        </ColorPicker>
+        </ColorNode>
         <ArrayNode v-else-if="component[mykey].type == 'Array'"
                    :uuid="component.uuid.value" 
                    :mykey="mykey" 
@@ -56,61 +58,59 @@
 </template>
 
 <script>
-import Vue from 'vue';
+  import Vue from 'vue';
 
-export default {
-  mounted() {
-  },
-  data() {
-    return {
-      // 得到主键，除去comptype和uuid
-      compkeys: Object.keys(this.component ? this.component : {}).filter(function(key) {
-        return key[0] != "_" && key != "uuid" && key != "enabled" && key != "enabledInHierarchy";
-      }),
-      isShowComp: true,
-    }
-  },
-  methods: {
-    onCheckBoxClick() {
-      this.component.enabled.value = !this.component.enabled.value;
-      this.setNodeValue(this.component.uuid.value, "enabled", this.component.enabled.value);
+  export default {
+    data() {
+      return {
+        // 得到主键，除去uuid,name和两个enabled
+        compkeys: Object.keys(this.component ? this.component : {}).filter(function(key) {
+          return key[0] != "_" && ["uuid", "name", "enabled", "enabledInHierarchy"].indexOf(key) == -1;
+        }),
+        isShowComp: true,
+      }
     },
-    onClickComp() {
-      this.isShowComp = !this.isShowComp;
-    },    
-    // 判断是否为枚举类型
-    isEnumType(comptype, key) {
-      return typeof Vue.enumStorage.get(comptype, key) != "undefined";
+    methods: {
+      onClickComp() {
+        this.isShowComp = !this.isShowComp;
+      },    
+      // 判断是否为枚举类型
+      isEnumType(comptype, key) {
+        return typeof Vue.enumStorage.get(comptype, key) != "undefined";
+      },
+      // 由于传入参数不能使用Vue，因此改成这种方式 
+      getEnumType(comptype, key) {
+        return Vue.enumStorage.get(comptype, key);
+      },
     },
-    // 由于传入参数不能使用Vue，因此改成这种方式 
-    getEnumType(comptype, key) {
-      return Vue.enumStorage.get(comptype, key);
-    },
-  },
-  props: [
-    'comptype',
-    'component',
-  ]
-}
+    props: [
+      'comptype',
+      'component',
+    ]
+  }
 </script>
 
 <style scoped>
   span {
-    color: #ff0015;
+    color: #fd942b;
   }
+
   h4 {
     margin: 8px;
     cursor: pointer; 
   }
+
   .myCheckBox {
     margin-top: 10px;
     width: 15px;
     height: 15px;
     float: left;
   }
+
   .inenabledInHierarchy {
     text-decoration: line-through;
   }
+
   .component {
     border: 2px solid #a1a1a1;
     padding: 5px 5px;
