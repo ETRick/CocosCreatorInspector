@@ -67,7 +67,7 @@ export default function () {
           isEnterArr.push(obj);
         }
       }
-      
+
       // 空属性值
       // undefined 不存在这个属性
       if (obj === undefined) {
@@ -76,6 +76,11 @@ export default function () {
       // 存在这个属性但是为null
       if (obj === null) {
         return this.NULL();
+      }
+
+      // 数组
+      if (obj instanceof Array) {
+        return this.ArrayType(obj, isEnterArr);
       }
 
       // cc内部结构或脚本
@@ -99,13 +104,8 @@ export default function () {
       }
 
       // cc未定义的结构和脚本（例如自定义脚本）
-      if (obj.__classname__) {
+      if (obj.__classname__ || typeof obj == "object") {
         return this.undefinedCCType(obj, isEnterArr);
-      }
-
-      // 数组
-      if (obj instanceof Array) {
-        return this.ArrayType(obj, isEnterArr);
       }
 
       // 基本类型
@@ -125,28 +125,29 @@ export default function () {
       return rtnObj;
     },
     // cc中没有定义的类型
-    undefinedCCType(com, isEnterArr) {
-      if (com instanceof cc.Component) {
+    undefinedCCType(obj, isEnterArr) {
+      let rtnObj = {};
+
+      // 自定义脚本有额外属性
+      if (obj instanceof cc.Component) {
         // 构造自定义脚本类型
-        let filterCom = {
-          uuid: this.BaseType(com.uuid),
-          enabled: this.BaseType(com.enabled),
-          enabledInHierarchy: this.BaseType(com.enabledInHierarchy),
-        };
-
-        // 过滤掉私有值和函数的值
-        for (let key of Object.keys(com)) {
-          let value = com[key];
-          if (ccIns.isPublicVar(com, key)) {
-            filterCom[key] = this.CustomType(value, isEnterArr);
-          }
-        }
-
-        return {
-          type: com.__classname__,
-          value: filterCom,
-        };
+        rtnObj.uuid = this.BaseType(obj.uuid);
+        rtnObj.enabled = this.BaseType(obj.enabled);
+        rtnObj.enabledInHierarchy = this.BaseType(obj.enabledInHierarchy);
       }
+
+      // 过滤掉私有值和函数的值
+      for (let key of Object.keys(obj)) {
+        let value = obj[key];
+        if (ccIns.isPublicVar(obj, key)) {
+          rtnObj[key] = this.CustomType(value, isEnterArr);
+        }
+      }
+
+      return {
+        type: obj.__classname__ ? obj.__classname__ : "object",
+        value: rtnObj,
+      };
     },
     // 颜色构造函数
     Color(color) {

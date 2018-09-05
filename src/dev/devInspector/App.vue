@@ -11,7 +11,7 @@
       <el-row>
         <!-- 左侧显示树形结构 -->
         <el-col :span="10">
-          <NodeTreeProperty :treeData="treeData" nodeKey="uuid" ref="tree" />
+          <NodeTreeProperty :treeData="treeData" nodeKey="uuid" :treeProps="treeProps" ref="tree" />
         </el-col>
         <!-- 右侧显示具体属性 -->
         <el-col :span="14">
@@ -46,6 +46,10 @@ export default {
       isEnterDebugMode: false,  // 是否进入DEBUG模式
       treeData: [],  // 节点树属性，绑定左侧组件
       treeItemData: {},  // 节点属性，绑定右侧组件
+      treeProps: {
+        label: "uuid",
+        children: "children",
+      }, // 左侧树的属性
     };
   },
   created() {
@@ -64,7 +68,6 @@ export default {
   methods: {
     // 处理收到的数据
     _handlePostData(message) {
-      // console.log("getInfo:", message);
       if (message !== null) {
         // 定义通讯变量
         const msgType = {
@@ -113,8 +116,8 @@ export default {
             // 节点树更新
             let node = treeproto.getNode(uuid);
             // 节点展开
-            while (node.parent) {
-              node.parent.expanded = true;
+            while (node) {
+              node.expanded = true;
               node = node.parent;
             }
             treeproto.setCurrentKey(uuid);
@@ -161,32 +164,60 @@ export default {
         }
       }
     },
+    // 更新树节点
+    _updateTreeNode(oldnode, newnode) {
+      // update name
+      if (oldnode.name != newnode.name) {
+        oldnode.name = newnode.name;
+      }
+      // update active
+      if (oldnode.activeInHierarchy !== newnode.activeInHierarchy) {
+        oldnode.activeInHierarchy = newnode.activeInHierarchy;
+      }
+      // update components
+      if (!isSame(oldnode.components, newnode.components)) {
+        oldnode.components = newnode.components;
+      }
+
+      // 数组比较
+      function isSame(arr1, arr2) {
+        if (arr1.length != arr2.length) {
+          return false;
+        }
+        for (let i = 0; i < arr1.length; i++) {
+          if (arr1[i] != arr2[i]) {
+            return false;
+          }
+        }
+        return true;
+      }
+    },
     // 更新树
     _updateTree(oldtree, newtree) {
+      this._updateTreeNode(oldtree, newtree);
+
       let oldchildren = oldtree.children;
       let newchildren = newtree.children;
-      for (let i = 0; i < newchildren.length; i++) {
-        if (typeof oldchildren[i] == 'undefined') {
-          // add
-          oldchildren.push(newchildren[i]);
-        } else if (oldchildren[i].uuid != newchildren[i].uuid) {
-          // replace
-          oldchildren.splice(i, 1, newchildren[i]);
-        } else {
-          // update name
-          if (oldchildren[i].name != newchildren[i].name) {
-            oldchildren[i].name = newchildren[i].name;
+      // 空值情况下，一个一个插入会导致无法展开（不知道为什么）
+      if (oldchildren.length == 0) {
+        oldtree.children = newtree.children;
+      } else {
+        for (let i = 0; i < newchildren.length; i++) {
+          if (typeof oldchildren[i] == 'undefined') {
+            // add
+            console.log("add", oldtree.name, oldtree.children, newchildren[i]);
+            oldchildren.push(newchildren[i]);
+          } else if (oldchildren[i].uuid != newchildren[i].uuid) {
+            // replace
+            oldchildren.splice(i, 1, newchildren[i]);
+          } else {
+            this._updateTree(oldchildren[i], newchildren[i]);
           }
-          // update active
-          if (oldchildren[i].activeInHierarchy !== newchildren[i].activeInHierarchy) {
-            oldchildren[i].activeInHierarchy = newchildren[i].activeInHierarchy;
-          }
-          this._updateTree(oldchildren[i], newchildren[i]);
         }
-      }
-      // remove
-      if (oldchildren.length > newchildren.length) {
-        oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
+        // remove
+        if (oldchildren.length > newchildren.length) {
+          oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
+        }
       }
     },
     // 渲染界面
@@ -197,7 +228,12 @@ export default {
         this.getNodeInfo(this.treeData[0].uuid);
       } else {
         let newTree = data;
-        this._updateTree(this.treeData[0], newTree[0]);
+        // 换了场景，scene会变化
+        if (this.treeData[0].uuid != newTree[0].uuid) {
+          this.treeData = newTree;
+        } else {
+          this._updateTree(this.treeData[0], newTree[0]);
+        }
       }
     },
     // 获得注入脚本的字符串
@@ -228,7 +264,6 @@ export default {
       chrome.devtools.inspectedWindow.eval(code);
       code = this._getInjectScriptString(injectConnect);
       chrome.devtools.inspectedWindow.eval(code);
-            console.log(code);
       code = this._getInjectScriptString(injectPlugin);
       chrome.devtools.inspectedWindow.eval(code);
       // 注入config

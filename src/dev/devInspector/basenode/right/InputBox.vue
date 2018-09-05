@@ -3,7 +3,7 @@
   <input v-if='!readonly' class="myInput"
         @focus="pauseGame(uuid)"
         @blur="resumeGame(uuid)"
-        @change="changeFunc ? changeFunc() : setNodeValue(uuid, mykeys, myvalue)"
+        @change="typeof changeFunc == 'function' ? changeFunc(mykey, myvalue) : setNodeValue(uuid, mykey, myvalue)"
         :placeholder="myvalue"
         v-model="myvalue">
   <span v-else>{{myvalue}}</span>
@@ -11,11 +11,10 @@
 
 <script>
   export default {
-    // changeFunc和mykeys二选一
-    //  如果不存在changeFunc，使用默认函数
+    // 如果不存在changeFunc，使用默认函数setNodeValue
     props: [
       'uuid',
-      'mykeys',
+      'mykey',
       'myvalue',
       'readonly',
       'changeFunc',

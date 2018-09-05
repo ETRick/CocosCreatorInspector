@@ -2,7 +2,7 @@
   <div>
     <!-- 显示数组的长度 -->
     <Node v-if="typeof myarray != 'undefined'" :name="mykey.firstUpperCase()" >
-      <InputBox :uuid="uuid" :myvalue="myarray.length" :changeFunc="changeArrLength" />
+      <InputBox :uuid="uuid" mykey="length" :myvalue="myarray.length" :changeFunc="changeArrLength" />
     </Node>
 
     <!-- 显示数组的其他属性值 -->
@@ -19,7 +19,7 @@
               v-for="seckey in Object.keys(obj.value)" :key="seckey" 
               :name="seckey.eraseSubstring(titlename).firstUpperCase()[0]"
               class="ui" :style="{width: 100 / Object.keys(obj.value).length + '%'}">
-        <InputBox :uuid="uuid" :myvalue="obj.value[seckey].value" :changeFunc="changeVecValue(index)" />
+        <InputBox :uuid="uuid" :mykey="[mykey, index, seckey]" :myvalue="obj.value[seckey].value" />
       </Node>
       <div v-else-if="obj.type != 'null'">
         <span style="float: left; width: 50%;">{{myarray[index].type}}</span>
@@ -34,18 +34,8 @@
   export default {
     methods: {
       // 数组长度修改触发函数
-      changeArrLength() {
-        this.setNodeArrayLength(this.uuid, this.mykey, this.myarray.length);
-      },
-      // vector点击触发函数
-      changeVecValue(index) {
-        let seckeys = Object.keys(this.myarray[index].value);
-        // 构造要赋值的value
-        let value = {};
-        for (let key of seckeys) {
-          value[key] = this.myarray[index].value[key].value;
-        }
-        this.setNodeValue(this.uuid, [this.mykey, index], value);
+      changeArrLength(length, value) {
+        this.setNodeArrayLength(this.uuid, this.mykey, value);
       },
     },
     props: [

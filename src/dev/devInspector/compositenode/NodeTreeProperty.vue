@@ -26,13 +26,13 @@ export default {
   watch: {
     // 用于节点框过滤
     filterText(value) {
-      console.log(value);
       this.$refs.tree.filter(value);
     }
   },
   methods: {
     // 点击节点的触发函数
     handleNodeClick(data, node) {
+      console.log(data, node);
       this.clickQuadNode(data.uuid);
     },
     // 拖拽节点触发的函数
@@ -44,7 +44,7 @@ export default {
       if (!filtervalue) {
         return true;
       }
-      console.log(data);
+
       // 将多项过滤分离
       let strs = filtervalue.split(" ");
       // 每个过滤信息分别判断

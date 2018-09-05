@@ -12,9 +12,9 @@ export default function () {
     };
 
     // 修改数组的长度
-    Array.prototype.resize = function (newSize, defaultValue) {
+    Array.prototype.resize = function (newSize, defaultValueFunc) {
         while (newSize > this.length) {
-            this.push(defaultValue);
+            this.push(defaultValueFunc());
         }
         this.length = newSize;
     };
@@ -96,5 +96,34 @@ export default function () {
     ccIns.Enum.get = function (com) {
         let comptype = com.__classname__.substr(3);
         return ccIns.Enum[comptype];
+    };
+
+    /* ---------- Timer 部分 ---------- */
+    // 用于main中设置触发器
+    ccIns.Timer = ccIns.Timer || function (interval) {
+        this.timer = 0;
+        this.interval = interval || 0;
+        this.isRunning = true;
+
+        // 计时器运行
+        this.run = function (deltaTime) {
+            if (this.isRunning) {
+                this.timer += deltaTime || cc.director._deltaTime;
+            }
+        };
+
+        // 计时器判断是否到达时间
+        this.isTimeOut = function () {
+            if (this.timer > this.interval) {
+                this.timer = 0;
+                return true;
+            }
+            return false;
+        };
+
+        // 计时器清零
+        this.clearTime = function () {
+            this.timer = 0;
+        };
     };
 }

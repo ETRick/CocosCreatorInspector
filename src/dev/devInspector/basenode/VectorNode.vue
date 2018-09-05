@@ -6,7 +6,7 @@
               :name="seckey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="seckey"
               class="ui" :style="{width: 100 / seckeys.length + '%'}"
               @movestep="changeFloatValueAction" :step="step">
-      <InputBox :uuid="uuid" :myvalue="myvalue[seckey].value" :readonly="readonly" :changeFunc="changeValue" />
+      <InputBox :uuid="uuid" :mykey="seckey" :myvalue="myvalue[seckey].value" :readonly="readonly" :changeFunc="changeValue" />
     </SlideNode>
   </Node>
 </template>
@@ -20,20 +20,24 @@
     },
     methods: {
       // 修改时修改整个Object(Vec/Size)
-      changeValue() {
-        // 构造要赋值的value
-        let value = {};
-        for (let key of this.seckeys) {
-          value[key] = this.myvalue[key].value;
+      changeValue(key, value) {
+        // 由于value拷贝复制进去，因此在此处修改值
+        value = parseFloat(value);
+        if (!isNaN(value)) {
+          this.myvalue[key].value = value;
+          // 构造要赋值的value
+          let obj = {};
+          for (let key of this.seckeys) {
+            obj[key] = this.myvalue[key].value;
+          }
+          this.setNodeValue(this.uuid, this.mykey, obj);
         }
-        this.setNodeValue(this.uuid, this.mykey, value);
       },
       // 根据鼠标拖动修改值
       changeFloatValueAction(step, key) {
         let value = parseFloat(this.myvalue[key].value);
         if (!isNaN(value)) {
-          this.myvalue[key].value = value + step;
-          this.changeValue();
+          this.changeValue(key, value + step);
         }
       },
     },

@@ -35,9 +35,10 @@ export default function () {
     };
 
     // 设置颜色
-    Vue.prototype.setNodeColor = function (uuid, value) {
+    Vue.prototype.setNodeColor = function (uuid, key, value) {
         this._evalCode("ccIns.setNodeColor('" +
             uuid + "','" +
+            key + "','" +
             value + "');");
         this.getNodeInfo(uuid);
     };

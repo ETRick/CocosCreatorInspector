@@ -25,15 +25,10 @@ export default function () {
   ccIns.setNodeValue = function (uuid, keyorkeys, value) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
     if (node) {
-      if (!(keyorkeys instanceof Array)) {
-        let key = keyorkeys;
-        // 防止出现NAN
-        if (typeof node[key] == "number" && !isNaN(parseFloat(value))) {
-          node[key] = parseFloat(value);
-        } else {
-          node[key] = value;
-        }
-      } else {
+      // key: 直接赋值
+      let key = keyorkeys;
+      // keys: 先进行递归找到对应的node和key
+      if (keyorkeys instanceof Array) {
         let keys = keyorkeys;
         let i = 0;
         for (; i < keys.length - 1; i++) {
@@ -42,12 +37,17 @@ export default function () {
             return;
           }
         }
-        // 防止出现NAN
-        if (typeof node[keys[i]] == "number" && !isNaN(parseFloat(value))) {
-          node[keys[i]] = parseFloat(value);
-        } else {
-          node[keys[i]] = value;
-        }
+        key = keys[i];
+      }
+
+      if (typeof node[key] == "number" && !isNaN(parseFloat(value))) {
+        // number, 防止出现NAN
+        node[key] = parseFloat(value);
+      } else if (node[key].__classname__ && ["Vec2", "Vec3", "Size"].hasValue(node[key].__classname__.substr(3))) {
+        // vector或者是size
+        node[key] = new cc[node[key].__classname__.substr(3)](value);
+      } else {
+        node[key] = value;
       }
     }
   };
@@ -61,39 +61,40 @@ export default function () {
         oneElement = node[arraykey][0];
         ccIns.addObjectToStorage(uuid, arraykey + "type", oneElement);
       }
-      node[arraykey].resize(length, getDefaultValue(oneElement));
+      node[arraykey].resize(length, produceDefaultValueFunc(oneElement));
     }
 
     // 通过其中一个元素得到该类型的默认值
-    function getDefaultValue(oneElement) {
+    //   返回的是函数，用来产生默认值，防止object时物体时push失效
+    function produceDefaultValueFunc(oneElement) {
       // 处理null和undefined
       if (oneElement === undefined || oneElement === null) {
-        return null;
+        return () => null;
       }
 
       // 处理cctype
       if (oneElement.__classname__) {
         let type = oneElement.__classname__.substr(3);
-        return cc[type]();
+        return cc[type] && ["Vec2", "Vec3", "Size"].hasValue(type) ? () => new cc[type]() : () => null;
       }
 
       // 基本类型
       if (typeof oneElement == "boolean") {
-        return false;
+        return () => false;
       } else if (typeof oneElement == "number") {
-        return 0;
+        return () => 0;
       } else if (typeof oneElement == "string") {
-        return "";
+        return () => "";
       }
-      return null;
+      return () => null;
     }
   };
 
   // 设置节点颜色
-  ccIns.setNodeColor = function (uuid, colorHex) {
+  ccIns.setNodeColor = function (uuid, key, colorHex) {
     let node = ccIns.getObjectFromStorage(uuid, "node");
     if (node) {
-      node.color = node.color.fromHEX(colorHex);
+      node[key] = node[key].fromHEX(colorHex);
     }
   };
 
@@ -134,6 +135,9 @@ export default function () {
 
   // 获取节点信息
   ccIns.getNodeInfo = function (uuid) {
+    // 为了提升用户体验，每次运行getNodeInfo后，都将节点计时器清零
+    ccIns.Timer.node.clearTime();
+
     let node = ccIns.getObjectFromStorage(uuid, "node");
     if (node) {
       // 判断是节点还是脚本（Scene不存在脚本）
@@ -168,8 +172,9 @@ export default function () {
 
   // 显示QuadRangle边框，并去除之前的QuadRangle边框
   ccIns.clickQuadNode = function (uuid) {
-    // 点击时将点击节点暂存在ccIns.n0变量中
+    // 点击时将点击节点暂存在ccIns.n0变量中，将组件暂存在ccIns.cs中
     ccIns.n0 = ccIns.getObjectFromStorage(uuid, "node");
+    ccIns.cs = ccIns.n0._components;
 
     let quadnode = ccIns.getObjectFromStorage(uuid, "quadNode");
     if (quadnode && ccIns.QuadNode.clicked != quadnode) {
