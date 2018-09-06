@@ -70,23 +70,20 @@ export default function () {
         }
       }
 
-      // 空属性值
-      // undefined 不存在这个属性
+      // 返回的object
+      let rtnObj;
+
       if (obj === undefined) {
-        return undefined;
-      }
-      // 存在这个属性但是为null
-      if (obj === null) {
-        return this.NULLType();
-      }
-
-      // 数组
-      if (obj instanceof Array) {
-        return this.ArrayType(obj, isEnterArr);
-      }
-
-      // cc内部结构或脚本
-      if (ccIns.isCCType(obj)) {
+        // undefined 不存在这个属性
+        rtnObj = undefined;
+      } else if (obj === null) {
+        // 存在这个属性但是为null
+        rtnObj = this.NULLType();
+      } else if (obj instanceof Array) {
+        // 数组
+        rtnObj = this.ArrayType(obj, isEnterArr);
+      } else if (ccIns.isCCType(obj)) {
+        // cc内部结构或脚本
         let type = obj.__classname__.substr(3);
         let value = {};
         if (this[type]) {
@@ -99,19 +96,24 @@ export default function () {
           // 如果两者都不是，只查找需要显示的name
           value.name = this.CustomType(obj.name, isEnterArr);
         }
-        return {
+        rtnObj = {
           type: type,
           value: value,
         };
+      } else if (obj.__classname__ || typeof obj == "object") {
+        // cc未定义的结构和脚本（例如自定义脚本）
+        rtnObj = this.undefinedCCType(obj, isEnterArr);
+      } else {
+        // 基本类型
+        rtnObj = this.BaseType(obj);
       }
 
-      // cc未定义的结构和脚本（例如自定义脚本）
-      if (obj.__classname__ || typeof obj == "object") {
-        return this.undefinedCCType(obj, isEnterArr);
+      // 访问过后，对象弹出
+      if (typeof obj == "object") {
+        isEnterArr.pop(obj);
       }
 
-      // 基本类型
-      return this.BaseType(obj);
+      return rtnObj;
     },
     // cc中已经定义的类型
     definedCCType(obj, isEnterArr) {

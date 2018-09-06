@@ -10,7 +10,6 @@
             :render-content="renderTreeContent" 
             :filter-node-method="filterNode"
             @node-click="handleNodeClick"
-            @node-expand="handleNodeExpand"
             draggable
             @node-drop="dropNode">
     </el-tree>
@@ -34,15 +33,6 @@ export default {
     // 点击节点的触发函数
     handleNodeClick(data, node) {
       this.clickQuadNode(data.uuid);
-    },
-    // 由于渲染只渲染已展开的，因此可能新增节点无法看到，在这里手动展开一次
-    handleNodeExpand(data, node, tree) {
-      for (let i = 0; i < node.childNodes.length; i++) {
-        // 如果发现节点数量不匹配，重新渲染
-        if (data.children[i].children.length != node.childNodes[i].childNodes.length) {
-          this.$refs.tree.updateKeyChildren(data.children[i].uuid, data.children[i].children);
-        }
-      }
     },
     // 拖拽节点触发的函数
     dropNode(fromNode, toNode, type) {

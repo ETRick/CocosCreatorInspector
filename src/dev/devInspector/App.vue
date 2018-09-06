@@ -202,21 +202,28 @@ export default {
 
       let oldchildren = oldtree.children;
       let newchildren = newtree.children;
-      // PS:空值情况下，一个一个插入会导致无法展开（不知道为什么）      
-      for (let i = 0; i < newchildren.length; i++) {
-        if (typeof oldchildren[i] == 'undefined') {
-          // add
-          oldchildren.push(newchildren[i]);
-        } else if (oldchildren[i].uuid != newchildren[i].uuid) {
-          // replace
-          oldchildren.splice(i, 1, newchildren[i]);
-        } else {
-          this._updateTree(oldchildren[i], newchildren[i]);
+      // PS:空值情况下，插入会导致没有渲染到，需要手动加入
+      if (oldchildren.length == 0) {
+        oldtree.children = newtree.children;
+        // 手动进行渲染
+        let treeproto = this.$refs.tree.$refs.tree;
+        treeproto.updateKeyChildren(oldtree.uuid, oldtree.children);
+      } else {
+        for (let i = 0; i < newchildren.length; i++) {
+          if (typeof oldchildren[i] == 'undefined') {
+            // add
+            oldchildren.push(newchildren[i]);
+          } else if (oldchildren[i].uuid != newchildren[i].uuid) {
+            // replace
+            oldchildren.splice(i, 1, newchildren[i]);
+          } else {
+            this._updateTree(oldchildren[i], newchildren[i]);
+          }
         }
-      }
-      // remove
-      if (oldchildren.length > newchildren.length) {
-        oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
+        // remove
+        if (oldchildren.length > newchildren.length) {
+          oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
+        }
       }
     },
     // 渲染界面
