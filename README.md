@@ -6,7 +6,7 @@
 
 ## 文档
 
-（PS：对应版本的文档请见 doc 文件夹，以下链接为 master 的）
+（PS：对应版本的文档请见 doc 文件夹，以下链接为 master 主分支的文档）
 
 - [如何运行项目](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/%E5%A6%82%E4%BD%95%E8%BF%90%E8%A1%8C%E9%A1%B9%E7%9B%AE.md)
 - [项目功能演示](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/%E9%A1%B9%E7%9B%AE%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA.md)
@@ -62,8 +62,12 @@ PS: 此分支使用 cc.Graphics 进行边框绘制，因此修改了 DEBUG 模�
 ### v4.0
 
 PS：从此版本起，该插件只支持cocos creator 2.0以上的版本。
+PS2：此版本为最终版本，接下来应该不会进行更新了，但是仍然会关注。
 
 1. 完全重构通讯结构，现在可以查看大部分属性信息了
 2. 重构了vue脚本，降低组件之间的耦合度
+3. 重构了注入脚本，降低文件之间的耦合度
 3. 添加了Enum类型，现在可以显示并修改Enum类型了
 4. 添加了Array类型，现在可以显示并修改Array类型了
+5. 添加了Vector/Size类型，现在可以显示并修改Vector类型了
+6. 修复了海量BUG，进行了使用的优化
