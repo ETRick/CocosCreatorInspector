@@ -114,6 +114,7 @@ export default function () {
     ccIns.QuadNode = ccIns.QuadNode || function (ccnode, ignoreActive) {
         this.ignoreActive = ignoreActive;
         this.uuid = ccnode.uuid;
+        // 防止scene报错
         if (!this.ignoreActive) {
             this.activeInHierarchy = ccnode.activeInHierarchy;
         }
@@ -183,7 +184,7 @@ export default function () {
     ccIns.QuadNode.hover = ccIns.QuadNode.hover || null;
 
 
-    /* ---------- main中实际的使用函数 ---------- */
+    /* ---------- main 中实际的使用函数 ---------- */
     // 初始化DebugGraphics节点和脚本
     ccIns.initDebugGraphicsNode = function () {
         // 页面中需要存在cc（js），cc.Graphics，并且没有生成Graphics节点
@@ -318,7 +319,7 @@ export default function () {
     // 更新Graphics树，包括非active
     // PS:只更新不绘制
     ccIns.updateGraphicsTree = function (quadroot, ccroot) {
-        // 与DOM不同，先更新自己的
+        // 先更新自己的
         quadroot.update(ccroot);
         // 使用不动点进行内部递归
         let fix = (f) => f(f);

@@ -98,11 +98,51 @@ export default function () {
     }
   };
 
-  // 设置节点是否可视
-  ccIns.setNodeActive = function (uuid, isActive) {
-    let node = ccIns.getObjectFromStorage(uuid, "node");
-    if (node && typeof isActive == 'boolean') {
-      node.active = isActive;
+  // 显示Graphics节点
+  ccIns.showGraphics = function () {
+    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
+    if (node) {
+      node.active = true;
+    }
+  };
+
+  // 隐藏Graphics节点
+  ccIns.hiddenGraphics = function () {
+    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
+    if (node) {
+      node.active = false;
+    }
+  };
+
+  // 显示QuadRangle边框，并去除之前的QuadRangle边框
+  ccIns.clickQuadNode = function (uuid) {
+    // 点击时将点击节点暂存在ccIns.n0变量中，将组件暂存在ccIns.cs中
+    ccIns.n0 = ccIns.getObjectFromStorage(uuid, "node");
+    ccIns.cs = ccIns.n0._components;
+
+    let quadnode = ccIns.getObjectFromStorage(uuid, "quadNode");
+    if (quadnode && ccIns.QuadNode.clicked != quadnode) {
+      ccIns.QuadNode.clicked = quadnode;
+    }
+  };
+
+  // 修改节点树中节点的层级
+  ccIns.changeNodeTree = function (fromUuid, toUuid, type) {
+    let fromNode = ccIns.getObjectFromStorage(fromUuid, "node");
+    let toNode = ccIns.getObjectFromStorage(toUuid, "node");
+    if (fromNode && toNode) {
+      // 移除原来的节点
+      fromNode.removeFromParent(false);
+      if (type == "inner") {
+        // 插入内部
+        toNode.addChild(fromNode);
+      } else {
+        // 插入同级别
+        let parent = toNode.parent;
+        // after时，位置需要+1
+        let index = parent.children.indexOf(toNode) + (type == "after");
+        parent.insertChild(fromNode, index);
+      }
     }
   };
 
@@ -151,54 +191,6 @@ export default function () {
     } else {
       // 未获取到节点数据
       console.log("未获取到节点数据");
-    }
-  };
-
-  // 显示Graphics节点
-  ccIns.showGraphics = function () {
-    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
-    if (node) {
-      node.active = true;
-    }
-  };
-
-  // 隐藏Graphics节点
-  ccIns.hiddenGraphics = function () {
-    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
-    if (node) {
-      node.active = false;
-    }
-  };
-
-  // 显示QuadRangle边框，并去除之前的QuadRangle边框
-  ccIns.clickQuadNode = function (uuid) {
-    // 点击时将点击节点暂存在ccIns.n0变量中，将组件暂存在ccIns.cs中
-    ccIns.n0 = ccIns.getObjectFromStorage(uuid, "node");
-    ccIns.cs = ccIns.n0._components;
-
-    let quadnode = ccIns.getObjectFromStorage(uuid, "quadNode");
-    if (quadnode && ccIns.QuadNode.clicked != quadnode) {
-      ccIns.QuadNode.clicked = quadnode;
-    }
-  };
-
-  // 修改节点树中节点的层级
-  ccIns.changeNodeTree = function (fromUuid, toUuid, type) {
-    let fromNode = ccIns.getObjectFromStorage(fromUuid, "node");
-    let toNode = ccIns.getObjectFromStorage(toUuid, "node");
-    if (fromNode && toNode) {
-      // 移除原来的节点
-      fromNode.removeFromParent(false);
-      if (type == "inner") {
-        // 插入内部
-        toNode.addChild(fromNode);
-      } else {
-        // 插入同级别
-        let parent = toNode.parent;
-        // after时，位置需要+1
-        let index = parent.children.indexOf(toNode) + (type == "after");
-        parent.insertChild(fromNode, index);
-      }
     }
   };
 

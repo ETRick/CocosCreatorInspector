@@ -4,7 +4,7 @@
     <hr />
  
     <!-- 依次展示脚本 -->
-    <div v-show="isShowComps" v-for="comp in components.value" :key="comp.value.uuid.value">
+    <div v-show="isShowComps" v-for="comp in components.value" :key="comp.value ? comp.value.uuid.value : ''">
       <ComponentProperty :comptype="comp.type" :component="comp.value" />
     </div>
   </div>

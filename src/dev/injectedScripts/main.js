@@ -9,10 +9,16 @@ export default function () {
       ccIns.isNotFirst = true;
       // 初始化debug模式
       ccIns.initDebugGraphicsNode();
-      // 初始化定时器
-      ccIns.Timer.node = new ccIns.Timer(ccIns.Config.nodeRefleshInterval);
-      ccIns.Timer.tree = new ccIns.Timer(ccIns.Config.nodeTreeRefleshInterval);
-      ccIns.Timer.graphics = new ccIns.Timer(ccIns.Config.graphicsRefleshInterval);
+
+      // 添加新场景刷新时的触发器
+      //  场景重启时，重新挂载drawnode节点，并恢复DEBUG模式
+      cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
+        if (cc.Graphics) {
+          let active = ccIns.graphicsNode.active;
+          ccIns.initDebugGraphicsNode();
+          ccIns.graphicsNode.active = active;
+        }
+      }, cc.director);
 
       // 添加节点刷新帧
       cc.director.on(cc.Director.EVENT_AFTER_DRAW, (e) => {
@@ -42,14 +48,6 @@ export default function () {
             ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.director._scene);
             ccIns.drawNode(ccIns.graphicsNode.getComponent("cc.Graphics"));
           }
-        }, cc.director);
-
-        // 添加新场景刷新时的触发器
-        //  场景重启时，重新挂载drawnode节点，并恢复DEBUG模式
-        cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
-          let active = ccIns.graphicsNode.active;
-          ccIns.initDebugGraphicsNode();
-          ccIns.graphicsNode.active = active;
         }, cc.director);
       } else {
         ccIns.sendMsgToDevTools(ccIns.Connect.msgType.notSupport, "不支持Debug模式!");

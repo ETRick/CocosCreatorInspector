@@ -33,9 +33,13 @@ import Vue from 'vue';
 
 import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
-import injectMain from "../injectedScripts/main.js";
+import injectEnum from "../injectedScripts/enum.js";
+import injectTimer from "../injectedScripts/timer.js";
+import injectStorage from "../injectedScripts/storage.js";
 import injectDebugGraphics from "../injectedScripts/debugGraphics.js";
 import injectUtil from "../injectedScripts/util.js"
+import injectMain from "../injectedScripts/main.js";
+
 import injectConfig from "../../config/injectedScripts.json";
 
 export default {
@@ -57,7 +61,7 @@ export default {
       return;
     }
 
-    // 建立和背景页面的连接
+    // 建立和背景页面的连接，以原页面的tabId作为区分
     let backgroundPageConnection = chrome.extension.connect({
       name: btoa("for" + String(chrome.devtools.inspectedWindow.tabId))
     });
@@ -198,42 +202,32 @@ export default {
 
       let oldchildren = oldtree.children;
       let newchildren = newtree.children;
-      // 空值情况下，一个一个插入会导致无法展开（不知道为什么）
-      if (oldchildren.length == 0) {
-        oldtree.children = newtree.children;
-      } else {
-        for (let i = 0; i < newchildren.length; i++) {
-          if (typeof oldchildren[i] == 'undefined') {
-            // add
-            console.log("add", oldtree.name, oldtree.children, newchildren[i]);
-            oldchildren.push(newchildren[i]);
-          } else if (oldchildren[i].uuid != newchildren[i].uuid) {
-            // replace
-            oldchildren.splice(i, 1, newchildren[i]);
-          } else {
-            this._updateTree(oldchildren[i], newchildren[i]);
-          }
+      // PS:空值情况下，一个一个插入会导致无法展开（不知道为什么）      
+      for (let i = 0; i < newchildren.length; i++) {
+        if (typeof oldchildren[i] == 'undefined') {
+          // add
+          oldchildren.push(newchildren[i]);
+        } else if (oldchildren[i].uuid != newchildren[i].uuid) {
+          // replace
+          oldchildren.splice(i, 1, newchildren[i]);
+        } else {
+          this._updateTree(oldchildren[i], newchildren[i]);
         }
-        // remove
-        if (oldchildren.length > newchildren.length) {
-          oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
-        }
+      }
+      // remove
+      if (oldchildren.length > newchildren.length) {
+        oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
       }
     },
     // 渲染界面
     _updateView(data) {
-      if (JSON.stringify(this.treeData) === "[]") {
-        // 第一次赋值，获取数据后，渲染右边界面
+      if (JSON.stringify(this.treeData) === "[]" || this.treeData[0].uuid != data[0].uuid) {
+        // 第一次赋值或者换了场景后，获取数据后，渲染右边界面
         this.treeData = data;
         this.getNodeInfo(this.treeData[0].uuid);
       } else {
         let newTree = data;
-        // 换了场景，scene会变化
-        if (this.treeData[0].uuid != newTree[0].uuid) {
-          this.treeData = newTree;
-        } else {
-          this._updateTree(this.treeData[0], newTree[0]);
-        }
+        this._updateTree(this.treeData[0], newTree[0]);
       }
     },
     // 获得注入脚本的字符串
@@ -251,7 +245,9 @@ export default {
     },
     // 获得注入脚本的配置文件
     _getConfigString() {
-      let code = getJsonObj("ccIns.Config", injectConfig);
+      // 设置ccIns和ccIns.Config
+      let code = "if (typeof ccIns == 'undefined') { ccIns = {}; };";
+      code += getJsonObj("ccIns.Config", injectConfig);
       return code;
 
       function getJsonObj(identify, obj) {
@@ -259,18 +255,19 @@ export default {
       }
     },
     onBtnClickUpdatePage(e) {
+      // 注入配置文件
+      let code = this._getConfigString();
+      chrome.devtools.inspectedWindow.eval(code);
+      
       // 注入脚本
-      let code = this._getInjectScriptString(injectUtil);
-      chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectConnect);
-      chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectPlugin);
-      chrome.devtools.inspectedWindow.eval(code);
-      // 注入config
-      code = this._getConfigString();
-      chrome.devtools.inspectedWindow.eval(code);
-      code = this._getInjectScriptString(injectDebugGraphics);
-      chrome.devtools.inspectedWindow.eval(code);
+      let scripts = [injectUtil, injectDebugGraphics, injectConnect,
+         injectPlugin, injectEnum, injectTimer, injectStorage];
+      for (let script of scripts) {
+        let code = this._getInjectScriptString(script);
+        chrome.devtools.inspectedWindow.eval(code);
+      }
+      
+      // 运行main函数
       code = this._getInjectScriptString(injectMain);
       chrome.devtools.inspectedWindow.eval(code, function(rtn) {
         console.log("刷新成功!");
