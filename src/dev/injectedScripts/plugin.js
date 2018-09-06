@@ -186,7 +186,11 @@ export default function () {
       }
 
       let nodeData = ccIns.Connect.CustomType(node);
-      nodeData.value.components = ccIns.Connect.CustomType(node._components);
+      // 每个组件手动push，防止出现递归导致未显示某些组件的bug
+      nodeData.value.components = {type: "Array", value: []};
+      for (let comp of node._components) {
+        nodeData.value.components.value.push(ccIns.Connect.CustomType(comp));
+      }
       ccIns.sendMsgToDevTools(ccIns.Connect.msgType.nodeInfo, nodeData);
     } else {
       // 未获取到节点数据

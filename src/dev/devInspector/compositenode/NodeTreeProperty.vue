@@ -70,6 +70,7 @@ export default {
           case "t:": {
             for (let compname of data.components) {
               if (compname.hasSubstrIgnoreCase(str.substr(2))) {
+                console.log(compname);
                 return true;
               }
             }

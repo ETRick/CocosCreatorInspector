@@ -59,6 +59,8 @@ export default function () {
     //   PS：为了防止递归，设置flag数组isEnterArr
     CustomType(obj, isEnterArr) {
       isEnterArr = isEnterArr || [];
+      
+      // 对对象进行访问判断
       if (typeof obj == "object") {
         // 如果已经访问过，直接返回NULL
         if (isEnterArr.hasValue(obj)) {
