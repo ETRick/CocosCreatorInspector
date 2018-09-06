@@ -64,7 +64,7 @@ export default function () {
       if (typeof obj == "object") {
         // 如果已经访问过，直接返回NULL
         if (isEnterArr.hasValue(obj)) {
-          return this.NULL();
+          return this.NULLType();
         } else {
           isEnterArr.push(obj);
         }
@@ -77,7 +77,7 @@ export default function () {
       }
       // 存在这个属性但是为null
       if (obj === null) {
-        return this.NULL();
+        return this.NULLType();
       }
 
       // 数组
@@ -201,7 +201,7 @@ export default function () {
         value: obj,
       };
     },
-    NULL() {
+    NULLType() {
       return {
         type: "null",
         value: null,

@@ -228,7 +228,7 @@ export default function () {
                 if (ccIns.QuadNode.clicked != ccIns.QuadNode.hover) {
                     ccIns.QuadNode.clicked = ccIns.QuadNode.hover;
                 }
-                // 同步到节点树
+                // 同步到devtools中的节点树，正向绑定
                 if (ccIns.QuadNode.clicked) {
                     ccIns.sendMsgToDevTools(ccIns.Connect.msgType.clickedNodeInfo, ccIns.QuadNode.clicked.uuid);
                 }
@@ -316,7 +316,7 @@ export default function () {
         };
     })();
 
-    // 更新Graphics树，包括非active
+    // 更新QuadNode树，包括非active节点
     // PS:只更新不绘制
     ccIns.updateGraphicsTree = function (quadroot, ccroot) {
         // 先更新自己的

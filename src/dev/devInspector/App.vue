@@ -259,7 +259,7 @@ export default {
       let code = this._getConfigString();
       chrome.devtools.inspectedWindow.eval(code);
       
-      // 注入脚本
+      // 注入初始化脚本
       let scripts = [injectUtil, injectDebugGraphics, injectConnect,
          injectPlugin, injectEnum, injectTimer, injectStorage];
       for (let script of scripts) {
@@ -271,7 +271,7 @@ export default {
       code = this._getInjectScriptString(injectMain);
       chrome.devtools.inspectedWindow.eval(code, function(rtn) {
         console.log("刷新成功!");
-        // 执行回调函数
+        // 执行回调函数，此回调函数用于页面刷新重新注入文件
         if (typeof e == "function") {
           let func = e;
           func(rtn);

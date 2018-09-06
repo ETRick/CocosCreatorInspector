@@ -11,8 +11,8 @@ export default function () {
       ccIns.initDebugGraphicsNode();
 
       // 添加新场景刷新时的触发器
-      //  场景重启时，重新挂载drawnode节点，并恢复DEBUG模式
-      cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
+      //  场景重启时，重新挂载DEBUG-Graphics节点，并恢复DEBUG模式
+      cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, (e) => {
         if (cc.Graphics) {
           let active = ccIns.graphicsNode.active;
           ccIns.initDebugGraphicsNode();
@@ -41,7 +41,7 @@ export default function () {
 
       // 检测cc.Graphics是否存在
       if (cc.Graphics) {
-        // 添加Graphics刷新帧
+        // 添加QuadNode树刷新帧
         cc.director.on(cc.Director.EVENT_AFTER_DRAW, (e) => {
           ccIns.Timer.graphics.run();
           if (ccIns.Timer.graphics.isTimeOut() && ccIns.updateGraphicsTree) {
