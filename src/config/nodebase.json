@@ -1,0 +1,40 @@
+[{
+        "key": "name"
+    },
+    {
+        "title": "position",
+        "keys": ["x", "y"]
+    },
+    {
+        "key": "rotation",
+        "step": 1
+    },
+    {
+        "title": "scale",
+        "keys": ["scaleX", "scaleY"],
+        "step": 0.01
+    },
+    {
+        "title": "anchor",
+        "keys": ["anchorX", "anchorY"],
+        "step": 0.01
+    },
+    {
+        "title": "size",
+        "keys": ["width", "height"]
+    },
+    {
+        "key": "opacity"
+    },
+    {
+        "key": "zIndex"
+    },
+    {
+        "title": "skew",
+        "keys": ["skewX", "skewY"],
+        "step": 1
+    },
+    {
+        "key": "color"
+    }
+]

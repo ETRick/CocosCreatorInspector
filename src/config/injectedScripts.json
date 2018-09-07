@@ -1,0 +1,10 @@
+{
+    "nodeRefleshInterval": 0.2,
+    "nodeTreeRefleshInterval": 0.2,
+    "graphicsRefleshInterval": 0,
+    "DEBUG_MODE": {
+        "lineWidth": 2,
+        "clickedBorderColor": "red",
+        "hoverBorderColor": "blue"
+    }
+}
