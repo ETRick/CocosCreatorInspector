@@ -121,6 +121,7 @@ export default function () {
       let objType = obj.__classname__.substr(3);
       // 通过__props__获得key值
       for (let key of cc[objType].__props__) {
+        key = ccIns.pri2Pub(key);
         // 忽略私有变量和函数
         if (ccIns.isPublicVar(obj, key)) {
           rtnObj[key] = this.CustomType(obj[key], isEnterArr);
@@ -142,6 +143,7 @@ export default function () {
 
       // 过滤掉私有值和函数的值
       for (let key of Object.keys(obj)) {
+        key = ccIns.pri2Pub(key);
         let value = obj[key];
         if (ccIns.isPublicVar(obj, key)) {
           rtnObj[key] = this.CustomType(value, isEnterArr);
@@ -163,8 +165,10 @@ export default function () {
       let objType = obj.__classname__.substr(3);
       // 通过__props__获得key值
       for (let key of cc[objType].__props__) {
+        key = ccIns.pri2Pub(key);
         // 忽略components, children
         if (!["components", "children"].hasValue(key) && ccIns.isPublicVar(obj, key)) {
+          // 私有变量转公有变量
           rtnObj[key] = this.CustomType(obj[key], isEnterArr);
         }
       }
@@ -176,6 +180,7 @@ export default function () {
       let objType = obj.__classname__.substr(3);
       // 通过__props__获得key值
       for (let key of cc[objType].__props__) {
+        key = ccIns.pri2Pub(key);
         // 忽略components, children
         if (!["components", "children", "active", "activeInHierarchy"].hasValue(key) && ccIns.isPublicVar(obj, key)) {
           rtnObj[key] = this.CustomType(obj[key], isEnterArr);

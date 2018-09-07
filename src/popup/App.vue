@@ -7,7 +7,7 @@
     <br/>
     <div style="margin:0 auto;width:100%;">
       <div style="width: 200px; margin: 0 auto;" v-show="isShowMoneyPng">
-        <img style="width: 100%;height: auto;" src="static/images/money.jpg">
+        <img style="width: 100%;height: auto;" src="static/images/photo.jpg">
       </div>
     </div>
     <br/>

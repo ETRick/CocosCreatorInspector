@@ -9,16 +9,6 @@ export default function () {
     /* --------- Enum 部分 ---------- */
     ccIns.Enum = ccIns.Enum || {};
 
-    // 判断变量是否为object和public
-    ccIns.isPublicVar = function (obj, key) {
-        return key[0] != "_" && typeof obj[key] != "function";
-    };
-
-    // 判断是不是cc类型
-    ccIns.isCCType = function (obj) {
-        return obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.";
-    };
-
     // 添加一个脚本的枚举属性，不重复添加
     ccIns.Enum.add = function (com) {
         let comptype = com.__classname__.substr(3);

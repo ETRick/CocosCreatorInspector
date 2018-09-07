@@ -23,4 +23,19 @@ export default function () {
     Array.prototype.hasValue = function (value) {
         return this.indexOf(value) != -1;
     };
+
+    // 私有变量转换成公有变量
+    ccIns.pri2Pub = function (key) {
+        return key[0] == "_" ? key.substr(1) : key;
+    };
+
+    // 判断变量是否为object和public
+    ccIns.isPublicVar = function (obj, key) {
+        return key[0] != "_" && typeof obj[key] != "undefined" && typeof obj[key] != "function";
+    };
+
+    // 判断是不是cc类型
+    ccIns.isCCType = function (obj) {
+        return obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.";
+    };
 }
