@@ -2,8 +2,7 @@
         "key": "name"
     },
     {
-        "title": "position",
-        "keys": ["x", "y"]
+        "key": "position"
     },
     {
         "key": "rotation",

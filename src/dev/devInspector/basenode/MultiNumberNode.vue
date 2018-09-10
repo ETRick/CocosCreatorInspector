@@ -1,6 +1,6 @@
 <template>
   <Node :name="titlename.firstUpperCase()">
-    <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey].value != 'undefined'"
+    <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey] != 'undefined'"
               :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
               class="ui" :style="{width: 100 / mykeys.length + '%'}"
               @movestep="changeFloatValueAction" :step="step">

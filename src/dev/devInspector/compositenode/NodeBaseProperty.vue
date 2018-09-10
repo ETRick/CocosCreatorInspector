@@ -31,6 +31,12 @@
                   :myvalue="itemData[config.key].value"
                   :readonly="config.readonly">
       </StringNode>
+      <VectorNode v-else-if='["Vec2", "Vec3", "Size"].hasValue(itemData[config.key].type)'
+                  :uuid="itemData.uuid.value"
+                  :mykey="config.key"
+                  :myvalue="itemData[config.key].value"
+                  :readonly="config.readonly">
+      </VectorNode>
       <ColorNode v-else-if="itemData[config.key].type == 'Color'" 
                     :uuid="itemData.uuid.value"
                     :mykey="config.key"
