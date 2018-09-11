@@ -32,6 +32,7 @@ export default {
   methods: {
     // 点击节点的触发函数
     handleNodeClick(data, node) {
+      console.log("Click uuid:" + data.uuid);
       this.clickQuadNode(data.uuid);
     },
     // 拖拽节点触发的函数

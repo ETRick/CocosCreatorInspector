@@ -187,9 +187,14 @@ export default function () {
 
       let nodeData = ccIns.Connect.CustomType(node);
       // 每个组件手动push，防止出现递归导致未显示某些组件的bug
-      nodeData.value.components = {type: "Array", value: []};
-      for (let comp of node._components) {
-        nodeData.value.components.value.push(ccIns.Connect.CustomType(comp));
+      nodeData.value.components = {
+        type: "Array",
+        value: []
+      };
+      if (node._components) {
+        for (let comp of node._components) {
+          nodeData.value.components.value.push(ccIns.Connect.CustomType(comp));
+        }
       }
       ccIns.sendMsgToDevTools(ccIns.Connect.msgType.nodeInfo, nodeData);
     } else {

@@ -22,7 +22,7 @@ export default function () {
     //   函数在节点构造的同时，会储存节点到ccIns.gameStorageMemory中
     //   函数在节点构造的同时，会发送枚举属性
     TreeNode(node) {
-      if (node instanceof cc.Node) {
+      if (node instanceof cc.Node || node instanceof cc.Scene) {
         // 添加新节点
         ccIns.addObjectToStorage(node.uuid, "node", node);
 
@@ -37,20 +37,22 @@ export default function () {
         }
 
         // 组件信息
-        node._components.forEach(com => {
-          // 添加新组件
-          ccIns.addObjectToStorage(com.uuid, "node", com);
+        if (node._components) {
+          node._components.forEach(com => {
+            // 添加新组件
+            ccIns.addObjectToStorage(com.uuid, "node", com);
 
-          rtnNode.components.push(com.__classname__);
-          // 添加该脚本的枚举属性
-          if (ccIns.Enum.add(com)) {
-            // 发送该枚举属性
-            ccIns.sendMsgToDevTools(this.msgType.enumType, {
-              key: com.__classname__.substr(3),
-              value: ccIns.Enum.get(com)
-            });
-          }
-        });
+            rtnNode.components.push(com.__classname__);
+            // 添加该脚本的枚举属性
+            if (ccIns.Enum.add(com)) {
+              // 发送该枚举属性
+              ccIns.sendMsgToDevTools(this.msgType.enumType, {
+                key: com.__classname__.substr(3),
+                value: ccIns.Enum.get(com)
+              });
+            }
+          });
+        }
 
         return rtnNode;
       }
@@ -59,7 +61,7 @@ export default function () {
     //   PS：为了防止递归，设置flag数组isEnterArr
     CustomType(obj, isEnterArr) {
       isEnterArr = isEnterArr || [];
-      
+
       // 对对象进行访问判断
       if (typeof obj == "object") {
         // 如果已经访问过，直接返回NULL
@@ -119,6 +121,15 @@ export default function () {
     definedCCType(obj, isEnterArr) {
       let rtnObj = {};
       let objType = obj.__classname__.substr(3);
+
+      // 脚本有额外属性
+      if (obj instanceof cc.Component) {
+        // 构造自定义脚本类型
+        rtnObj.uuid = this.BaseType(obj.uuid);
+        rtnObj.enabled = this.BaseType(obj.enabled);
+        rtnObj.enabledInHierarchy = this.BaseType(obj.enabledInHierarchy);
+      }
+
       // 通过__props__获得key值
       for (let key of cc[objType].__props__) {
         key = ccIns.pri2Pub(key);
@@ -133,7 +144,7 @@ export default function () {
     undefinedCCType(obj, isEnterArr) {
       let rtnObj = {};
 
-      // 自定义脚本有额外属性
+      // 脚本有额外属性
       if (obj instanceof cc.Component) {
         // 构造自定义脚本类型
         rtnObj.uuid = this.BaseType(obj.uuid);
@@ -146,7 +157,7 @@ export default function () {
         key = ccIns.pri2Pub(key);
         let value = obj[key];
         if (ccIns.isPublicVar(obj, key)) {
-          rtnObj[key] = this.CustomType(value, isEnterArr);
+          rtnObj[key] = rtnObj[key] || this.CustomType(value, isEnterArr);
         }
       }
 
@@ -161,7 +172,19 @@ export default function () {
     },
     // 为了防止递归，不放置components
     Node(obj, isEnterArr) {
-      let rtnObj = {};
+      let rtnObj = {
+        uuid: this.BaseType(obj.uuid),
+        zIndex: this.BaseType(obj.zIndex),
+        width: this.BaseType(obj.width),
+        height: this.BaseType(obj.height),
+        color: this.CustomType(obj.color),
+        opacity: this.BaseType(obj.opacity),
+        rotation: this.BaseType(obj.rotation),
+        anchorX: this.BaseType(obj.anchorX),
+        anchorY: this.BaseType(obj.anchorY),
+        active: this.BaseType(obj.active),
+        activeInHierarchy: this.BaseType(obj.activeInHierarchy),
+      };
       let objType = obj.__classname__.substr(3);
       // 通过__props__获得key值
       for (let key of cc[objType].__props__) {
@@ -169,21 +192,31 @@ export default function () {
         // 忽略components, children
         if (!["components", "children"].hasValue(key) && ccIns.isPublicVar(obj, key)) {
           // 私有变量转公有变量
-          rtnObj[key] = this.CustomType(obj[key], isEnterArr);
+          rtnObj[key] = rtnObj[key] || this.CustomType(obj[key], isEnterArr);
         }
       }
       return rtnObj;
     },
     // Scene和Node类似，但是Scene中不存在active
     Scene(obj, isEnterArr) {
-      let rtnObj = {};
+      let rtnObj = {
+        uuid: this.BaseType(obj.uuid),
+        zIndex: this.BaseType(obj.zIndex),
+        width: this.BaseType(obj.wedth),
+        height: this.BaseType(obj.height),
+        color: this.CustomType(obj.color),
+        opacity: this.BaseType(obj.opacity),
+        rotation: this.BaseType(obj.rotation),
+        anchorX: this.BaseType(obj.anchorX),
+        anchorY: this.BaseType(obj.anchorY),
+      };
       let objType = obj.__classname__.substr(3);
       // 通过__props__获得key值
       for (let key of cc[objType].__props__) {
         key = ccIns.pri2Pub(key);
         // 忽略components, children
         if (!["components", "children", "active", "activeInHierarchy"].hasValue(key) && ccIns.isPublicVar(obj, key)) {
-          rtnObj[key] = this.CustomType(obj[key], isEnterArr);
+          rtnObj[key] = rtnObj[key] || this.CustomType(obj[key], isEnterArr);
         }
       }
       return rtnObj;
@@ -203,10 +236,12 @@ export default function () {
     // 基本类型构造：
     //   基本类型是指js的基本类型(number, string之类)
     BaseType(obj) {
-      return {
-        type: typeof obj,
-        value: obj,
-      };
+      if (typeof obj != "undefined") {
+        return {
+          type: typeof obj,
+          value: obj,
+        };
+      }
     },
     NULLType() {
       return {
