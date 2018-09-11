@@ -211,8 +211,27 @@ export default function () {
             // 保证该节点处于最上面，cc.macro.MAX_ZINDEX是PROFILE-NODE
             node.zIndex = cc.macro.MAX_ZINDEX - 1;
 
-            // 绑定hover
-            node.on(cc.Node.EventType.MOUSE_MOVE, function (e) {
+            // 绑定hover(MOUSE_MOVE)
+            node.on(cc.Node.EventType.TOUCH_MOVE, hoverFunc, node);
+
+            // 绑定hover(TOUCH_MOVE)
+            node.on(cc.Node.EventType.MOUSE_MOVE, hoverFunc, node);
+
+            // 绑定click(MOUSE_DOWN和TOUCH_END功能相同)
+            node.on(cc.Node.EventType.TOUCH_END, function (e) {
+                console.log("Click Pos: ", e.getLocation());
+                hoverFunc(e);
+                if (ccIns.QuadNode.clicked != ccIns.QuadNode.hover) {
+                    ccIns.QuadNode.clicked = ccIns.QuadNode.hover;
+                }
+                // 同步到devtools中的节点树，正向绑定
+                if (ccIns.QuadNode.clicked) {
+                    ccIns.sendMsgToDevTools(ccIns.Connect.msgType.clickedNodeInfo, ccIns.QuadNode.clicked.uuid);
+                }
+            }, node);
+
+            // hover触发的函数
+            function hoverFunc(e) {
                 // 得到当前鼠标位置的四边形
                 let node = e.target;
                 if (node.active) {
@@ -223,19 +242,8 @@ export default function () {
                         ccIns.QuadNode.hover = quadnode;
                     }
                 }
-            }, node);
-
-            // 绑定click
-            node.on(cc.Node.EventType.TOUCH_END, function (e) {
-                if (ccIns.QuadNode.clicked != ccIns.QuadNode.hover) {
-                    ccIns.QuadNode.clicked = ccIns.QuadNode.hover;
-                }
-                // 同步到devtools中的节点树，正向绑定
-                if (ccIns.QuadNode.clicked) {
-                    ccIns.sendMsgToDevTools(ccIns.Connect.msgType.clickedNodeInfo, ccIns.QuadNode.clicked.uuid);
-                }
-            }, node);
-
+            }
+            
             // 得到包含点的所有Quads
             function getQuadsContainPos(pos) {
                 // Quads不包括scene, DEBUG-Graphics, Canvas三个节点的quads
