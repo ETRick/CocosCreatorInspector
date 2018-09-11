@@ -2,7 +2,7 @@
 // 字段说明参考：http://open.chrome.360.cn/extension_dev/manifest.html
 {
   "name": "Cocos Creator Inspector",
-  "version": "3.1.1",
+  "version": "2.0.2",
   "description": "Cocos Creator Inspector",
   "browser_action": {
     "default_title": "Cocos Creator Inspector",

@@ -1,8 +1,8 @@
 <template>
-  <Node :name="titlename.firstUpperCase()">
-    <SlideNode v-for="mykey in mykeys" :key="mykey" v-if="typeof itemData[mykey] != 'undefined'"
+  <Node v-if="keys.length > 0" :name="titlename.firstUpperCase()">
+    <SlideNode v-for="mykey in keys" :key="mykey"
               :name="mykey.eraseSubstring(titlename).firstUpperCase()[0]" :mykey="mykey"
-              class="ui" :style="{width: 100 / mykeys.length + '%'}"
+              class="ui" :style="{width: 100 / keys.length + '%'}"
               @movestep="changeFloatValueAction" :step="step">
       <InputBox :uuid="itemData.uuid.value" :mykey="mykey" :myvalue="itemData[mykey].value" :readonly="readonly" />
     </SlideNode>
@@ -11,6 +11,12 @@
 
 <script>
 export default {
+  data() {
+    return {
+      // keys过滤掉mykeys中不存在的属性
+      keys: this.mykeys.filter(key => typeof this.itemData[key] != "undefined")
+    }
+  },
   methods: {
     changeFloatValueAction(step, key) {
       let value = parseFloat(this.itemData[key].value);

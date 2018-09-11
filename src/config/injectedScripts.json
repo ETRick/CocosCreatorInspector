@@ -1,4 +1,5 @@
 {
+    "version": "2.0.2",
     "nodeRefleshInterval": 0.2,
     "nodeTreeRefleshInterval": 0.2,
     "graphicsRefleshInterval": 0,

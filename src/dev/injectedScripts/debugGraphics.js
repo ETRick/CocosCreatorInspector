@@ -188,13 +188,13 @@ export default function () {
     // 初始化DebugGraphics节点和脚本
     ccIns.initDebugGraphicsNode = function () {
         // 页面中需要存在cc（js），cc.Graphics，并且没有生成Graphics节点
-        if (cc && cc.Graphics && !cc.director._scene.getChildByName("Debug-Graphics")) {
+        if (cc && cc.Graphics && !cc.director._scene.getChildByName("DEBUG-GRAPHICS")) {
             // 设置根节点
             ccIns.QuadNode.root = new ccIns.QuadNode(cc.director._scene, true);
 
             // 生成Graphics挂载节点和Graphics脚本
             let node = new cc.Node();
-            node.name = "Debug-Graphics";
+            node.name = "DEBUG-GRAPHICS";
             node.addComponent("cc.Graphics");
             cc.director._scene.addChild(node);
             ccIns.graphicsNode = node;
@@ -208,6 +208,8 @@ export default function () {
             node.anchorY = 0;
             node.width = ccCanvas.width;
             node.height = ccCanvas.height;
+            // 保证该节点处于最上面，cc.macro.MAX_ZINDEX是PROFILE-NODE
+            node.zIndex = cc.macro.MAX_ZINDEX - 1;
 
             // 绑定hover
             node.on(cc.Node.EventType.MOUSE_MOVE, function (e) {
@@ -224,7 +226,7 @@ export default function () {
             }, node);
 
             // 绑定click
-            node.on(cc.Node.EventType.MOUSE_DOWN, function (e) {
+            node.on(cc.Node.EventType.TOUCH_END, function (e) {
                 if (ccIns.QuadNode.clicked != ccIns.QuadNode.hover) {
                     ccIns.QuadNode.clicked = ccIns.QuadNode.hover;
                 }

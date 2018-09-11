@@ -7,6 +7,9 @@ export default function () {
   if (cc) {
     if (!ccIns.isNotFirst) {
       ccIns.isNotFirst = true;
+
+      console.log("Welcome use cocos creator inspector! v" + ccIns.Config.version);
+
       // 初始化debug模式
       ccIns.initDebugGraphicsNode();
 
@@ -45,7 +48,7 @@ export default function () {
         cc.director.on(cc.Director.EVENT_AFTER_DRAW, (e) => {
           ccIns.Timer.graphics.run();
           if (ccIns.Timer.graphics.isTimeOut() && ccIns.updateGraphicsTree) {
-            ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.director._scene);
+            ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.director._scene);         
             ccIns.drawNode(ccIns.graphicsNode.getComponent("cc.Graphics"));
           }
         }, cc.director);

@@ -100,7 +100,7 @@ export default function () {
 
   // 显示Graphics节点
   ccIns.showGraphics = function () {
-    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
+    let node = ccIns.graphicsNode;
     if (node) {
       node.active = true;
     }
@@ -108,7 +108,7 @@ export default function () {
 
   // 隐藏Graphics节点
   ccIns.hiddenGraphics = function () {
-    let node = cc.Canvas.instance.node.parent.getChildByName("Debug-Graphics");
+    let node = ccIns.graphicsNode;
     if (node) {
       node.active = false;
     }
