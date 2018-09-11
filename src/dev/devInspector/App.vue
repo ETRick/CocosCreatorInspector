@@ -299,6 +299,7 @@ export default {
 
 <style scoped>
   .treeInfo {
+    margin: 20px;
     height: 100%;
   }
 

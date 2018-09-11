@@ -1,18 +1,20 @@
 <template>
   <div>
     <el-input placeholder="输入name和uuid进行搜索" v-model="filterText" />
-    <el-tree :data="treeData" ref="tree" 
-            class="grid-content treeList"
-            :props="treeProps" 
-            highlight-current 
-            :node-key="nodeKey"
-            :expand-on-click-node="false" 
-            :render-content="renderTreeContent" 
-            :filter-node-method="filterNode"
-            @node-click="handleNodeClick"
-            draggable
-            @node-drop="dropNode">
-    </el-tree>
+    <el-scrollbar style="height: 100%; overflow-x: hidden;">
+      <el-tree :data="treeData" ref="tree" 
+              class="grid-content treeList"
+              :props="treeProps" 
+              highlight-current 
+              :node-key="nodeKey"
+              :expand-on-click-node="false" 
+              :render-content="renderTreeContent" 
+              :filter-node-method="filterNode"
+              @node-click="handleNodeClick"
+              draggable
+              @node-drop="dropNode">
+      </el-tree>
+    </el-scrollbar>
   </div>
 </template>
 
