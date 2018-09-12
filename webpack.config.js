@@ -79,6 +79,9 @@ module.exports = {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
+    }),
+    new webpack.ProvidePlugin({
+      $: "jquery",
     })
   ],
   module: {

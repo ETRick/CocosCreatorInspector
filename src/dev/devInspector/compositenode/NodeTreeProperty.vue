@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-input placeholder="输入name和uuid进行搜索" v-model="filterText" />
-    <el-scrollbar style="height: 100%; overflow-x: hidden;">
+    <el-scrollbar id="left-scrollbar">
       <el-tree :data="treeData" ref="tree" 
               class="grid-content treeList"
               :props="treeProps" 
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     // 点击节点的触发函数
-    handleNodeClick(data, node) {
+    handleNodeClick(data) {
       console.log("Click uuid:" + data.uuid);
       this.clickQuadNode(data.uuid);
     },
@@ -63,7 +63,6 @@ export default {
           case "t:": {
             for (let compname of data.components) {
               if (compname.hasSubstrIgnoreCase(str.substr(2))) {
-                console.log(compname);
                 return true;
               }
             }
@@ -83,7 +82,7 @@ export default {
     // 渲染树节点函数
     renderTreeContent(h, { node, data, store }) {
       return (
-        <span style={addStyle()}>
+        <span id={data.uuid} style={addStyle()}>
           <span>{data.name}</span>
         </span>
       );
@@ -130,5 +129,13 @@ export default {
     justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
+  }
+
+  .el-scrollbar{
+    height: 500px;
+  }
+  .el-scrollbar__wrap{
+    overflow: scroll;
+    overflow-x: hidden;
   }
 </style>

@@ -30,6 +30,7 @@
 
 <script>
 import Vue from 'vue';
+import $ from 'jquery';
 
 import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
@@ -124,18 +125,43 @@ export default {
               node.expanded = true;
               node = node.parent;
             }
+            // 设置当前节点
             treeproto.setCurrentKey(uuid);
+            // 滑动条移动到那个位置，使用dom操作
+            // 本来想使用nextTick是为了等待DOM渲染完毕后再进行刷新，后来发现
+            // nextTick的时间不够，于是使用setTimeout
+            let setScrollbarOffsetFunc = () => {
+              let dom = document.getElementById(uuid);
+              let scrollTop = getElemOffsetTop(document.getElementById(uuid));
+              if (scrollTop == 0) {
+                setTimeout(setScrollbarOffsetFunc, 200);
+              } else {
+                // 此处使用jquery动画效果
+                let scrollbar = document.getElementById("left-scrollbar");
+                $(scrollbar.children[0]).animate({
+                  scrollTop: scrollTop > scrollbar.scrollHeight / 2 ?
+                    scrollTop - scrollbar.scrollHeight / 2 : 0
+                }, 400);
+              }
+
+              function getElemOffsetTop(obj) {
+                var top = 0;
+                while (obj.offsetParent && obj.offsetParent.id != "left-scrollbar"){
+                  top += obj.offsetTop;
+                  obj = obj.offsetParent;
+                }
+                return top; 
+              }
+            }
+            setTimeout(setScrollbarOffsetFunc, 200);
             break;
           }
           case msgType.refleshDocument: {
             if (this.isShowDebug) {
-              // 设置触发器，每1.5s尝试刷新新的节点
-              sleep(1500);
               // 设置回调函数，回调中会重复调用函数直到成功
               let callback = function (success) {
                 if (!success) {
-                  sleep(1500);
-                  this.onBtnClickUpdatePage(callback);
+                  setTimeout('this.onBtnClickUpdatePage(callback)', 1500);
                 } else {
                   // 刷新debug模式
                   if (this.isEnterDebugMode) {
@@ -143,17 +169,7 @@ export default {
                   }
                 }
               }.bind(this);
-              this.onBtnClickUpdatePage(callback);
-            }
-
-            function sleep(numberMillis) {
-              var now = new Date();
-              var exitTime = now.getTime() + numberMillis;
-              while (true) {
-                now = new Date();
-                if (now.getTime() > exitTime)
-                  return;
-              }
+              setTimeout('this.onBtnClickUpdatePage(callback)', 1500);
             }
             break;
           }

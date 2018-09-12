@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import ElementUI from 'element-ui';
 import '../../../theme/index.css';
+import Scrollbar from 'vue-perfect-scrollbar';
 // import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 
@@ -37,6 +38,8 @@ util();
 // 自定义接口函数加载
 import plugin from './plugin.js';
 plugin();
+
+Vue.component('Scrollbar', Scrollbar);
 
 Vue.component('Node', MyNode);
 Vue.component('SlideNode', SlideNode);

@@ -29,7 +29,8 @@
     "sass-loader": "^6.0.6",
     "url-loader": "^0.6.2",
     "vue": "^2.4.4",
-    "vue-awesome": "^2.3.4"
+    "vue-awesome": "^2.3.4",
+    "vue-perfect-scrollbar": "^0.1.0"
   },
   "browserslist": [
     "> 1%",
