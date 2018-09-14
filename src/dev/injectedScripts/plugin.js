@@ -205,9 +205,13 @@ export default function () {
 
   // 向devtools发送信息
   ccIns.sendMsgToDevTools = function (type, msg) {
-    window.postMessage({
-      type: type,
-      msg: msg
-    }, "*");
+    try {
+      window.postMessage({
+        type: type,
+        msg: msg
+      }, "*");
+    } catch (e) {
+      console.log("Post Error: ", e);
+    }
   };
 }
