@@ -18,60 +18,57 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        clientX: 0,
-      };
+export default {
+  data() {
+    return {
+      clientX: 0
+    };
+  },
+  methods: {
+    changePositionMouseAction(event) {
+      document.addEventListener("mousemove", this._onMouseMove);
+      document.addEventListener("mouseup", this._onMouseUp);
+      document.addEventListener("onselectstart", this._onSelect);
     },
-    methods: {
-      changePositionMouseAction(event) {
-        document.addEventListener("mousemove", this._onMouseMove);
-        document.addEventListener("mouseup", this._onMouseUp);
-        document.addEventListener("onselectstart", this._onSelect);
-      },
-      _onSelect() {
-        return false;
-      },
-      _onMouseMove(event) {
-        let x = event.clientX;
-        let calcStep = parseFloat(this.step) || 10;// 默认值为10
-        if (x > this.clientX) {
-          calcStep = Math.abs(calcStep);
-        } else {
-          calcStep = -Math.abs(calcStep);
-        }
-        // console.log(calcStep, this.mykey);
-        this.$emit("movestep", calcStep, this.mykey);
-        this.clientX = x;
-      },
-      _onMouseUp(event) {
-        document.removeEventListener('mousemove', this._onMouseMove);
-        document.removeEventListener("mouseup", this._onMouseUp);
-        document.removeEventListener("onselectstart", this._onSelect);
-      },
+    _onSelect() {
+      return false;
     },
-    props: [
-      'name',
-      'mykey',
-      'step',
-    ]
-  }
+    _onMouseMove(event) {
+      let x = event.clientX;
+      let calcStep = parseFloat(this.step) || 10; // 默认值为10
+      if (x > this.clientX) {
+        calcStep = Math.abs(calcStep);
+      } else {
+        calcStep = -Math.abs(calcStep);
+      }
+      // console.log(calcStep, this.mykey);
+      this.$emit("movestep", calcStep, this.mykey);
+      this.clientX = x;
+    },
+    _onMouseUp(event) {
+      document.removeEventListener("mousemove", this._onMouseMove);
+      document.removeEventListener("mouseup", this._onMouseUp);
+      document.removeEventListener("onselectstart", this._onSelect);
+    }
+  },
+  props: ["name", "mykey", "step"]
+};
 </script>
 
 <style scoped>
-  .font {
-    font-family: BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, 'SourceHanSansCN-Normal', Arial, sans-serif
-  }
+.font {
+  font-family: BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Lucida Grande",
+    "Segoe UI", Ubuntu, Cantarell, "SourceHanSansCN-Normal", Arial, sans-serif;
+}
 
-  .noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Chrome/Safari/Opera */
-    -khtml-user-select: none; /* Konqueror */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
-    /* Non-prefixed version, currently
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
    not supported by any browser */
-  }
+}
 </style>

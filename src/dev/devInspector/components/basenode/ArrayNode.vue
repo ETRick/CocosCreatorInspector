@@ -31,28 +31,24 @@
 </template>
 
 <script>
-  export default {
-    methods: {
-      // 数组长度修改触发函数
-      changeArrLength(length, value) {
-        this.setNodeArrayLength(this.uuid, this.mykey, value);
-      },
-    },
-    props: [
-      "uuid",
-      "mykey",
-      "myarray",
-    ]
-  }
+export default {
+  methods: {
+    // 数组长度修改触发函数
+    changeArrLength(length, value) {
+      this.setNodeArrayLength(this.uuid, this.mykey, value);
+    }
+  },
+  props: ["uuid", "mykey", "myarray"]
+};
 </script>
 
 <style scoped>
-  span {
-    color: #fd942b;
-  }
+span {
+  color: #fd942b;
+}
 
-  .ui {
-    float : left;
-    cursor : ew-resize;
-  }
+.ui {
+  float: left;
+  cursor: ew-resize;
+}
 </style>

@@ -5,14 +5,7 @@
 </template>
 
 <script>
-  export default {
-    props: [
-      'uuid',
-      'mykey',
-      'myvalue',
-    ]
-  }
+export default {
+  props: ["uuid", "mykey", "myvalue"]
+};
 </script>
-
-<style scoped>
-</style>

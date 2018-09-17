@@ -15,30 +15,28 @@ export default {
     return {
       // keys过滤掉mykeys中不存在的属性
       keys: this.mykeys.filter(key => typeof this.itemData[key] != "undefined")
-    }
+    };
   },
   methods: {
     changeFloatValueAction(step, key) {
       let value = parseFloat(this.itemData[key].value);
       if (!isNaN(value)) {
         this.itemData[key].value = value + step;
-        this.setNodeValue(this.itemData.uuid.value, key, this.itemData[key].value);
+        this.setNodeValue(
+          this.itemData.uuid.value,
+          key,
+          this.itemData[key].value
+        );
       }
-    },
+    }
   },
-  props: [
-    'itemData',
-    'titlename',
-    'mykeys',
-    'step',
-    "readonly",
-  ],
-}
+  props: ["itemData", "titlename", "mykeys", "step", "readonly"]
+};
 </script>
 
 <style scoped>
-  .ui {
-    float : left;
-    cursor : ew-resize;
-  }
+.ui {
+  float: left;
+  cursor: ew-resize;
+}
 </style>

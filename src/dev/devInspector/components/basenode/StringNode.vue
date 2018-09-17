@@ -5,24 +5,19 @@
 </template>
 
 <script>
-  export default {
-    props: [
-      'uuid',
-      'mykey',
-      'myvalue',
-      'readonly'
-    ]
-  }
+export default {
+  props: ["uuid", "mykey", "myvalue", "readonly"]
+};
 </script>
 
 <style scoped>
-  span {
-    color: #fd942b;
-  }
-  
-  .myInput {
-    width: 90%;
-    border-radius: 5px;
-    color: #fd942b;
-  }
+span {
+  color: #fd942b;
+}
+
+.myInput {
+  width: 90%;
+  border-radius: 5px;
+  color: #fd942b;
+}
 </style>

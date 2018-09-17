@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import $ from 'jquery';
+import Vue from "vue";
+import $ from "jquery";
 
 import injectPlugin from "../injectedScripts/plugin.js";
 import injectConnect from "../injectedScripts/connect.js";
@@ -38,7 +38,7 @@ import injectEnum from "../injectedScripts/enum.js";
 import injectTimer from "../injectedScripts/timer.js";
 import injectStorage from "../injectedScripts/storage.js";
 import injectDebugGraphics from "../injectedScripts/debugGraphics.js";
-import injectUtil from "../injectedScripts/util.js"
+import injectUtil from "../injectedScripts/util.js";
 import injectMain from "../injectedScripts/main.js";
 
 import injectConfig from "../../config/injectedScripts.json";
@@ -46,15 +46,15 @@ import injectConfig from "../../config/injectedScripts.json";
 export default {
   data() {
     return {
-      isShowDebug: false,  // 是否有cc变量
-      hasGraphics: true,  // 是否有cc.Graphics变量
-      isEnterDebugMode: false,  // 是否进入DEBUG模式
-      treeData: [],  // 节点树属性，绑定左侧组件
-      treeItemData: {},  // 节点属性，绑定右侧组件
+      isShowDebug: false, // 是否有cc变量
+      hasGraphics: true, // 是否有cc.Graphics变量
+      isEnterDebugMode: false, // 是否进入DEBUG模式
+      treeData: [], // 节点树属性，绑定左侧组件
+      treeItemData: {}, // 节点属性，绑定右侧组件
       treeProps: {
         label: "uuid",
-        children: "children",
-      }, // 左侧树的属性
+        children: "children"
+      } // 左侧树的属性
     };
   },
   created() {
@@ -68,7 +68,9 @@ export default {
     });
 
     // 添加监听器
-    backgroundPageConnection.onMessage.addListener(this._handlePostData.bind(this));
+    backgroundPageConnection.onMessage.addListener(
+      this._handlePostData.bind(this)
+    );
   },
   methods: {
     // 处理收到的数据
@@ -82,7 +84,7 @@ export default {
           refleshInfo: 3, // 节点刷新信息
           clickedNodeInfo: 4, // 出现节点被点击
           refleshDocument: 5, // 出现页面刷新
-          enumType: 6, // 节点中的枚举信息
+          enumType: 6 // 节点中的枚举信息
         };
         switch (message.type) {
           case msgType.notSupport: {
@@ -99,7 +101,7 @@ export default {
             this.isShowDebug = true;
             this._updateView(message.msg);
             break;
-          } 
+          }
           case msgType.nodeInfo: {
             // 获取节点属性信息
             this.treeItemData = message.msg.value;
@@ -117,7 +119,7 @@ export default {
             let treeproto = this.$refs.tree.$refs.tree;
             let uuid = message.msg;
             // 节点属性页面更新
-            this.$refs.tree.handleNodeClick({uuid: uuid});
+            this.$refs.tree.handleNodeClick({ uuid: uuid });
             // 节点树更新
             let node = treeproto.getNode(uuid);
             // 节点展开
@@ -138,30 +140,38 @@ export default {
               } else {
                 // 此处使用jquery动画效果
                 let scrollbar = document.getElementById("left-scrollbar");
-                $(scrollbar.children[0]).animate({
-                  scrollTop: scrollTop > scrollbar.scrollHeight / 2 ?
-                    scrollTop - scrollbar.scrollHeight / 2 : 0
-                }, 400);
+                $(scrollbar.children[0]).animate(
+                  {
+                    scrollTop:
+                      scrollTop > scrollbar.scrollHeight / 2
+                        ? scrollTop - scrollbar.scrollHeight / 2
+                        : 0
+                  },
+                  400
+                );
               }
 
               function getElemOffsetTop(obj) {
                 var top = 0;
-                while (obj.offsetParent && obj.offsetParent.id != "left-scrollbar"){
+                while (
+                  obj.offsetParent &&
+                  obj.offsetParent.id != "left-scrollbar"
+                ) {
                   top += obj.offsetTop;
                   obj = obj.offsetParent;
                 }
-                return top; 
+                return top;
               }
-            }
+            };
             setTimeout(setScrollbarOffsetFunc, 200);
             break;
           }
           case msgType.refleshDocument: {
             if (this.isShowDebug) {
               // 设置回调函数，回调中会重复调用函数直到成功
-              let callback = function (success) {
+              let callback = function(success) {
                 if (!success) {
-                  setTimeout('this.onBtnClickUpdatePage(callback)', 1500);
+                  setTimeout("this.onBtnClickUpdatePage(callback)", 1500);
                 } else {
                   // 刷新debug模式
                   if (this.isEnterDebugMode) {
@@ -169,7 +179,7 @@ export default {
                   }
                 }
               }.bind(this);
-              setTimeout('this.onBtnClickUpdatePage(callback)', 1500);
+              setTimeout("this.onBtnClickUpdatePage(callback)", 1500);
             }
             break;
           }
@@ -180,7 +190,7 @@ export default {
           }
           default: {
             console.log(message);
-          }  
+          }
         }
       }
     },
@@ -226,7 +236,7 @@ export default {
         treeproto.updateKeyChildren(oldtree.uuid, oldtree.children);
       } else {
         for (let i = 0; i < newchildren.length; i++) {
-          if (typeof oldchildren[i] == 'undefined') {
+          if (typeof oldchildren[i] == "undefined") {
             // add
             oldchildren.push(newchildren[i]);
           } else if (oldchildren[i].uuid != newchildren[i].uuid) {
@@ -238,13 +248,19 @@ export default {
         }
         // remove
         if (oldchildren.length > newchildren.length) {
-          oldchildren.splice(newchildren.length, oldchildren.length - newchildren.length);
+          oldchildren.splice(
+            newchildren.length,
+            oldchildren.length - newchildren.length
+          );
         }
       }
     },
     // 渲染界面
     _updateView(data) {
-      if (JSON.stringify(this.treeData) === "[]" || this.treeData[0].uuid != data[0].uuid) {
+      if (
+        JSON.stringify(this.treeData) === "[]" ||
+        this.treeData[0].uuid != data[0].uuid
+      ) {
         // 第一次赋值或者换了场景后，获取数据后，渲染右边界面
         this.treeData = data;
         this.getNodeInfo(this.treeData[0].uuid);
@@ -281,15 +297,22 @@ export default {
       // 注入配置文件
       let code = this._getConfigString();
       chrome.devtools.inspectedWindow.eval(code);
-      
+
       // 注入初始化脚本
-      let scripts = [injectUtil, injectDebugGraphics, injectConnect,
-         injectPlugin, injectEnum, injectTimer, injectStorage];
+      let scripts = [
+        injectUtil,
+        injectDebugGraphics,
+        injectConnect,
+        injectPlugin,
+        injectEnum,
+        injectTimer,
+        injectStorage
+      ];
       for (let script of scripts) {
         let code = this._getInjectScriptString(script);
         chrome.devtools.inspectedWindow.eval(code);
       }
-      
+
       // 运行main函数
       code = this._getInjectScriptString(injectMain);
       chrome.devtools.inspectedWindow.eval(code, function(rtn) {
@@ -314,30 +337,30 @@ export default {
 </script>
 
 <style scoped>
-  .treeInfo {
-    margin: 20px;
-    height: 100%;
-  }
+.treeInfo {
+  margin: 20px;
+  height: 100%;
+}
 
-  .bg-purple {
-    background: #d3dce6;
-  }
+.bg-purple {
+  background: #d3dce6;
+}
 
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
+.bg-purple-light {
+  background: #e5e9f2;
+}
 
-  body span h1 h2 h3 {
-    font-family: BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Lucida Grande",
-      "Segoe UI", Ubuntu, Cantarell, "SourceHanSansCN-Normal", Arial, sans-serif;
-  }
+body span h1 h2 h3 {
+  font-family: BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Lucida Grande",
+    "Segoe UI", Ubuntu, Cantarell, "SourceHanSansCN-Normal", Arial, sans-serif;
+}
 
-  .reflesh-button {
-    margin-bottom: 10px;
-  }
+.reflesh-button {
+  margin-bottom: 10px;
+}
 
-  .debug-button {
-    margin-bottom: 10px;
-    float: right;
-  }
+.debug-button {
+  margin-bottom: 10px;
+  float: right;
+}
 </style>

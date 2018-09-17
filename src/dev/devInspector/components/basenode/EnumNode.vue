@@ -5,15 +5,7 @@
 </template>
 
 <script>
-  export default {
-    props: [
-      'enumTypes',
-      'uuid',
-      'mykey',
-      'myvalue',
-    ]
-  }
+export default {
+  props: ["enumTypes", "uuid", "mykey", "myvalue"]
+};
 </script>
-
-<style scoped>
-</style>

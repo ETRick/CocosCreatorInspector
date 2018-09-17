@@ -8,26 +8,17 @@
 </template>
 
 <script>
-  export default {
-    methods: {
-      // 根据鼠标拖动修改值
-      changeFloatValueAction(step) {
-        let value = parseFloat(this.myvalue);
-        if (!isNaN(value)) {
-          this.myvalue = value + step;
-          this.setNodeValue(this.uuid, this.mykey, this.myvalue);
-        }
-      },
-    },
-    props: [
-      'uuid',
-      'mykey',
-      'myvalue',
-      'step',
-      'readonly',
-    ]
-  }
+export default {
+  methods: {
+    // 根据鼠标拖动修改值
+    changeFloatValueAction(step) {
+      let value = parseFloat(this.myvalue);
+      if (!isNaN(value)) {
+        this.myvalue = value + step;
+        this.setNodeValue(this.uuid, this.mykey, this.myvalue);
+      }
+    }
+  },
+  props: ["uuid", "mykey", "myvalue", "step", "readonly"]
+};
 </script>
-
-<style scoped>
-</style>

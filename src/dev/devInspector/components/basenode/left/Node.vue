@@ -16,31 +16,29 @@
 </template>
 
 <script>
-  export default {
-    props: [
-      'name',
-      'isTextCenter'
-    ]
-  }
+export default {
+  props: ["name", "isTextCenter"]
+};
 </script>
 
 <style scoped>
-  .font {
-    font-family: BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, 'SourceHanSansCN-Normal', Arial, sans-serif
-  }
+.font {
+  font-family: BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Lucida Grande",
+    "Segoe UI", Ubuntu, Cantarell, "SourceHanSansCN-Normal", Arial, sans-serif;
+}
 
-  .noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Chrome/Safari/Opera */
-    -khtml-user-select: none; /* Konqueror */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
-    /* Non-prefixed version, currently
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
    not supported by any browser */
-  }
+}
 
-  .center {
-    text-align: center;
-  }
+.center {
+  text-align: center;
+}
 </style>
