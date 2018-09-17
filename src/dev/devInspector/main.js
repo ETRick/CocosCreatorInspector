@@ -8,10 +8,6 @@ import App from './App.vue';
 // 自定义util函数加载
 import util from './util.js';
 util();
-
-import CheckBox from './components/basenode/right/CheckBox.vue'
-Vue.component('CheckBox', CheckBox);
-
 // 自定义接口函数加载
 import plugin from './plugin.js';
 plugin();
