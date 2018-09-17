@@ -54,49 +54,46 @@
 </template>
 
 <script>
-  
-  import configjs from '../../../config/nodebase.json';
+import configjs from "../../../../config/nodebase.json";
 
-  export default {
-    data() {
-      return {
-        configs: configjs,
-        isShowNode: true,
-      }
-    },
-    methods: {
-      onClickNode() {
-        this.isShowNode = !this.isShowNode;
-      },
-    },
-    props: [
-      'itemData'
-    ]
-  }
+export default {
+  data() {
+    return {
+      configs: configjs,
+      isShowNode: true
+    };
+  },
+  methods: {
+    onClickNode() {
+      this.isShowNode = !this.isShowNode;
+    }
+  },
+  props: ["itemData"]
+};
 </script>
 
 <style scoped>
-  h1 {
-    margin-top: 20px;
-    margin-bottom: 4px;
-    margin-left: 20px;
-    font-weight: bold;
-    cursor: pointer
-  }
+h1 {
+  margin-top: 20px;
+  margin-bottom: 4px;
+  margin-left: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-  hr {
-    margin-bottom: 10px;
-    margin-top: 4px;
-  }
+hr {
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
 
-  .inactiveInHierarchy {
-    text-decoration: line-through;
-  }
+.inactiveInHierarchy {
+  text-decoration: line-through;
+}
 
-  .myCheckBox {
-    width: 20px;
-    height: 20px;
-    margin-top: 8px; 
-    float: left;
-  }
+.myCheckBox {
+  width: 20px;
+  height: 20px;
+  margin-top: 8px;
+  float: left;
+}
 </style>
