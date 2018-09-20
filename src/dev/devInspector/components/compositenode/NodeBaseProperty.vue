@@ -13,7 +13,7 @@
     <!-- 根据配置文件中属性显示属性值 -->
     <div v-show="isShowNode" v-for="config in configs" :key="config"
          v-if="config.key && itemData[config.key]">
-      <BoolNode v-if="itemData[config.key].type === 'boolean'"
+      <BoolNode v-if="itemData[config.key].type == 'boolean'"
                 :uuid="itemData.uuid.value"
                 :mykey="config.key"
                 :myvalue="itemData[config.key].value">
@@ -35,7 +35,8 @@
                   :uuid="itemData.uuid.value"
                   :mykey="config.key"
                   :myvalue="itemData[config.key].value"
-                  :readonly="config.readonly">
+                  :readonly="config.readonly"
+                  :step="config.step">
       </VectorNode>
       <ColorNode v-else-if="itemData[config.key].type == 'Color'" 
                     :uuid="itemData.uuid.value"

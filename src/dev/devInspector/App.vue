@@ -104,6 +104,13 @@ export default {
           }
           case msgType.nodeInfo: {
             // 获取节点属性信息
+            // DEBUG 测试信息
+            if (
+              !this.treeItemData.uuid ||
+              this.treeItemData.uuid.value != message.msg.value.uuid.value
+            ) {
+              console.debug("Get New Node: ", message.msg.value);
+            }
             this.treeItemData = message.msg.value;
             break;
           }

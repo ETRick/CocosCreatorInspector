@@ -26,7 +26,6 @@ requireComponent.keys().forEach(fileName => {
   const componentConfig = requireComponent(fileName);
   // 除去.vue和目录
   const componentName = fileName.replace(/\.\w+$/, '').replace(/^\.(\w|\/)+\//, '');
-  console.log(componentConfig, componentName);
   // 全局加载组件
   Vue.component(componentName, componentConfig.default || componentConfig);
 });

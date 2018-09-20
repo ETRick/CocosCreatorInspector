@@ -11,6 +11,9 @@
 
 <script>
 export default {
+  mounted() {
+    console.debug(this.keys, this.mykeys);
+  },
   data() {
     return {
       // keys过滤掉mykeys中不存在的属性

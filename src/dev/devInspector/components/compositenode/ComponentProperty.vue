@@ -26,8 +26,7 @@
         <NumberNode v-else-if="component[mykey].type == 'number'" 
                     :uuid="component.uuid.value" 
                     :mykey="mykey" 
-                    :myvalue="component[mykey].value"
-                    :step="10">
+                    :myvalue="component[mykey].value">
         </NumberNode>
         <StringNode v-else-if="component[mykey].type == 'string'"
                     :uuid="component.uuid.value" 
@@ -58,67 +57,69 @@
 </template>
 
 <script>
-  import Vue from 'vue';
+import Vue from "vue";
 
-  export default {
-    data() {
-      return {
-        // 得到主键，除去uuid,name和两个enabled
-        compkeys: Object.keys(this.component ? this.component : {}).filter(function(key) {
-          return key[0] != "_" && ["uuid", "name", "enabled", "enabledInHierarchy"].indexOf(key) == -1;
-        }),
-        isShowComp: true,
-      }
+export default {
+  data() {
+    return {
+      // 得到主键，除去uuid,name和两个enabled
+      compkeys: Object.keys(this.component ? this.component : {}).filter(
+        function(key) {
+          return (
+            key[0] != "_" &&
+            ["uuid", "name", "enabled", "enabledInHierarchy"].indexOf(key) == -1
+          );
+        }
+      ),
+      isShowComp: true
+    };
+  },
+  methods: {
+    onClickComp() {
+      this.isShowComp = !this.isShowComp;
     },
-    methods: {
-      onClickComp() {
-        this.isShowComp = !this.isShowComp;
-      },    
-      // 判断是否为枚举类型
-      isEnumType(comptype, key) {
-        return typeof Vue.enumStorage.get(comptype, key) != "undefined";
-      },
-      // 由于传入参数不能使用Vue，因此改成这种方式 
-      getEnumType(comptype, key) {
-        return Vue.enumStorage.get(comptype, key);
-      },
+    // 判断是否为枚举类型
+    isEnumType(comptype, key) {
+      return typeof Vue.enumStorage.get(comptype, key) != "undefined";
     },
-    props: [
-      'comptype',
-      'component',
-    ]
-  }
+    // 由于传入参数不能使用Vue，因此改成这种方式
+    getEnumType(comptype, key) {
+      return Vue.enumStorage.get(comptype, key);
+    }
+  },
+  props: ["comptype", "component"]
+};
 </script>
 
 <style scoped>
-  span {
-    color: #fd942b;
-  }
+span {
+  color: #fd942b;
+}
 
-  h4 {
-    margin: 8px;
-    cursor: pointer; 
-  }
+h4 {
+  margin: 8px;
+  cursor: pointer;
+}
 
-  .myCheckBox {
-    margin-top: 10px;
-    width: 15px;
-    height: 15px;
-    float: left;
-  }
+.myCheckBox {
+  margin-top: 10px;
+  width: 15px;
+  height: 15px;
+  float: left;
+}
 
-  .inenabledInHierarchy {
-    text-decoration: line-through;
-  }
+.inenabledInHierarchy {
+  text-decoration: line-through;
+}
 
-  .component {
-    border: 2px solid #a1a1a1;
-    padding: 5px 5px;
-    background: #dddddd;
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px; /* 老的 Firefox */
-  }
+.component {
+  border: 2px solid #a1a1a1;
+  padding: 5px 5px;
+  background: #dddddd;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px; /* 老的 Firefox */
+}
 </style>

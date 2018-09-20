@@ -2,7 +2,7 @@
 // 字段说明参考：http://open.chrome.360.cn/extension_dev/manifest.html
 {
   "name": "Cocos Creator Inspector",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "Cocos Creator Inspector",
   "browser_action": {
     "default_title": "Cocos Creator Inspector",
@@ -13,17 +13,15 @@
     "48": "static/images/icon48.png"
   },
   "devtools_page": "dev.html",
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "contentScripts.main.js"
-      ],
-      "run_at": "document_end"
-    }
-  ],
+  "content_scripts": [{
+    "matches": [
+      "<all_urls>"
+    ],
+    "js": [
+      "contentScripts.main.js"
+    ],
+    "run_at": "document_end"
+  }],
   "background": {
     "scripts": [
       "backgroundScripts.main.js"

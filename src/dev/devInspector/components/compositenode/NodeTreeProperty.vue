@@ -34,7 +34,7 @@ export default {
   methods: {
     // 点击节点的触发函数
     handleNodeClick(data) {
-      console.log("Click uuid:" + data.uuid);
+      console.debug("Click uuid: " + data.uuid);
       this.clickQuadNode(data.uuid);
     },
     // 拖拽节点触发的函数
@@ -98,44 +98,40 @@ export default {
       }
     }
   },
-  props: [
-    "treeData",
-    "nodeKey",
-    "treeProps"
-  ]
+  props: ["treeData", "nodeKey", "treeProps"]
 };
 </script>
 
 <style scoped>
-  .treeList {
-    overflow-x: auto;
-    height: 100%;
-    width: 100%;
-  }
+.treeList {
+  overflow-x: auto;
+  height: 100%;
+  width: 100%;
+}
 
-  .grid-content {
-    border-radius: 4px;
-    min-height: 20px;
-  }
+.grid-content {
+  border-radius: 4px;
+  min-height: 20px;
+}
 
-  .is-current {
-    text-decoration: line-through;
-  }
+.is-current {
+  text-decoration: line-through;
+}
 
-  .-tree-node {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    padding-right: 8px;
-  }
+.-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
 
-  .el-scrollbar{
-    height: 500px;
-  }
-  .el-scrollbar__wrap{
-    overflow: scroll;
-    overflow-x: hidden;
-  }
+.el-scrollbar {
+  height: 500px;
+}
+.el-scrollbar__wrap {
+  overflow: scroll;
+  overflow-x: hidden;
+}
 </style>
