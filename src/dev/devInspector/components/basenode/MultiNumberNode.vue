@@ -11,14 +11,21 @@
 
 <script>
 export default {
-  mounted() {
-    console.debug(this.keys, this.mykeys);
-  },
   data() {
     return {
       // keys过滤掉mykeys中不存在的属性
-      keys: this.mykeys.filter(key => typeof this.itemData[key] != "undefined")
+      keys: []
     };
+  },
+  watch: {
+    itemData(newVal, oldVal) {
+      if (newVal != oldVal) {
+        this.keys = this.mykeys.filter(
+          key => typeof newVal[key] != "undefined"
+        );
+        this.itemData = newVal;
+      }
+    }
   },
   methods: {
     changeFloatValueAction(step, key) {

@@ -174,7 +174,7 @@ export default function () {
     Node(obj, isEnterArr) {
       let rtnObj = {
         uuid: this.BaseType(obj.uuid),
-        zIndex: this.BaseType(obj.zIndex),
+        name: this.BaseType(obj.name),
         width: this.BaseType(obj.width),
         height: this.BaseType(obj.height),
         color: this.CustomType(obj.color),
@@ -184,6 +184,7 @@ export default function () {
         anchorY: this.BaseType(obj.anchorY),
         active: this.BaseType(obj.active),
         activeInHierarchy: this.BaseType(obj.activeInHierarchy),
+        zIndex: this.BaseType(obj.zIndex),
       };
       let objType = obj.__classname__.substr(3);
       // 通过__props__获得key值
