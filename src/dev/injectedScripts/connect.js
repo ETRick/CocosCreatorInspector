@@ -203,7 +203,7 @@ export default function () {
       let rtnObj = {
         uuid: this.BaseType(obj.uuid),
         zIndex: this.BaseType(obj.zIndex),
-        width: this.BaseType(obj.wedth),
+        width: this.BaseType(obj.width),
         height: this.BaseType(obj.height),
         color: this.CustomType(obj.color),
         opacity: this.BaseType(obj.opacity),
