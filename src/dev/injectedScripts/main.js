@@ -30,7 +30,9 @@ export default function () {
         // if-2: director没有暂停，则正常计时
         // if-3: 当director暂停时，仍然会进入，此时计时停止（director暂停，此时能渲染界面）
         if (cc.game.isPaused() || (!cc.director.isPaused() && ccIns.Timer.node.isTimeOut())) {
-          ccIns.sendMsgToDevTools(ccIns.Connect.msgType.refleshInfo, {});
+          if (ccIns.n0) {
+            ccIns.getNodeInfo(ccIns.n0.uuid);
+          }
         }
       }, cc.director);
 
@@ -48,7 +50,7 @@ export default function () {
         cc.director.on(cc.Director.EVENT_AFTER_DRAW, (e) => {
           ccIns.Timer.graphics.run();
           if (ccIns.Timer.graphics.isTimeOut() && ccIns.updateGraphicsTree) {
-            ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.director._scene);         
+            ccIns.updateGraphicsTree(ccIns.QuadNode.root, cc.director._scene);
             ccIns.drawNode(ccIns.graphicsNode.getComponent("cc.Graphics"));
           }
         }, cc.director);

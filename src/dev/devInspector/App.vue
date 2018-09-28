@@ -81,10 +81,9 @@ export default {
           notSupport: 0, // 不支持的游戏
           nodeListInfo: 1, // 节点列表信息
           nodeInfo: 2, // 节点信息
-          refleshInfo: 3, // 节点刷新信息
-          clickedNodeInfo: 4, // 出现节点被点击
-          refleshDocument: 5, // 出现页面刷新
-          enumType: 6 // 节点中的枚举信息
+          clickedNodeInfo: 3, // 出现节点被点击
+          refleshDocument: 4, // 出现页面刷新
+          enumType: 5 // 节点中的枚举信息
         };
         switch (message.type) {
           case msgType.notSupport: {
@@ -114,13 +113,6 @@ export default {
             this.treeItemData = message.msg.value;
             break;
           }
-          case msgType.refleshInfo: {
-            // 刷新节点
-            if (this.treeItemData.uuid) {
-              this.getNodeInfo(this.treeItemData.uuid.value);
-            }
-            break;
-          }
           case msgType.clickedNodeInfo: {
             // 直接点击树节点
             let treeproto = this.$refs.tree.$refs.tree;
@@ -128,8 +120,8 @@ export default {
             // 节点属性页面更新
             this.$refs.tree.handleNodeClick({ uuid: uuid });
             // 节点树更新
-            let node = treeproto.getNode(uuid);
-            // 节点展开
+            let node = treeproto.getNode(uuid).parent;
+            // 节点父集展开
             while (node) {
               node.expanded = true;
               node = node.parent;
@@ -176,17 +168,20 @@ export default {
           case msgType.refleshDocument: {
             if (this.isShowDebug) {
               // 设置回调函数，回调中会重复调用函数直到成功
-              let callback = function(success) {
-                if (!success) {
-                  setTimeout("this.onBtnClickUpdatePage(callback)", 1500);
-                } else {
-                  // 刷新debug模式
-                  if (this.isEnterDebugMode) {
-                    this.showGraphics();
-                  }
+              (async function(that) {
+                let success = false;
+                while (!success) {
+                  success = await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                      that.onBtnClickUpdatePage(success => resolve(success));
+                    }, 1500);
+                  });
                 }
-              }.bind(this);
-              setTimeout("this.onBtnClickUpdatePage(callback)", 1500);
+                // 刷新debug模式
+                if (that.isEnterDebugMode) {
+                  that.showGraphics();
+                }
+              })(this);
             }
             break;
           }

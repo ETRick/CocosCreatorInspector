@@ -116,10 +116,6 @@ export default function () {
 
   // 显示QuadRangle边框，并去除之前的QuadRangle边框
   ccIns.clickQuadNode = function (uuid) {
-    // 点击时将点击节点暂存在ccIns.n0变量中，将组件暂存在ccIns.cs中
-    ccIns.n0 = ccIns.getObjectFromStorage(uuid, "node");
-    ccIns.cs = ccIns.n0._components;
-
     let quadnode = ccIns.getObjectFromStorage(uuid, "quadNode");
     if (quadnode && ccIns.QuadNode.clicked != quadnode) {
       ccIns.QuadNode.clicked = quadnode;
@@ -183,6 +179,12 @@ export default function () {
       // 判断是节点还是脚本（Scene不存在脚本）
       if (!(node instanceof cc.Node || node instanceof cc.Scene)) {
         node = node.node;
+      }
+
+      // 点击时将点击节点暂存在ccIns.n0变量中，将组件暂存在ccIns.cs中
+      if (ccIns.n0 !== node) {
+        ccIns.n0 = node;
+        ccIns.cs = node._components;
       }
 
       let nodeData = ccIns.Connect.CustomType(node);

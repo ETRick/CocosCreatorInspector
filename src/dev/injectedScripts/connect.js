@@ -13,10 +13,9 @@ export default function () {
       notSupport: 0, // 不支持的游戏
       nodeListInfo: 1, // 节点列表信息
       nodeInfo: 2, // 节点信息
-      refleshInfo: 3, // 节点刷新信息
-      clickedNodeInfo: 4, // 出现节点被点击
-      refleshDocument: 5, // 出现页面刷新
-      enumType: 6, // 节点中的枚举信息
+      clickedNodeInfo: 3, // 出现节点被点击
+      refleshDocument: 4, // 出现页面刷新
+      enumType: 5, // 节点中的枚举信息
     },
     // 树节点构造：只需要node中的其中一些属性，用于树的显示
     //   函数在节点构造的同时，会储存节点到ccIns.gameStorageMemory中
