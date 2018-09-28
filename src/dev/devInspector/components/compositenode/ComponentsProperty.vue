@@ -11,33 +11,31 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        isShowComps: true,
-      }
-    },
-    methods: {
-      onClickAllComp() {
-        this.isShowComps = !this.isShowComps;
-      },
-    },
-    props: [
-      'components'
-    ]
-  }
+export default {
+  data() {
+    return {
+      isShowComps: true
+    };
+  },
+  methods: {
+    onClickAllComp() {
+      this.isShowComps = !this.isShowComps;
+    }
+  },
+  props: ["components"]
+};
 </script>
 
 <style scoped>
-  h2 {
-    margin-top: 10px;
-    margin-bottom: 2px;
-    font-weight: bold;
-    cursor: pointer
-  }
+h2 {
+  margin-top: 10px;
+  margin-bottom: 2px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-  hr {
-    margin-bottom: 5px;
-    margin-top: 2px;
-  }
+hr {
+  margin-bottom: 5px;
+  margin-top: 2px;
+}
 </style>
