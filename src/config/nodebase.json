@@ -2,8 +2,7 @@
         "key": "name"
     },
     {
-        "key": "position",
-        "step": 0.01
+        "key": "position"
     },
     {
         "title": "rotation",
@@ -12,7 +11,7 @@
     },
     {
         "key": "scale",
-        "step": 0.01
+        "step": 0.1
     },
     {
         "title": "anchor",
