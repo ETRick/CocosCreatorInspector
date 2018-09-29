@@ -12,7 +12,6 @@
 - [项目功能演示](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/%E9%A1%B9%E7%9B%AE%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA.md)
 - [项目工作原理](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.md)
 - [config 规范](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/config%E8%A7%84%E8%8C%83.md)
-- [视频演示](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/cc-inspector%E5%B1%95%E7%A4%BA.avi)
 
 ## 版本变化
 
