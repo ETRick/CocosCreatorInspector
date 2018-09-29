@@ -219,10 +219,11 @@ export default function () {
 
             // 绑定click(MOUSE_DOWN和TOUCH_END功能相同)
             node.on(cc.Node.EventType.TOUCH_END, function (e) {
-                console.log("Click Pos: ", e.getLocation());
+                console.debug("Click Pos: ", e.getLocation());
                 hoverFunc(e);
                 if (ccIns.QuadNode.clicked != ccIns.QuadNode.hover) {
                     ccIns.QuadNode.clicked = ccIns.QuadNode.hover;
+                    ccIns.QuadNode.hover = null;
                 }
                 // 同步到devtools中的节点树，正向绑定
                 if (ccIns.QuadNode.clicked) {
@@ -243,7 +244,7 @@ export default function () {
                     }
                 }
             }
-            
+
             // 得到包含点的所有Quads
             function getQuadsContainPos(pos) {
                 // Quads不包括scene, DEBUG-Graphics, Canvas三个节点的quads

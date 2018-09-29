@@ -54,30 +54,35 @@ export default {
         switch (str.substr(0, 2)) {
           // 通过uuid判断
           case "u:": {
-            if (data.uuid.hasSubstrIgnoreCase(str.substr(2))) {
-              return true;
+            if (!data.uuid.hasSubstrIgnoreCase(str.substr(2))) {
+              return false;
             }
             break;
           }
           // 通过type判断
           case "t:": {
+            let match = false;
             for (let compname of data.components) {
               if (compname.hasSubstrIgnoreCase(str.substr(2))) {
-                return true;
+                match = true;
+                break;
               }
+            }
+            if (!match) {
+              return false;
             }
             break;
           }
           // 通过name判断
           default: {
-            if (data.name.hasSubstrIgnoreCase(str)) {
-              return true;
+            if (!data.name.hasSubstrIgnoreCase(str)) {
+              return false;
             }
           }
         }
       }
 
-      return false;
+      return true;
     },
     // 渲染树节点函数
     renderTreeContent(h, { node, data, store }) {

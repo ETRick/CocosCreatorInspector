@@ -9,12 +9,15 @@ export default function () {
 
   // 暂停游戏
   ccIns.pauseGame = function () {
+    ccIns.lastGameStatusIsPaused = cc.director.isPaused();
     cc.director.pause();
   };
 
   // 恢复游戏
   ccIns.resumeGame = function () {
-    cc.director.resume();
+    if (!ccIns.lastGameStatusIsPaused) {
+      cc.director.resume();
+    }
   };
 
   // 设置节点状态（通过key-value）
@@ -213,7 +216,7 @@ export default function () {
         msg: msg
       }, "*");
     } catch (e) {
-      console.log("Post Error: ", e);
+      console.debug("Post Error: ", e);
     }
   };
 }
