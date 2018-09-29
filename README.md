@@ -12,6 +12,7 @@
 - [项目功能演示](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/%E9%A1%B9%E7%9B%AE%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA.md)
 - [项目工作原理](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/%E9%A1%B9%E7%9B%AE%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.md)
 - [config 规范](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/config%E8%A7%84%E8%8C%83.md)
+- [视频演示](https://github.com/bilibiliChangKai/CocosCreatorInspector/blob/master/doc/cc-inspector%E5%B1%95%E7%A4%BA.avi)
 
 ## 版本变化
 
@@ -57,24 +58,24 @@ PS: 此分支使用 cc.Graphics 进行边框绘制，因此修改了 DEBUG 模�
 ### v1.3
 
 1. 修改了通讯结构，现在可以查看组件的更多信息了
-2. 修改了popup，现在显示的是我自己的连接了
+2. 修改了 popup，现在显示的是我自己的连接了
 
 ### v2.0
 
-PS：从此版本起，该插件只支持cocos creator 2.0以上的版本。
+PS：从此版本起，该插件只支持 cocos creator 2.0 以上的版本。
 
 PS2：此版本为最终版本，接下来应该不会进行更新了，但是仍然会关注。
 
 1. 完全重构通讯结构，现在可以查看大部分属性信息了
-2. 重构了vue脚本，降低组件之间的耦合度
+2. 重构了 vue 脚本，降低组件之间的耦合度
 3. 重构了注入脚本，降低文件之间的耦合度
-3. 添加了Enum类型，现在可以显示并修改Enum类型了
-4. 添加了Array类型，现在可以显示并修改Array类型了
-5. 添加了Vector/Size类型，现在可以显示并修改Vector类型了
-6. 使用了cocos creator官网案例进行测试，修复了贼多BUG，进行了一些用户使用时的便利性优化
+4. 添加了 Enum 类型，现在可以显示并修改 Enum 类型了
+5. 添加了 Array 类型，现在可以显示并修改 Array 类型了
+6. 添加了 Vector/Size 类型，现在可以显示并修改 Vector 类型了
+7. 使用了 cocos creator 官网案例进行测试，修复了贼多 BUG，进行了一些用户使用时的便利性优化
 
 ### v2.1
 
-1. 重新修改了打tag标准
-1. 添加了滚动栏（但是UI有点不太好看）
-2. 修改了巨量BUG
+1. 重新修改了打 tag 标准
+1. 添加了滚动栏（但是 UI 有点不太好看）
+1. 修改了巨量 BUG
