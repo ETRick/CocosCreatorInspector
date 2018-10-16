@@ -134,5 +134,5 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#source-map'
+  devtool: '#eval-source-map'
 };

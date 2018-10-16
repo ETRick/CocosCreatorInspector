@@ -76,6 +76,7 @@ export default {
   },
   methods: {
     onClickComp() {
+      debugger
       this.isShowComp = !this.isShowComp;
     },
     // 判断是否为枚举类型
