@@ -179,6 +179,7 @@ export default function () {
         color: this.CustomType(obj.color),
         opacity: this.BaseType(obj.opacity),
         rotation: this.BaseType(obj.rotation),
+        eulerAngles: this.CustomType(obj.eulerAngles),
         anchorX: this.BaseType(obj.anchorX),
         anchorY: this.BaseType(obj.anchorY),
         active: this.BaseType(obj.active),

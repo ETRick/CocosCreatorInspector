@@ -6,8 +6,7 @@
         "step": 0.02
     },
     {
-        "title": "rotation",
-        "keys": ["rotationX", "rotationY"],
+        "key": "eulerAngles",
         "step": 1
     },
     {
