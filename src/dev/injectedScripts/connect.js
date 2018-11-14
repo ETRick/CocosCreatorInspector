@@ -64,7 +64,8 @@ export default function () {
       // 对对象进行访问判断
       if (typeof obj == "object") {
         // 如果已经访问过，直接返回NULL
-        if (isEnterArr.hasValue(obj)) {
+        // 设置深度
+        if (isEnterArr.hasValue(obj) || isEnterArr.length >= 2) {
           return this.NULLType();
         } else {
           isEnterArr.push(obj);
@@ -176,6 +177,9 @@ export default function () {
         name: this.BaseType(obj.name),
         width: this.BaseType(obj.width),
         height: this.BaseType(obj.height),
+        scaleX: this.BaseType(obj.scaleX),
+        scaleY: this.BaseType(obj.scaleY),
+        scaleZ: this.BaseType(obj.scaleZ),
         color: this.CustomType(obj.color),
         opacity: this.BaseType(obj.opacity),
         rotation: this.BaseType(obj.rotation),

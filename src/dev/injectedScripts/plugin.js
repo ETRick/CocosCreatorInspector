@@ -196,6 +196,8 @@ export default function () {
         type: "Array",
         value: []
       };
+
+      // 有些组件内部会有报错
       if (node._components) {
         for (let comp of node._components) {
           nodeData.value.components.value.push(ccIns.Connect.CustomType(comp));

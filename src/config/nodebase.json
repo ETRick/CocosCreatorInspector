@@ -10,7 +10,8 @@
         "step": 1
     },
     {
-        "key": "scale",
+        "title": "scale",
+        "keys": ["scaleX", "scaleY", "scaleZ"],
         "step": 0.1
     },
     {
