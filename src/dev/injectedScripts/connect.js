@@ -182,7 +182,7 @@ export default function () {
         scaleZ: this.BaseType(obj.scaleZ),
         color: this.CustomType(obj.color),
         opacity: this.BaseType(obj.opacity),
-        rotation: this.BaseType(obj.rotation),
+        angle: this.BaseType(obj.angle),
         eulerAngles: this.CustomType(obj.eulerAngles),
         anchorX: this.BaseType(obj.anchorX),
         anchorY: this.BaseType(obj.anchorY),
@@ -211,7 +211,7 @@ export default function () {
         height: this.BaseType(obj.height),
         color: this.CustomType(obj.color),
         opacity: this.BaseType(obj.opacity),
-        rotation: this.BaseType(obj.rotation),
+        angle: this.BaseType(obj.angle),
         anchorX: this.BaseType(obj.anchorX),
         anchorY: this.BaseType(obj.anchorY),
       };

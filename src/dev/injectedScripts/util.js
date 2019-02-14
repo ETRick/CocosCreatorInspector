@@ -1,6 +1,7 @@
 // Author: huzi(moustache)
 // Date: 18-8-3 9:42
 // Description: util函数类，包含常用函数
+
 export default function () {
     if (typeof ccIns == "undefined") {
         ccIns = {};
@@ -31,11 +32,16 @@ export default function () {
 
     // 判断变量是否为object和public
     ccIns.isPublicVar = function (obj, key) {
-        return key[0] != "_" && typeof obj[key] != "undefined" && typeof obj[key] != "function";
+        return !ccIns.isDeprecatedVar(obj, key) && key[0] != "_" && typeof obj[key] != "undefined" && typeof obj[key] != "function";
     };
 
     // 判断是不是cc类型
     ccIns.isCCType = function (obj) {
         return obj.__classname__ && obj.__classname__.substr(0, 3) == "cc.";
     };
+
+    // 是否是废弃的变量
+    ccIns.isDeprecatedVar = function(obj, key){
+        return ['rotationX','rotationY','rotation'].hasValue(key);
+    }
 }
