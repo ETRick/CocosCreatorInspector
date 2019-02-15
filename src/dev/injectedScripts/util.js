@@ -42,6 +42,11 @@ export default function () {
 
     // 是否是废弃的变量
     ccIns.isDeprecatedVar = function(obj, key){
-        return ['rotationX','rotationY','rotation'].hasValue(key);
+        // TODO: 大致是2.1.0开始加入的Node的derecated变量还是2.0？
+        if(cc.ENGINE_VERSION.substr(0, 2) == "2."){
+            return ['rotationX','rotationY','rotation'].hasValue(key);
+        }else{
+            return false;
+        }
     }
 }
